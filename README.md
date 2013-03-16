@@ -1,4 +1,4 @@
-Module for input management with nodejs.
+Module for input/output management with nodejs.
 
 # Installation
 

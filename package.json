@@ -16,5 +16,8 @@
 	"engines": {
 		"node": "*"
 	},
-	"readmeFilename": "README.md"
+	"readmeFilename": "README.md",
+	"scripts": {
+		"test": "node tests.js"
+	}
 }
