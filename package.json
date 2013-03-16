@@ -1,0 +1,18 @@
+{
+	"name": "stdio",
+	"version": "0.0.1",
+	"description": "Node.js module to standard input/output management",
+	"main": "main.js",
+	"author": {
+		"name": "Sergio Garcia Mondaray"
+	},
+	"keywords": [
+		"input",
+		"console",
+		"output"
+	],
+	"engines": {
+		"node": "*"
+	},
+	"readmeFilename": "README.md"
+}
