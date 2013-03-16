@@ -2,17 +2,17 @@ Module for input/output management with nodejs.
 
 [![Build Status](https://secure.travis-ci.org/sgmonda/stdio.png)](http://travis-ci.org/sgmonda/stdio)
 
-# Installation
+## Installation
 
 To install the most recent release from npm, run:
 
     npm install stdio
 
-# Usage
+## Usage
 
 You can do many things with this module
 
-## Read standard input at once
+### Read standard input at once
 
 ```javascript
 var stdio = require('stdio');
@@ -21,7 +21,7 @@ stdio.read(function(data){
 });
 ```
 
-## Parse Unix-like command line options
+### Parse Unix-like command line options
 
 ```javascript
 var stdio = require('stdio');
