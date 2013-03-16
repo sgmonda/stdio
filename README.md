@@ -13,8 +13,8 @@ You can do many things with this module
 ## Read standard input at once
 
 ```javascript
-    var input = require('in');
-    input.read(function(data){
+    var stdio = require('stdio');
+    stdio.read(function(data){
         console.log(data);
     });
 ```
@@ -22,8 +22,8 @@ You can do many things with this module
 ## Parse Unix-like command line options
 
 ```javascript
-    var input = require('in');
-    var ops = input.getopt({
+    var stdio = require('stdio');
+    var ops = stdio.getopt({
         'check': {key: 'c', args: 2},
         'map': {key: 'm'},
         'kaka': {key: 'k', args: 2},
