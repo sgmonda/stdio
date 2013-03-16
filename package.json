@@ -18,6 +18,6 @@
 	},
 	"readmeFilename": "README.md",
 	"scripts": {
-		"test": "node tests.js"
+		"test": "node test/tests.js < test/lipsum.txt"
 	}
 }

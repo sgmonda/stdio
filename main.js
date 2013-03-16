@@ -96,18 +96,19 @@ module.exports.getopt = function (options, argv) {
  * Reads the complete standard input
  * @param {function} callback
  */
-module.exports.read = function(callback){
+module.exports.read = function (callback) {
 
-    if(!callback) throw new Error('no callback provided to readInput() call');
+	if (!callback) {
+		throw new Error('no callback provided to readInput() call');
+	}
 
-    var inputdata = '';
-    
-    process.stdin.resume();    
-    process.stdin.on('data', function(text){
-        inputdata += String(text);
-    });
-    process.stdin.on('end', function(){
-        callback && callback(inputdata);
-    });
-    
+	var inputdata = '';
+
+	process.stdin.resume();
+	process.stdin.on('data', function (text) {
+		inputdata += String(text);
+	});
+	process.stdin.on('end', function () {
+		callback(inputdata);
+	});
 };
