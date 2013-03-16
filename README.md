@@ -1,21 +1,16 @@
 Module for input management with nodejs.
 
-This is a very young project. Use it at your own risk.
-
-Install
-=======
+# Installation
 
 To install the most recent release from npm, run:
 
-    npm install in
+    npm install stdio
 
-Use
-====
+# Usage
 
 You can do many things with this module
 
-Read standard input at once
-----------------------------
+## Read standard input at once
 
 ```javascript
     var input = require('in');
@@ -24,8 +19,7 @@ Read standard input at once
     });
 ```
 
-Parse Unix-like command line options
--------------------------------------
+## Parse Unix-like command line options
 
 ```javascript
     var input = require('in');
