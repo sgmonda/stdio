@@ -114,3 +114,4 @@ var getoptTests = [
 		console.log('- Test ' + (i + 1) + '/' + getoptTests.length + ' passed ✓');
 	});
 }());
+

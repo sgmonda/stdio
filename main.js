@@ -1,6 +1,8 @@
 /*jslint node: true, nomen: true*/
 'use strict';
 
+var util = require('util');
+
 /**
  * Parses command line options
  * @param {function} options options specification
@@ -111,4 +113,13 @@ module.exports.read = function (callback) {
 	process.stdin.on('end', function () {
 		callback(inputdata);
 	});
+};
+
+/**
+ * Printf-like output
+ * @param {String} format (use %s, %d or %j)
+ * @param {*} arguments
+ */
+module.exports.printf = function () {
+	process.stdout.write(util.format.apply(this, arguments));
 };

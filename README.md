@@ -55,3 +55,15 @@ if(ops.kaka){
     // Your action, using ops.kaka[0] or ops.kaka[1] or...
 }
 ```
+
+## Printf-like function
+
+```javascript
+stdio.printf('example %d: %s is %j\n', 2, 'any', {a: 2, b: [0, 2, 8], c: 'str'});
+```
+
+will produce the following output:
+
+```
+example 2: any is {"a":2,"b":[0,2,8],"c":"str"}
+```
