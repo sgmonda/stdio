@@ -56,7 +56,9 @@ if(ops.kaka){
 }
 ```
 
-## Printf-like function
+### Printf-like output
+
+This simple line:
 
 ```javascript
 stdio.printf('example %d: %s is %j\n', 2, 'any', {a: 2, b: [0, 2, 8], c: 'str'});
@@ -67,3 +69,5 @@ will produce the following output:
 ```
 example 2: any is {"a":2,"b":[0,2,8],"c":"str"}
 ```
+
+You can use `%s` for strings, `%d` for numbers (integer or floating-point ones), and `%j` for JSON objects.
