@@ -71,3 +71,10 @@ example 2: any is {"a":2,"b":[0,2,8],"c":"str"}
 ```
 
 You can use `%s` for strings, `%d` for numbers (integer or floating-point ones), and `%j` for JSON objects.
+
+## TODO
+
+[ ] Support grouped short options, like `-pnd` instead of `-p -n -d`
+[ ] Make single value options more friendly (avoid usage of option.args)
+[ ] Support mandatory options
+[ ] Add a function to print usage

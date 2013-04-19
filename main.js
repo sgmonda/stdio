@@ -1,4 +1,4 @@
-/*jslint node: true, nomen: true*/
+/*jslint node: true, nomen: true, vars: true, plusplus: true*/
 'use strict';
 
 var util = require('util');
@@ -90,9 +90,48 @@ module.exports.getopt = function (options, argv) {
 		}
 	}
 
+	opts.createHelp = function (header, usage) {
+
+		var o = null, lines = [], maxLength, help = '';
+
+		for (o in options) {
+			if (options.hasOwnProperty(o)) {
+				var ops = ' ', i;
+				for (i = 0; i < options[o].args; i++) {
+					ops += '<ARG' + (i + 1) + '> ';
+				}
+				lines.push(['  ' + (options[o].key ? '-' + options[o].key + ', --' : '--') + o + ops, (options[o].description || '')]);
+			}
+		}
+
+		if (header && usage) {
+			help += 'USAGE: ' + usage + '\n' + header + '\n';
+		}
+
+		maxLength = lines.reduce(function (prev, curr, indx) {
+			var aux = curr[0].length;
+			if (aux > prev) {
+				return aux;
+			}
+			return prev;
+		}, 0);
+
+		lines.forEach(function (l) {
+			help += l[0] + (new Array(maxLength - l[0].length + 1)).join(' ') + '\t' + l[1] + '\n';
+		});
+
+		return help;
+	};
+
+	opts.printHelp = function (header, usage) {
+		process.stdout.write(opts.createHelp(header, usage));
+	};
+
+
 	return opts;
 
 };
+
 
 /**
  * Reads the complete standard input

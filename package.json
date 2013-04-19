@@ -1,6 +1,6 @@
 {
 	"name": "stdio",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "Node.js module for standard input/output management",
 	"main": "main.js",
 	"author": {
