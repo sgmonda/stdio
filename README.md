@@ -56,6 +56,37 @@ if(ops.kaka){
 }
 ```
 
+#### Print usage
+
+This module can generate an usage message automatically. You can use it when user specifies `--help` option. This code:
+
+```javascript
+var stdio = require('stdio');
+
+var ops = stdio.getopt({
+	una: {description: 'Sets something to some value', key: 'u', args: 2},
+	otra_muy_larga: {description: 'A boolean flag', key: 'o'},
+	una_sin_desc: {description: 'Another boolean flag'},
+	ultima: {description: 'A description', key: 'u', args: 1}
+});
+
+// Print help
+ops.printHelp({
+	description: 'Description of this simple program',
+	usage: 'node something.js [OPTIONS] ... FILE'
+});
+```
+
+Will produce the following output:
+
+```
+USAGE: node something.js [OPTIONS] ... FILE
+Description of this simple program
+  -u, --una <ARG1> <ARG2> 	Sets something to some value
+  -o, --otra_muy_larga    	A boolean flag
+  --una_sin_desc          	Another boolean flag
+  -u, --ultima <ARG1>     	A description
+```
 ### Printf-like output
 
 This simple line:
@@ -71,10 +102,3 @@ example 2: any is {"a":2,"b":[0,2,8],"c":"str"}
 ```
 
 You can use `%s` for strings, `%d` for numbers (integer or floating-point ones), and `%j` for JSON objects.
-
-## TODO
-
-[ ] Support grouped short options, like `-pnd` instead of `-p -n -d`
-[ ] Make single value options more friendly (avoid usage of option.args)
-[ ] Support mandatory options
-[ ] Add a function to print usage

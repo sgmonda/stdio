@@ -123,8 +123,8 @@ module.exports.getopt = function (options, argv) {
 		return help;
 	};
 
-	opts.printHelp = function (header, usage) {
-		process.stdout.write(opts.createHelp(header, usage));
+	opts.printHelp = function (helpOptions) {
+		process.stdout.write(opts.createHelp(helpOptions.description, helpOptions.usage));
 	};
 
 
