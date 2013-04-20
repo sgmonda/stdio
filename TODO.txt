@@ -1,0 +1,7 @@
+# TODO
+
+- [X] Add a function to print usage
+- [ ] Support grouped short options, like `-pnd` instead of `-p -n -d`
+- [ ] Make single value options more friendly (avoid usage of option.args)
+- [ ] Support mandatory options
+- [ ] Add support for mandatory arguments (throwing an error if not included)
