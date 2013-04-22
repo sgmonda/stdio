@@ -17,12 +17,67 @@ module.exports.getopt = function (options, argv) {
 	    opt,
 	    optname,
 	    name,
-	    j;
+	    j,
+	    o,
+	    argvBackup;
 
 	argv = argv || process.argv;
+	argvBackup = argv.join('&%$·').split('&%$·');
 
 	// Arguments parsing
 	argv = argv.slice(2);
+
+	/**
+	 * Creates the help description (to be used by printHelp(), for instance)
+	 */
+	opts.createHelp = function () {
+
+		var o = null, lines = [], maxLength, help = '';
+
+		for (o in options) {
+			if (options.hasOwnProperty(o)) {
+				var ops = ' ', i;
+				for (i = 0; i < options[o].args; i++) {
+					ops += '<ARG' + (i + 1) + '> ';
+				}
+				lines.push(['  ' + (options[o].key ? '-' + options[o].key + ', --' : '--') + o + ops, (options[o].description || '') + (options[o].mandatory ? ' (mandatory)' : '')]);
+			}
+		}
+
+		maxLength = lines.reduce(function (prev, curr, indx) {
+			var aux = curr[0].length;
+			if (aux > prev) {
+				return aux;
+			}
+			return prev;
+		}, 0);
+
+		lines.forEach(function (l) {
+			help += l[0] + (new Array(maxLength - l[0].length + 1)).join(' ') + '\t' + l[1] + '\n';
+		});
+
+		return help;
+	};
+
+	/**
+	 * Prints the standard help message
+	 */
+	opts.printHelp = function () {
+		var usage = 'USAGE: ';
+		usage += 'node ' + argvBackup[1].split('/').pop() + ' ';
+		var o, i;
+		for (o in options) {
+			if (options.hasOwnProperty(o)) {
+				usage += '[--' + o;
+				for (i = 0, len = options[o].args; i < len; i++) {
+					usage += ' <ARG' + (i + 1) + '>';
+				}
+				usage += '] ';
+			}
+		}
+		console.log(usage);
+		process.stdout.write(opts.createHelp());
+	};
 
 	for (i = 0, len = argv.length; i < len; i = i + 1) {
 
@@ -41,7 +96,9 @@ module.exports.getopt = function (options, argv) {
 				optname = arg.substring(2);
 				spected = options[optname];
 				if (!spected) {
-					throw new Error('Unknown option: --' + optname);
+					console.log('Unknown option: --' + optname);
+					opts.printHelp();
+					process.exit(-1);
 				}
 
 			} else {
@@ -59,7 +116,9 @@ module.exports.getopt = function (options, argv) {
 
 				spected = options[optname];
 				if (!spected) {
-					throw new Error('Unknown option: -' + arg.substring(1));
+					console.log('Unknown option: -' + arg.substring(1));
+					opts.printHelp();
+					process.exit(-1);
 				}
 			}
 
@@ -90,46 +149,27 @@ module.exports.getopt = function (options, argv) {
 		}
 	}
 
-	opts.createHelp = function (header, usage) {
+	// Check if there is any mandatory and not specified option
 
-		var o = null, lines = [], maxLength, help = '';
-
-		for (o in options) {
-			if (options.hasOwnProperty(o)) {
-				var ops = ' ', i;
-				for (i = 0; i < options[o].args; i++) {
-					ops += '<ARG' + (i + 1) + '> ';
-				}
-				lines.push(['  ' + (options[o].key ? '-' + options[o].key + ', --' : '--') + o + ops, (options[o].description || '')]);
+	var mandatoryNotSpecified = [];
+	for (o in options) {
+		if (options.hasOwnProperty(o)) {
+			if (options[o].mandatory && !opts[o]) {
+				mandatoryNotSpecified.push(o);
 			}
 		}
-
-		if (header && usage) {
-			help += 'USAGE: ' + usage + '\n' + header + '\n';
-		}
-
-		maxLength = lines.reduce(function (prev, curr, indx) {
-			var aux = curr[0].length;
-			if (aux > prev) {
-				return aux;
-			}
-			return prev;
-		}, 0);
-
-		lines.forEach(function (l) {
-			help += l[0] + (new Array(maxLength - l[0].length + 1)).join(' ') + '\t' + l[1] + '\n';
-		});
-
-		return help;
-	};
-
-	opts.printHelp = function (helpOptions) {
-		process.stdout.write(opts.createHelp(helpOptions.description, helpOptions.usage));
-	};
-
+	}
+	if (mandatoryNotSpecified.length > 0) {
+		var error = 'Mandatory option' + (mandatoryNotSpecified.length > 1 ? 's' : '') + ' not specified: ';
+		error += mandatoryNotSpecified.map(function (o) {
+			return '--' + o;
+		}).join(', ');
+		console.log(error);
+		opts.printHelp();
+		process.exit(-1);
+	}
 
 	return opts;
-
 };
 
 
