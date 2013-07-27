@@ -2,17 +2,17 @@ Module for input/output management with nodejs.
 
 [![Build Status](https://secure.travis-ci.org/sgmonda/stdio.png)](http://travis-ci.org/sgmonda/stdio)
 
-## Installation
+## 1. Installation
 
 To install the most recent release from npm, run:
 
     npm install stdio
 
-## Usage
+## 2. Usage
 
 You can do many things with this module
 
-### Parse Unix-like command line options
+### 2.1. Parse Unix-like command line options
 
 ```javascript
 var stdio = require('stdio');
@@ -84,7 +84,7 @@ USAGE: node something.js [--una <ARG1> <ARG2>] [--otra_muy_larga] [--una_sin_des
 
 If a non-spected option is given or a mandatory option is not, an error (followed by the usage message) will be shown, finishing your program automatically. It's cool, isn`t it?
 
-### Read standard input at once
+### 2.2. Read standard input at once
 
 ```javascript
 var stdio = require('stdio');
@@ -93,7 +93,7 @@ stdio.read(function(data){
 });
 ```
 
-### Printf-like output
+### 2.3. Printf-like output
 
 This simple line:
 
@@ -109,9 +109,13 @@ example 2: any is {"a":2,"b":[0,2,8],"c":"str"}
 
 You can use `%s` for strings, `%d` for numbers (integer or floating-point ones), and `%j` for JSON objects.
 
-## Changelog
+## 3. Changelog
 
 ### 0.1.0
 
 * If an option is specified with less arguments than the specified, an error (and the help message) is shown and program finishes.
 * Captured options now has 3 possible values: `true`, a single `string` or an array of `strings`. Much easier to use than in previous releases (but incompatible with them, so be careful updating).
+
+## 4. Projects using `stdio` module
+
+If you use this module in your project, please, let us know.
