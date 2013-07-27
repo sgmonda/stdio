@@ -122,42 +122,99 @@ module.exports.getopt = function (options, argv) {
 				}
 			}
 
-			// Arguments asociated with this option
-			if (spected.args === 1) {
+			if (argv[i + 1] && argv[i + 1][0] !== '-') {
 
-				i = i + 1;
-				opt.args = argv[i];
-			} else if (spected.args) {
+				// Arguments asociated with this option
+				if (spected.args === 1) {
 
-				opt.args = [];
-				for (j = i + 1; j < i + 1 + (spected.args || 0); j = j + 1) {
-					opt.args.push(argv[j]);
+					i = i + 1;
+					opt = argv[i];
+				} else if (spected.args) {
+
+					opt = [];
+					for (j = i + 1; j < i + 1 + (spected.args || 0); j = j + 1) {
+						opt.push(argv[j]);
+					}
+					i += spected.args;
+
+				} else {
+
+					opt = true;
 				}
-				i += spected.args;
+
 			} else {
+
 				opt = true;
 			}
 
 			if (opt) {
 				opts[optname] = opt;
 			}
+
 		} else {
+
 			if (!opts.args) {
 				opts.args = [];
 			}
+
 			opts.args.push(argv[i]);
 		}
 	}
 
-	// Check if there is any mandatory and not specified option
+	// Check if two options has the same short key
+
+	var key = null;
+	var shorts = {};
+	for (key in options) {
+		if (options.hasOwnProperty(key) && options[key].key) {
+			if (shorts[options[key].key]) {
+				console.log('Wrong options specification: There are two or more options with the key "-%s"', options[key].key);
+				process.exit(-1);
+			}
+			shorts[options[key].key] = true;
+		}
+	}
+
+	// Check if there is any mandatory and not specified option, or any wrong specified one
 
 	var mandatoryNotSpecified = [];
+	var wrongSpecified = [];
+
 	for (o in options) {
+
 		if (options.hasOwnProperty(o)) {
-			if (options[o].mandatory && !opts[o]) {
+
+			var argsCount = parseInt(options[o].args, 10);
+
+			if (opts[o] === true && argsCount === 1) {
+
+				// Wrong specified
+				wrongSpecified.push(o);
+
+			} else if (opts[o] && argsCount >= 2) {
+
+				for (i = 0; i < argsCount; i++) {
+					if (!opts[o][i]) {
+						// Wrong specified
+						wrongSpecified.push(o);
+						break;
+					}
+				}
+
+			} else if (!opts[o] && options[o].mandatory) {
+
+				// Not specified being mandatory
 				mandatoryNotSpecified.push(o);
 			}
 		}
+	}
+
+	if (wrongSpecified.length > 0) {
+		var error2 = 'Incomplete specification of option' + (mandatoryNotSpecified.length > 1 ? 's' : '') + ': ';
+		error2 += wrongSpecified.map(function (o) {
+			return '--' + o;
+		}).join(', ');
+		console.log(error2);
 	}
 	if (mandatoryNotSpecified.length > 0) {
 		var error = 'Mandatory option' + (mandatoryNotSpecified.length > 1 ? 's' : '') + ' not specified: ';
@@ -165,6 +222,9 @@ module.exports.getopt = function (options, argv) {
 			return '--' + o;
 		}).join(', ');
 		console.log(error);
+	}
+
+	if (mandatoryNotSpecified.length > 0 || wrongSpecified.length > 0) {
 		opts.printHelp();
 		process.exit(-1);
 	}

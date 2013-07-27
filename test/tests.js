@@ -75,7 +75,7 @@ var getoptTests = [
 			'other': {key: 'o'}
 		},
 		argv: ['node', 'program.js', '-t', 'uno', '237', '--other'],
-		spectedOps: {'test': {args: ['uno', '237']}, 'other': true}
+		spectedOps: {'test': ['uno', '237'], 'other': true}
 	},
 	{
 		opsSpecification: {
@@ -83,7 +83,7 @@ var getoptTests = [
 			'other': {key: 'o'}
 		},
 		argv: ['node', 'program.js', '-t', 'uno', '237', '--other', 'extra1', 'extra2'],
-		spectedOps: {'test': {args: ['uno', '237']}, 'other': true, 'args': ['extra1', 'extra2']}
+		spectedOps: {'test': ['uno', '237'], 'other': true, 'args': ['extra1', 'extra2']}
 	},
 	{
 		opsSpecification: {
@@ -92,7 +92,7 @@ var getoptTests = [
 			'last': {args: 1}
 		},
 		argv: ['node', 'program.js', '-t', 'uno', '237', '--other', 'extra1', 'extra2', '--last', '34', 'extra3'],
-		spectedOps: {'test': {args: ['uno', '237']}, 'other': true, 'args': ['extra1', 'extra2', 'extra3'], 'last': {'args': '34'}}
+		spectedOps: {'test': ['uno', '237'], 'other': true, 'args': ['extra1', 'extra2', 'extra3'], 'last': '34'}
 	}
 ];
 

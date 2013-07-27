@@ -1,10 +1,10 @@
 {
 	"name": "stdio",
-	"version": "0.0.3",
-	"description": "Node.js module for standard input/output management",
+	"version": "0.1.0",
+	"description": "Module for standard input/output management with NodeJS",
 	"main": "main.js",
 	"author": {
-		"name": "Sergio Garcia Mondaray"
+		"name": "Sergio Garcia Mondaray <sgmonda@gmail.com> (http://www.sgmonda.com)"
 	},
 	"keywords": [
 		"input",
