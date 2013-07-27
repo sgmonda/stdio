@@ -75,7 +75,7 @@ if (ops.help) {
 will produce the following output (if it is called with `--help` flag):
 
 ```
-USAGE: node something.js [OPTIONS] ... FILE
+USAGE: node something.js [--una <ARG1> <ARG2>] [--otra_muy_larga] [--una_sin_desc] [--ultima <ARG1>]
 Description of this simple program
   -u, --una <ARG1> <ARG2> 	Sets something to some value (mandatory)
   -o, --otra_muy_larga    	A boolean flag (mandatory)
@@ -83,7 +83,7 @@ Description of this simple program
   -u, --ultima <ARG1>     	A description
 ```
 
-If a non-spected option is given of a mandatory option is not, an error (followed by the usage message) will be shown, finishing your program automatically. It's cool, isn`t it?
+If a non-spected option is given or a mandatory option is not, an error (followed by the usage message) will be shown, finishing your program automatically. It's cool, isn`t it?
 
 ### Read standard input at once
 
