@@ -76,7 +76,6 @@ will produce the following output (if it is called with `--help` flag):
 
 ```
 USAGE: node something.js [--una <ARG1> <ARG2>] [--otra_muy_larga] [--una_sin_desc] [--ultima <ARG1>]
-Description of this simple program
   -u, --una <ARG1> <ARG2> 	Sets something to some value (mandatory)
   -o, --otra_muy_larga    	A boolean flag (mandatory)
   --una_sin_desc          	Another boolean flag
