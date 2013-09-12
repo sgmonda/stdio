@@ -6,5 +6,5 @@
 - [X] Add support for mandatory arguments (throwing an error if not included)
 - [X] Support mandatory options
 - [ ] Support enumerated options. Help must say something like --whatever <something|another|last>
-
+- [ ] Support arguments suggestions when a non-supported one is detected
 
