@@ -118,4 +118,8 @@ You can use `%s` for strings, `%d` for numbers (integer or floating-point ones),
 
 ## 4. Projects using `stdio` module
 
+The following projects are currently using `stdio` module:
+
+* mammock: https://github.com/earmbrust/mammock
+
 If you use this module in your project, please, let us know.
