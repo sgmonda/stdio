@@ -17,8 +17,8 @@ var stdio = require('../main.js'),
  */
 
 (function () {
-	var title = 'INPUT read at once\n',
-	    i = title.length;
+	var title = 'INPUT read at once\n';
+	var i = title.length;
 
 	while ((i = i - 1) > 0) {
 		title += '=';
@@ -98,8 +98,8 @@ var getoptTests = [
 
 (function () {
 
-	var title = 'GETOPT tests\n',
-	    i = title.length;
+	var title = 'GETOPT tests\n';
+	var i = title.length;
 
 	while ((i = i - 1) > 0) {
 		title += '=';
@@ -107,8 +107,8 @@ var getoptTests = [
 	console.log('\n' + title);
 
 	getoptTests.forEach(function (t, i) {
-		var ops = JSON.stringify(stdio.getopt(t.opsSpecification, t.argv)),
-		    spected = JSON.stringify(t.spectedOps);
+		var ops = JSON.stringify(stdio.getopt(t.opsSpecification, t.argv));
+		var spected = JSON.stringify(t.spectedOps);
 		console.assert(ops === spected, 'getopt test failed:\n'
 					   + 'Spec = ' + spected + '\nGet = ' + ops + '\n');
 		console.log('- Test ' + (i + 1) + '/' + getoptTests.length + ' passed ✓');

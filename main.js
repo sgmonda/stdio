@@ -9,17 +9,17 @@ var util = require('util');
  */
 module.exports.getopt = function (options, argv) {
 
-	var opts = {},           // Options map
-	    arg,                 // Every argument
-	    spected,
-	    i,
-	    len,
-	    opt,
-	    optname,
-	    name,
-	    j,
-	    o,
-	    argvBackup;
+	var opts = {};           // Options map
+	var arg;                 // Every argument
+	var spected;
+	var i;
+	var len;
+	var opt;
+	var optname;
+	var name;
+	var j;
+	var o;
+	var argvBackup;
 
 	argv = argv || process.argv;
 	argvBackup = argv.join('&%$·').split('&%$·');
