@@ -109,14 +109,22 @@ example 2: any is {"a":2,"b":[0,2,8],"c":"str"}
 
 You can use `%s` for strings, `%d` for numbers (integer or floating-point ones), and `%j` for JSON objects.
 
-## 3. Changelog
+## 3. Testing
+
+To run tests, use the following command from module's root:
+
+````
+npm test
+````
+
+## Changelog
 
 ### 0.1.0
 
 * If an option is specified with less arguments than the specified, an error (and the help message) is shown and program finishes.
 * Captured options now has 3 possible values: `true`, a single `string` or an array of `strings`. Much easier to use than in previous releases (but incompatible with them, so be careful updating).
 
-## 4. Projects using `stdio` module
+## Projects using `stdio` module
 
 The following projects are currently using `stdio` module:
 
