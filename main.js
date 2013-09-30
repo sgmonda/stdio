@@ -79,6 +79,9 @@ module.exports.getopt = function (options, argv) {
 		process.stdout.write(opts.createHelp());
 	};
 
+	/**
+	 * Perform the parsing
+	 */
 	for (i = 0, len = argv.length; i < len; i = i + 1) {
 
 		opt = null;
@@ -87,8 +90,10 @@ module.exports.getopt = function (options, argv) {
 		arg = argv[i];
 
 		if (arg.charAt(0) === '-') {
+
 			opt = {};
 			spected = null;
+
 			if (arg.charAt(1) === '-') {
 
 				// It's a long option
@@ -125,10 +130,12 @@ module.exports.getopt = function (options, argv) {
 			if (argv[i + 1] && argv[i + 1][0] !== '-') {
 
 				// Arguments asociated with this option
+
 				if (spected.args === 1) {
 
 					i = i + 1;
 					opt = argv[i];
+
 				} else if (spected.args) {
 
 					opt = [];
@@ -194,7 +201,9 @@ module.exports.getopt = function (options, argv) {
 			} else if (opts[o] && argsCount >= 2) {
 
 				for (i = 0; i < argsCount; i++) {
+
 					if (!opts[o][i]) {
+
 						// Wrong specified
 						wrongSpecified.push(o);
 						break;
@@ -210,21 +219,29 @@ module.exports.getopt = function (options, argv) {
 	}
 
 	if (wrongSpecified.length > 0) {
+
 		var error2 = 'Incomplete specification of option' + (mandatoryNotSpecified.length > 1 ? 's' : '') + ': ';
+
 		error2 += wrongSpecified.map(function (o) {
 			return '--' + o;
 		}).join(', ');
+
 		console.log(error2);
 	}
+
 	if (mandatoryNotSpecified.length > 0) {
+
 		var error = 'Mandatory option' + (mandatoryNotSpecified.length > 1 ? 's' : '') + ' not specified: ';
+
 		error += mandatoryNotSpecified.map(function (o) {
 			return '--' + o;
 		}).join(', ');
+
 		console.log(error);
 	}
 
 	if (mandatoryNotSpecified.length > 0 || wrongSpecified.length > 0) {
+
 		opts.printHelp();
 		process.exit(-1);
 	}
@@ -246,9 +263,11 @@ module.exports.read = function (callback) {
 	var inputdata = '';
 
 	process.stdin.resume();
+
 	process.stdin.on('data', function (text) {
 		inputdata += String(text);
 	});
+
 	process.stdin.on('end', function () {
 		callback(inputdata);
 	});
@@ -260,5 +279,6 @@ module.exports.read = function (callback) {
  * @param {*} arguments
  */
 module.exports.printf = function () {
+
 	process.stdout.write(util.format.apply(this, arguments));
 };
