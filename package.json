@@ -3,7 +3,7 @@
 	"version": "0.1.1",
 	"description": "Module for standard input/output management with NodeJS",
 	"keywords": ["input", "console", "output", "terminal", "system"],
-	"homepage": "https://github.com/sgmonda/stdio",
+	"homepage": "http://sgmonda.github.io/stdio/",
 	"license": "MIT",
 	"main": "main.js",
 	"author": {
