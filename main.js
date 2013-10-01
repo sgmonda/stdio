@@ -108,23 +108,33 @@ module.exports.getopt = function (options, argv) {
 
 			} else {
 
-				// It's a short option
+				// It's a short option (or many one)
 
-				for (name in options) {
-					if (options.hasOwnProperty(name)) {
-						if (options[name].key === arg.substring(1)) {
+				var keys = arg.substring(1).split('');
+
+				keys.forEach(function (k) {
+
+					for (name in options) {
+
+						if (options[name].key === k) {
 							optname = name;
 							break;
 						}
 					}
-				}
 
-				spected = options[optname];
-				if (!spected) {
-					console.log('Unknown option: -' + arg.substring(1));
-					opts.printHelp();
-					process.exit(-1);
-				}
+					spected = options[optname];
+					if (!spected) {
+						console.log('Unknown option: -' + k);
+						opts.printHelp();
+						process.exit(-1);
+					}
+
+					if (keys.length > 1) {
+
+						opts[optname] = true;
+
+					}
+				});
 			}
 
 			if (argv[i + 1] && argv[i + 1][0] !== '-') {
