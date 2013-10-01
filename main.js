@@ -6,8 +6,10 @@ var util = require('util');
 /**
  * Parses command line options
  * @param {function} options options specification
+ * @param {string} extra Extra arguments description
+ * @param {argv} arguments Arguments array (optionsl)
  */
-module.exports.getopt = function (options, argv) {
+module.exports.getopt = function (options, extra, argv) {
 
 	var opts = {};           // Options map
 	var arg;                 // Every argument
@@ -64,17 +66,7 @@ module.exports.getopt = function (options, argv) {
 	 */
 	opts.printHelp = function () {
 		var usage = 'USAGE: ';
-		usage += 'node ' + argvBackup[1].split('/').pop() + ' ';
-		var o, i;
-		for (o in options) {
-			if (options.hasOwnProperty(o)) {
-				usage += '[--' + o;
-				for (i = 0, len = options[o].args; i < len; i++) {
-					usage += ' <ARG' + (i + 1) + '>';
-				}
-				usage += '] ';
-			}
-		}
+		usage += 'node ' + argvBackup[1].split('/').pop() + ' [OPTIONS] ' + (extra || '');
 		console.log(usage);
 		process.stdout.write(opts.createHelp());
 	};

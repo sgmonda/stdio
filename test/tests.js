@@ -134,7 +134,7 @@ var getoptTests = [
 	console.log('\n' + title);
 
 	getoptTests.forEach(function (t, i) {
-		var ops = JSON.stringify(stdio.getopt(t.opsSpecification, t.argv));
+		var ops = JSON.stringify(stdio.getopt(t.opsSpecification, null, t.argv));
 		var spected = JSON.stringify(t.spectedOps);
 		console.assert(ops === spected, 'getopt test failed:\n'
 					   + 'Spec = ' + spected + '\nGet = ' + ops + '\n');
