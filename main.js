@@ -67,6 +67,7 @@ module.exports.getopt = function (options, extra, argv) {
 	opts.printHelp = function () {
 		var usage = 'USAGE: ';
 		usage += 'node ' + argvBackup[1].split('/').pop() + ' [OPTIONS] ' + (extra || '');
+		usage += ', where OPTIONS are:';
 		console.log(usage);
 		process.stdout.write(opts.createHelp());
 	};
