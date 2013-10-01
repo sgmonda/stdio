@@ -54,7 +54,7 @@ As you can see, every option in `ops` object can has 3 different type of values:
 
 #### Print usage
 
-This module can generate an usage message automatically. You can use it when user specifies `--help` option. This code:
+This module can generate an usage message automatically. You can use it when user specifies `--help` option, which is automatically supported. This code:
 
 ```javascript
 var stdio = require('stdio');
@@ -64,18 +64,13 @@ var ops = stdio.getopt({
 	otra_muy_larga: {description: 'A boolean flag', key: 'o', mandatory: true},
 	una_sin_desc: {description: 'Another boolean flag'},
 	ultima: {description: 'A description', key: 'u', args: 1}
-});
-
-// Print help
-if (ops.help) {
-	ops.printHelp();
-}
+}, '[FILE1] [FILE2] ...'); // Optional extra arguments description
 ```
 
 will produce the following output (if it is called with `--help` flag):
 
 ```
-USAGE: node something.js [--una <ARG1> <ARG2>] [--otra_muy_larga] [--una_sin_desc] [--ultima <ARG1>]
+USAGE: node something.js [OPTIONS] [FILE1] [FILE2] ...
   -u, --una <ARG1> <ARG2> 	Sets something to some value (mandatory)
   -o, --otra_muy_larga    	A boolean flag (mandatory)
   --una_sin_desc          	Another boolean flag
@@ -118,6 +113,11 @@ npm test
 ````
 
 ## Changelog
+
+### 0.1.1
+
+* Grouped short options support added (for boolean flags). Now you can write `-abc` instead of `-a -b -c`.
+* Usage message has been simplified. Extra arguments description is supported now.
 
 ### 0.1.0
 
