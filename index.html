@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
   </head>
   <body>
     <div class="wrapper">
@@ -28,29 +28,114 @@
         </ul>
       </header>
       <section>
-        <h2>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Installation</h2>
 
-<p>To install the most recent release from <a href="https://npmjs.org/">npm</a>, run:</p>
+        <h2>Installation</h2>
 
-<pre>
-npm install stdio
-</pre>
+		<p>To install the most recent release from <a href="https://npmjs.org/">npm</a>, run:</p>
 
-<h2>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Usage</h2>
+		<pre>npm install stdio</pre>
 
-<h3>Parsing UNIX-like command-line options</h3>
+		<h2>Usage</h2>
 
-<h4>Print usage</h4>
+		You can do some things with this module:
+		<ul>
+		  <li>Parsing command-line options in a UNIX-like style</li>
+		  <li>Read standard input at once</li>
+		  <li>Printf-like output</li>
+		</ul>
 
-<h3>Read standard input at once</h3>
+		<h3>Parsing UNIX-like command-line options</h3>
 
-<h3>Printf-like output</h3>
+		<p>With <code>stdio</code> it is very easy to add suport for 
+		command-line options to a NodeJS program. There is a function
+		called <code>getopt()</code> (like GNU utility) very easy to use. Imagine
+		you have a script which may receive the name and age of an
+		user, if he is redhead or not, and finally a folder with her files:</p>
 
-<h2>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Changelog</h2>
+		<pre class="prettyprint">
+var stdio = require('stdio');
 
+var options = stdio.getopt({
+    'name': {description: 'User name', mandatory: true, args: 1},
+    'surname': {description: 'User surname', args: 1},
+    'age': {key: 'a', description: 'User age', args: 1},
+    'redhead': {key: 'r', description: 'If he is redhead'}
+});</pre>
+
+		<p>Now, if you run your program with the following
+		command:</p>
+
+		<pre>node yourscript.js --name 'Rick' -r --age 33 /path/to/astley</pre>
+
+		<p>Then the <code>options</code> object returned by <code>getopt()</code> will be as
+		follows:</p>
+
+		<pre class="prettyprint">
+{
+    'name': 'Rick',
+    'redhead': true,
+    'age': '33',
+    'args': ['/path/to/astley']
+}</pre>
+
+		<p>So you can perform checks and use provided data however
+		you want:</p>
+
+		<pre class="prettyprint">
+console.log('Your name is %s', options.name);
+if (options.redhead) {
+    console.log('You are redhead!');
+}</pre>
+		<p>Easy, isn't it?</p>
+
+		<h4>Print usage</h4>
+
+		<p>Now try to run you program adding a non-specified option, like <code>-x</code>
+		for instance. What happens?</p>
+
+		<pre>
+Unknown option: -k
+USAGE: node preuba.js [OPTIONS] 
+  --name < ARG1 >        User name (mandatory)
+  --surname < ARG1 >     User surname
+  -a, --age < ARG1 >     User age
+  -r, --redhead          If he is redhead</pre>
+
+		<p>It is cool!</p>
+
+		<p>The same info, with a proper error message, is shown if
+		you forget to specify a mandatory option, or if you don't
+		specify some required argument of an option.</p>
+
+		<p>You can print this usage info manually, too:</p>
+
+		<pre class="prettyprint">
+options.printHelp()</pre>
+
+		<h3>Read standard input at once</h3>
+
+		<p>If you want to get the whole standard input at
+		once, <code>stdio</code> lets you write the following:</p>
+
+		<pre class="prettyprint">
+var stdio = require('stdio');
+stdio.read(function(data){
+    console.log(data);
+});</pre>
+
+		<p>It cannot be easier.</p>
+
+		<h3>Printf-like output</h3>
+
+<p>This simple line:</p>
+<pre class="prettyprint">
+stdio.printf('example %d: %s is %j\n', 2, 'any', {a: 2, b: [0, 2, 8], c: 'str'});</pre>
+
+<p>will produce the following output:</p>
+
+<pre class="prettyprint">example 2: any is {"a":2,"b":[0,2,8],"c":"str"}</pre>
+
+<p>You can use <code>%s</code> for strings, <code>%d</code> for numbers (integer or floating-point ones), and <code>%j</code> for JSON objects.</p>
 
       </section>
       <footer>
@@ -59,6 +144,7 @@ npm install stdio
       </footer>
     </div>
     <script src="javascripts/scale.fix.js"></script>
-    
+
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js?lang=css&skin=default"></script>
   </body>
 </html>

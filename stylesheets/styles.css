@@ -253,3 +253,8 @@ footer {
     color:#444;
   }
 }
+
+pre {
+	padding: 10px !important;
+	border: solid #ddd 1px !important;
+}
