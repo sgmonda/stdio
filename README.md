@@ -2,6 +2,8 @@ Module for input/output management with nodejs.
 
 [![Build Status](https://secure.travis-ci.org/sgmonda/stdio.png)](http://travis-ci.org/sgmonda/stdio)
 
+Website: http://sgmonda.github.io/stdio/
+
 ## 1. Installation
 
 To install the most recent release from npm, run:
