@@ -1,5 +1,6 @@
 # TODO
 
+- [ ] Support a list of many arguments for an option (without a fixed length). {..., args: '*'}
 - [ ] Support enumerated options. Help must say something like --whatever <something|another|last>
 - [ ] Support arguments suggestions when a non-supported one is detected
 - [ ] Create a stdio.inspect() function to inspect objects with color
