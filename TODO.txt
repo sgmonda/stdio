@@ -4,6 +4,7 @@
 - [ ] Support enumerated options. Help must say something like --whatever <something|another|last>
 - [ ] Support arguments suggestions when a non-supported one is detected
 - [ ] Support default values for options
+- [ ] Support mandatory extra args
 - [ ] Create a stdio.inspect() function to inspect objects with color (maybe integrated with printf)
 
 - [X] Add a function to print usage
