@@ -99,9 +99,9 @@ module.exports.getopt = function (options, extra, argv) {
 					process.exit(-1);
 				}
 
-			} else {
+			} else if (arg.charAt(1).match(/[a-zA-Z]/)) {
 
-				// It's a short option (or many one)
+				// It's a negative number, a short option (or many one)
 
 				var keys = arg.substring(1).split('');
 
@@ -130,7 +130,7 @@ module.exports.getopt = function (options, extra, argv) {
 				});
 			}
 
-			if (argv[i + 1] && argv[i + 1][0] !== '-') {
+			if (argv[i + 1]) {
 
 				// Arguments asociated with this option
 

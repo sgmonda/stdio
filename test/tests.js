@@ -120,7 +120,23 @@ var getoptTests = [
 		},
 		argv: ['node', 'program.js', '-b'],
 		spectedOps: {joint2: true}
-	}
+	},
+	{
+		opsSpecification: {
+			'number': {key: 'n', args: 2},
+			'other': {key: 'o'}
+		},
+		argv: ['node', 'program.js', '-n', '-33', '-237', '--other'],
+		spectedOps: {'number': ['-33', '-237'], 'other': true}
+	},
+	{
+		opsSpecification: {
+			'number': {key: 'n', args: 2},
+			'other': {key: 'o'}
+		},
+		argv: ['node', 'program.js', '-n', '33', '-237'],
+		spectedOps: {'number': ['33', '-237']}
+	},
 ];
 
 (function () {
