@@ -116,6 +116,10 @@ npm test
 
 ## Changelog
 
+### 0.1.2
+
+* Bug fix: Negative numbers as parameters caused wrong errors.
+
 ### 0.1.1
 
 * Grouped short options support added (for boolean flags). Now you can write `-abc` instead of `-a -b -c`.
