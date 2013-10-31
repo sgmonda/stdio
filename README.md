@@ -135,5 +135,6 @@ npm test
 The following projects are currently using `stdio` module:
 
 * mammock: https://github.com/earmbrust/mammock
+* sqsmonitor: https://github.com/hasallen/sqsmonitor
 
 If you use this module in your project, please, let us know.
