@@ -136,5 +136,6 @@ The following projects are currently using `stdio` module:
 
 * mammock: https://github.com/earmbrust/mammock
 * sqsmonitor: https://github.com/hasallen/sqsmonitor
+* frejus: https://npmjs.org/package/frejus
 
 If you use this module in your project, please, let us know.
