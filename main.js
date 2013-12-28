@@ -1,7 +1,16 @@
 /*jslint node: true, nomen: true, vars: true, plusplus: true*/
 'use strict';
 
+// DEPENDENCIES
+
 var util = require('util');
+
+// GLOBALS
+
+var stdin = process.stdin;
+var MAX_PROMPT_TRIES = 3;
+
+// MAIN LOGIC
 
 function preprocess (argv) {
 
@@ -278,25 +287,61 @@ module.exports.read = function (callback) {
 		throw new Error('no callback provided to readInput() call');
 	}
 
-	var inputdata = '';
+	var inputdata;
+	stdin.resume();
 
-	process.stdin.resume();
-
-	process.stdin.on('data', function (text) {
+	var listener = function (text) {
 		inputdata += String(text);
-	});
+	};
 
-	process.stdin.on('end', function () {
+	stdin.on('data', listener);
+
+	stdin.on('end', function () {
+		stdin.removeListener('data', listener);
 		callback(inputdata);
 	});
 };
 
 /**
- * Printf-like output
- * @param {String} format (use %s, %d or %j)
- * @param {*} arguments
+ * Shows a prompt question with some possible answers
+ * @param {string}   question Question to show
+ * @param {array}    options  Possible answers
+ * @param {function} callback Function to call with user response (err, response)
  */
-module.exports.printf = function () {
+module.exports.question = function (question, options, callback) {
 
-	process.stdout.write(util.format.apply(this, arguments));
+	if (!question || !Array.isArray(options) || options.length < 2) {
+		throw new Error('Stdio questions have to be created providing a question and two or more possible answers');
+	}
+
+	var tries = MAX_PROMPT_TRIES;
+
+	var performQuestion = function () {
+		process.stdout.write(question + ' [' + options.join('/') + ']: ');
+	}
+
+	stdin.resume();
+
+	var listener = function (data) {
+
+		var response = data.toString().toLowerCase().trim();
+
+		if (options.indexOf(response) === -1) {
+
+			console.log('Unexpected answer');
+			tries--;
+			if (tries === 0) {
+				stdin.removeListener('data', listener);
+				callback('Retries spent');
+			} else {
+				performQuestion();
+			}
+			return;
+		}
+		stdin.removeListener('data', listener);
+		callback(false, response);
+	};
+
+	stdin.addListener('data', listener);
+	performQuestion();
 };

@@ -5,7 +5,7 @@
  * Stdio NodeJS module tests
  */
 
-// Dependences =================================================================
+// Dependencies =================================================================
 
 var stdio = require('../main.js'),
     exec = require('child_process').exec;
@@ -166,4 +166,3 @@ var getoptTests = [
 		console.log('- Test ' + (i + 1) + '/' + getoptTests.length + ' passed ✓');
 	});
 }());
-

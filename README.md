@@ -83,6 +83,8 @@ If a non-spected option is given or a mandatory option is not, an error (followe
 
 ### 2.2. Read standard input at once
 
+This simple following code will read the whole standard input.
+
 ```javascript
 var stdio = require('stdio');
 stdio.read(function(data){
@@ -90,21 +92,24 @@ stdio.read(function(data){
 });
 ```
 
-### 2.3. Printf-like output
+Obviously it is not recommended for huge input files.
 
-This simple line:
+### 2.3. Show prompt questions and wait user's answer
 
 ```javascript
-stdio.printf('example %d: %s is %j\n', 2, 'any', {a: 2, b: [0, 2, 8], c: 'str'});
+var stdio = require('stdio');
+stdio.question('This is a question?', ['y', 'n'], function (err, answer) {
+    // Use answer here
+});
 ```
 
-will produce the following output:
+The previous code will show something like the following:
 
-```
-example 2: any is {"a":2,"b":[0,2,8],"c":"str"}
-```
+````
+This is a question? [y/n]:
+````
 
-You can use `%s` for strings, `%d` for numbers (integer or floating-point ones), and `%j` for JSON objects.
+and waits until user enters an answer. There will be 3 retries before reporting an error by mean of the callback.
 
 ## 3. Testing
 
@@ -115,6 +120,11 @@ npm test
 ````
 
 ## Changelog
+
+### 0.1.4
+
+* New fancy feature! Now you can show simple prompts to interact with users by mean of a question.
+* Old printf-like feature has been removed.
 
 ### 0.1.3
 
