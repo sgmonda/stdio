@@ -3,6 +3,20 @@
 
 var util = require('util');
 
+function preprocess (argv) {
+
+	var i, arg;
+	for (i = 0; i < argv.length; i++) {
+		arg = argv[i];
+		var parts = arg.match(/(.+)=(.+)/);
+		if (parts) {
+			argv.splice(i, 1, parts[1], parts[2]);
+		}
+	}
+
+	return argv;
+}
+
 /**
  * Parses command line options
  * @param {function} options options specification
@@ -24,6 +38,7 @@ module.exports.getopt = function (options, extra, argv) {
 	var argvBackup;
 
 	argv = argv || process.argv;
+	argv = preprocess(argv);
 	argvBackup = argv.join('&%$·').split('&%$·');
 
 	// Arguments parsing

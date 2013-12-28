@@ -1,7 +1,6 @@
 # TODO
 
 - [ ] Support interactive input/output, like [Y/y/n] questions.
-- [ ] Support large options definition using equals: --something=myvalue
 - [ ] Support a list of many arguments for an option (without a fixed length). {..., args: '*'}
 - [ ] Support enumerated options. Help must say something like --whatever <something|another|last>
 - [ ] Support arguments suggestions when a non-supported one is detected
@@ -14,3 +13,4 @@
 - [X] Make single value options more friendly (avoid usage of option.args)
 - [X] Add support for mandatory arguments (throwing an error if not included)
 - [X] Support mandatory options
+- [X] Support large options definition using equals: --something=myvalue

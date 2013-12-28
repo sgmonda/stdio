@@ -137,6 +137,15 @@ var getoptTests = [
 		argv: ['node', 'program.js', '-n', '33', '-237'],
 		spectedOps: {'number': ['33', '-237']}
 	},
+	{
+		opsSpecification: {
+			'number': {key: 'n', args: 1},
+			'other': {key: 'o'},
+			'pepe': {args: 2}
+		},
+		argv: ['node', 'program.js', '--number=88', '--pepe', '22', '33'],
+		spectedOps: {'number': '88', 'pepe': ['22', '33']}
+	},
 ];
 
 (function () {
