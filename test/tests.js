@@ -26,12 +26,12 @@ var stdio = require('../main.js'),
 
 	exec('wc -l test/lipsum.txt', function (err, res) {
 		console.assert(err === null, 'An error occurred while reading sample text file');
-		var spectedLines = parseInt(res.match(/\d+/)[0], 10);
+		var expectedLines = parseInt(res.match(/\d+/)[0], 10);
 		stdio.read(function (input) {
 			var readedLines = parseInt(input.split('\n').length, 10) - 1;
 			console.log('\n' + title);
-			console.assert(spectedLines === readedLines, 'Spected and get lines count are different\n'
-														 + 'Spec = ' + spectedLines + '\nGet  = ' + readedLines);
+			console.assert(expectedLines === readedLines, 'expected and get lines count are different\n'
+														 + 'Spec = ' + expectedLines + '\nGet  = ' + readedLines);
 			console.log('- Test passed ✓');
 		});
 	});
@@ -45,12 +45,12 @@ var getoptTests = [
 	{
 		opsSpecification: {},
 		argv: ['node', 'program.js'],
-		spectedOps: {}
+		expectedOps: {}
 	},
 	{
 		opsSpecification: {},
 		argv: ['node', 'program.js', 'arg1', 'arg2'],
-		spectedOps: {
+		expectedOps: {
 			'args': ['arg1', 'arg2']
 		}
 	},
@@ -59,7 +59,7 @@ var getoptTests = [
 			'test': {}
 		},
 		argv: ['node', 'program.js', '--test'],
-		spectedOps: {'test': true}
+		expectedOps: {'test': true}
 	},
 	{
 		opsSpecification: {
@@ -67,7 +67,7 @@ var getoptTests = [
 			'other': {key: 'o'}
 		},
 		argv: ['node', 'program.js', '-o'],
-		spectedOps: {'other': true}
+		expectedOps: {'other': true}
 	},
 	{
 		opsSpecification: {
@@ -75,7 +75,7 @@ var getoptTests = [
 			'other': {key: 'o'}
 		},
 		argv: ['node', 'program.js', '-t', 'uno', '237', '--other'],
-		spectedOps: {'test': ['uno', '237'], 'other': true}
+		expectedOps: {'test': ['uno', '237'], 'other': true}
 	},
 	{
 		opsSpecification: {
@@ -83,7 +83,7 @@ var getoptTests = [
 			'other': {key: 'o'}
 		},
 		argv: ['node', 'program.js', '-t', 'uno', '237', '--other', 'extra1', 'extra2'],
-		spectedOps: {'test': ['uno', '237'], 'other': true, 'args': ['extra1', 'extra2']}
+		expectedOps: {'test': ['uno', '237'], 'other': true, 'args': ['extra1', 'extra2']}
 	},
 	{
 		opsSpecification: {
@@ -92,7 +92,7 @@ var getoptTests = [
 			'last': {args: 1}
 		},
 		argv: ['node', 'program.js', '-t', 'uno', '237', '--other', 'extra1', 'extra2', '--last', '34', 'extra3'],
-		spectedOps: {'test': ['uno', '237'], 'other': true, 'args': ['extra1', 'extra2', 'extra3'], 'last': '34'}
+		expectedOps: {'test': ['uno', '237'], 'other': true, 'args': ['extra1', 'extra2', 'extra3'], 'last': '34'}
 	},
 	{
 		opsSpecification: {
@@ -101,7 +101,7 @@ var getoptTests = [
 			'joint3': {key: 'c'}
 		},
 		argv: ['node', 'program.js', '-abc'],
-		spectedOps: {joint1: true, joint2: true, joint3: true}
+		expectedOps: {joint1: true, joint2: true, joint3: true}
 	},
 	{
 		opsSpecification: {
@@ -110,7 +110,7 @@ var getoptTests = [
 			'joint3': {key: 'c'}
 		},
 		argv: ['node', 'program.js', '-ac'],
-		spectedOps: {joint1: true, joint3: true}
+		expectedOps: {joint1: true, joint3: true}
 	},
 	{
 		opsSpecification: {
@@ -119,7 +119,7 @@ var getoptTests = [
 			'joint3': {key: 'c'}
 		},
 		argv: ['node', 'program.js', '-b'],
-		spectedOps: {joint2: true}
+		expectedOps: {joint2: true}
 	},
 	{
 		opsSpecification: {
@@ -127,7 +127,7 @@ var getoptTests = [
 			'other': {key: 'o'}
 		},
 		argv: ['node', 'program.js', '-n', '-33', '-237', '--other'],
-		spectedOps: {'number': ['-33', '-237'], 'other': true}
+		expectedOps: {'number': ['-33', '-237'], 'other': true}
 	},
 	{
 		opsSpecification: {
@@ -135,7 +135,7 @@ var getoptTests = [
 			'other': {key: 'o'}
 		},
 		argv: ['node', 'program.js', '-n', '33', '-237'],
-		spectedOps: {'number': ['33', '-237']}
+		expectedOps: {'number': ['33', '-237']}
 	},
 	{
 		opsSpecification: {
@@ -144,7 +144,7 @@ var getoptTests = [
 			'pepe': {args: 2}
 		},
 		argv: ['node', 'program.js', '--number=88', '--pepe', '22', '33'],
-		spectedOps: {'number': '88', 'pepe': ['22', '33']}
+		expectedOps: {'number': '88', 'pepe': ['22', '33']}
 	},
 ];
 
@@ -160,9 +160,9 @@ var getoptTests = [
 
 	getoptTests.forEach(function (t, i) {
 		var ops = JSON.stringify(stdio.getopt(t.opsSpecification, null, t.argv));
-		var spected = JSON.stringify(t.spectedOps);
-		console.assert(ops === spected, 'getopt test failed:\n'
-					   + 'Spec = ' + spected + '\nGet = ' + ops + '\n');
+		var expected = JSON.stringify(t.expectedOps);
+		console.assert(ops === expected, 'getopt test failed:\n'
+					   + 'Spec = ' + expected + '\nGet = ' + ops + '\n');
 		console.log('- Test ' + (i + 1) + '/' + getoptTests.length + ' passed ✓');
 	});
 }());
