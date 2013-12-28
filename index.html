@@ -88,7 +88,7 @@ if (options.redhead) {
 }</pre>
 		<p>Easy, isn't it?</p>
 
-		<h4>Print usage</h4>
+		<h5>Print usage</h5>
 
 		<p>Now try to run you program adding a non-specified option, like <code>-x</code>
 		for instance. What happens?</p>
@@ -123,19 +123,23 @@ stdio.read(function(data){
     console.log(data);
 });</pre>
 
-		<p>It cannot be easier.</p>
+		<p>You can use it for small input files. It cannot be easier.</p>
 
-		<h3>Printf-like output</h3>
+		<h3>Prompt questions</h3>
 
-<p>This simple line:</p>
+<p>This simple code:</p>
 <pre class="prettyprint">
-stdio.printf('example %d: %s is %j\n', 2, 'any', {a: 2, b: [0, 2, 8], c: 'str'});</pre>
+var stdio = require('stdio');
+stdio.question('Is this a question?', ['y', 'n'], function (err, answer) {
+    // Use answer here
+});
+</pre>
 
-<p>will produce the following output:</p>
+<p>will show the provided question in the terminal, waiting user's answer:</p>
 
-<pre class="prettyprint">example 2: any is {"a":2,"b":[0,2,8],"c":"str"}</pre>
-
-<p>You can use <code>%s</code> for strings, <code>%d</code> for numbers (integer or floating-point ones), and <code>%j</code> for JSON objects.</p>
+<pre class="prettyprint">
+Is this a question? [y/n]:
+</pre>
 
       </section>
       <footer>
