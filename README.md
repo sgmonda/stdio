@@ -116,6 +116,10 @@ npm test
 
 ## Changelog
 
+### 0.1.3
+
+* Support for extended large options added. Now it is possible to write `--anoption=44` instead of `--anoption 44`. This works only for options with a single parameter.
+
 ### 0.1.2
 
 * Bug fix: Negative numbers as parameters caused wrong errors.
