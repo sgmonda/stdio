@@ -12,7 +12,10 @@ To install the most recent release from npm, run:
 
 ## 2. Usage
 
-You can do many things with this module
+You can do many things with this module:
+* Parse UNIX-like command line options
+* Read standard input at once
+* Make prompt questions
 
 ### 2.1. Parse Unix-like command line options
 
