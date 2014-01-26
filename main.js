@@ -310,15 +310,26 @@ module.exports.read = function (callback) {
  */
 module.exports.question = function (question, options, callback) {
 
-	if (!question || !Array.isArray(options) || options.length < 2) {
-		throw new Error('Stdio questions have to be created providing a question and two or more possible answers');
+	// Options can be omited
+	if (typeof options === 'function' && !callback) {
+		callback = options;
+		options = null;
+	}
+
+	if (!question || (options && (!Array.isArray(options) || options.length < 2))) {
+		throw new Error('Stdio prompt question is malformed');
 	}
 
 	var tries = MAX_PROMPT_TRIES;
 
 	var performQuestion = function () {
-		process.stdout.write(question + ' [' + options.join('/') + ']: ');
-	}
+		var str = question;
+		if (options) {
+			str += ' [' + options.join('/') + ']';
+		}
+		str += ': ';
+		process.stdout.write(str);
+	};
 
 	stdin.resume();
 
@@ -326,7 +337,7 @@ module.exports.question = function (question, options, callback) {
 
 		var response = data.toString().toLowerCase().trim();
 
-		if (options.indexOf(response) === -1) {
+		if (options && options.indexOf(response) === -1) {
 
 			console.log('Unexpected answer');
 			tries--;
