@@ -3,8 +3,6 @@
 
 // DEPENDENCIES
 
-var util = require('util');
-
 // GLOBALS
 
 var stdin = process.stdin;
@@ -41,7 +39,6 @@ module.exports.getopt = function (options, extra, argv) {
 	var len;
 	var opt;
 	var optname;
-	var name;
 	var j;
 	var o;
 	var argvBackup;
@@ -70,7 +67,7 @@ module.exports.getopt = function (options, extra, argv) {
 			}
 		}
 
-		maxLength = lines.reduce(function (prev, curr, indx) {
+		maxLength = lines.reduce(function (prev, curr) {
 			var aux = curr[0].length;
 			if (aux > prev) {
 				return aux;
@@ -131,6 +128,7 @@ module.exports.getopt = function (options, extra, argv) {
 
 				keys.forEach(function (k) {
 
+					var name;
 					for (name in options) {
 
 						if (options[name].key === k) {
