@@ -124,6 +124,10 @@ npm test
 
 ## Changelog
 
+### 0.1.5
+
+* Added support for prompt questions without options
+
 ### 0.1.4
 
 * New fancy feature! Now you can show simple prompts to interact with users by mean of a question.
