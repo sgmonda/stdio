@@ -53,6 +53,7 @@ if(ops.kaka){
 ```
 
 As you can see, every option in `ops` object can has 3 different type of values:
+
 * The boolean value `true` if it has been specified without an `args` attribute.
 * A single `string` if it has been specified with `args: 1`.
 * A `string` array, if it has been specified with `args` >= 2.
