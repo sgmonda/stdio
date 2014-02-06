@@ -4,6 +4,8 @@ Module for input/output management with nodejs.
 
 Website: http://sgmonda.github.io/stdio/
 
+[![NPM](https://nodei.co/npm/stdio.png)](https://nodei.co/npm/stdio/)
+
 ## 1. Installation
 
 To install the most recent release from npm, run:
