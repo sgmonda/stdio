@@ -17,12 +17,12 @@ function preprocess (argv) {
 		arg = argv[i];
 		var parts = arg.match(/(.+)[^\\]=(.+)/);
 		if (parts) {
-            argv.splice(i, 1, parts[1], parts[2]);
+	            argv.splice(i, 1, parts[1], parts[2]);
 		}
-
-        if(arg.match(/\\=/)){
-            argv.splice(i, 1, arg.replace(/\\=/g, '='));
-        }
+	
+	        if(arg.match(/\\=/)){
+	            argv.splice(i, 1, arg.replace(/\\=/g, '='));
+	        }
 	}
 
 	return argv;
