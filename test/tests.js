@@ -146,6 +146,13 @@ var getoptTests = [
 		argv: ['node', 'program.js', '--number=88', '--pepe', '22', '33'],
 		expectedOps: {'number': '88', 'pepe': ['22', '33']}
 	},
+    {
+        opsSpecification: {
+            url: {key: 'u', args: 1}
+        },
+        argv: ['node', 'program.js', '-url', '"http://www.example.com/?b\\=1"'],
+        expectedOps: {url: '"http://www.example.com/?b=1"' }
+    }
 ];
 
 (function () {
