@@ -15,7 +15,7 @@ function preprocess (argv) {
 	var i, arg;
 	for (i = 0; i < argv.length; i++) {
 		arg = argv[i];
-		var parts = arg.match(/(.+)[^\\]=(.+)/);
+		var parts = arg.match(/(.+[^\\])=(.+)/);
 		if (parts) {
 	            argv.splice(i, 1, parts[1], parts[2]);
 		}
