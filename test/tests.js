@@ -150,8 +150,15 @@ var getoptTests = [
         opsSpecification: {
             url: {key: 'u', args: 1}
         },
-        argv: ['node', 'program.js', '-url', '"http://www.example.com/?b\\=1"'],
+        argv: ['node', 'program.js', '--url', '"http://www.example.com/?b\\=1"'],
         expectedOps: {url: '"http://www.example.com/?b=1"' }
+    },
+    {
+        opsSpecification: {
+            meta: {key: 'm', args: 1}
+        },
+        argv: ['node', 'program.js', '-m', 'loc.ark+\\=13960\\=t0000693r.meta.json'],
+        expectedOps: {meta: 'loc.ark+=13960=t0000693r.meta.json' }
     }
 ];
 

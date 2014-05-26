@@ -127,6 +127,17 @@ npm test
 
 ## Changelog
 
+### 0.1.6
+
+* Arguments now can have "=" sign escaped: `node program.js -m loc.ark+\\=13960\\=t0000693r.meta.json` will give the following:
+````
+{
+  createHelp: [Function],
+  printHelp: [Function],
+  meta: 'loc.ark+=13960=t0000693r.meta.json'
+}
+````
+
 ### 0.1.5
 
 * Added support for prompt questions without options
