@@ -1,14 +1,30 @@
-/*jslint node: true, nomen: true, vars: true, plusplus: true*/
 'use strict';
-
-// DEPENDENCIES
 
 // GLOBALS
 
 var stdin = process.stdin;
-var MAX_PROMPT_TRIES = 3;
 
-// MAIN LOGIC
+// CORE
+
+/**
+ * Process an arguments list and refactorizes it replacing each -a=b element for two new elements: -a and b
+ **/
+function preProcessArguments (argv) {
+
+	var processedArgs = [];
+	argv.forEach(function (arg) {
+		if (arg[0] !== '-' || arg.indexOf('=') === -1) {
+			processedArgs.push(arg);
+			return;
+		}
+		arg = arg.match(/(.*?)=(.*)/);
+		processedArgs.push(arg[1]);
+		processedArgs.push(arg[2]);
+	});
+	return processedArgs;
+}
+
+
 
 function preprocess (argv) {
 
@@ -17,12 +33,12 @@ function preprocess (argv) {
 		arg = argv[i];
 		var parts = arg.match(/(.+[^\\])=(.+)/);
 		if (parts) {
-	            argv.splice(i, 1, parts[1], parts[2]);
+	        argv.splice(i, 1, parts[1], parts[2]);
 		}
-	
-	        if(arg.match(/\\=/)){
-	            argv.splice(i, 1, arg.replace(/\\=/g, '='));
-	        }
+		
+	    if(arg.match(/\\=/)){
+	        argv.splice(i, 1, arg.replace(/\\=/g, '='));
+	    }
 	}
 
 	return argv;
@@ -358,3 +374,5 @@ module.exports.question = function (question, options, callback) {
 	stdin.addListener('data', listener);
 	performQuestion();
 };
+
+module.exports.preProcessArguments = preProcessArguments;
