@@ -1,9 +1,9 @@
 {
 	"name": "stdio",
-	"version": "0.1.6",
-	"description": "Module for standard input/output management with NodeJS",
-	"keywords": ["input", "console", "output", "terminal", "system"],
-	"homepage": "http://sgmonda.github.io/stdio/",
+	"version": "0.2.0",
+	"description": "Standard input/output management with NodeJS",
+	"keywords": ["input", "console", "output", "terminal", "system", "arguments", "cli"],
+	"homepage": "https://github.com/sgmonda/stdio",
 	"license": "MIT",
 	"main": "main.js",
 	"author": {
@@ -13,11 +13,17 @@
 		"type": "git",
 		"url": "https://github.com/sgmonda/stdio"
 	},
+	"dependencies": {},
+	"devDependencies": {
+		"jasmine-node": "1.14.3",
+		"jshint": "2.5.1"
+	},
 	"engines": {
 		"node": "*"
 	},
-	"readmeFilename": "README.md",
+	"readmeFilename": "readme.md",
 	"scripts": {
-		"test": "node test/tests.js < test/lipsum.txt"
+		"jshint": "node_modules/jshint/bin/jshint main.js tests",
+		"test": "node node_modules/jasmine-node/lib/jasmine-node/cli.js --matchall tests/"
 	}
 }
