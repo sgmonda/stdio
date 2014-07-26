@@ -6,6 +6,7 @@
 - [ ] Support default values for options
 - [ ] Support mandatory extra args
 - [ ] Create a stdio.inspect() function to inspect objects with color (maybe integrated with printf)
+- [ ] Add support for dynamic arguments count for options: {..., args: '*'}
 
 - [X] Add a function to print usage
 - [X] Support grouped short options, like `-pnd` instead of `-p -n -d`

@@ -127,6 +127,11 @@ npm test
 
 ## Changelog
 
+### 0.2.0
+
+* The whole project has been rewritten. The code is now more readable and follows JSHint. Many tests have been added, now using Jasmine.
+* Options with "=" character now don't need to be escaped. This adds a backwards incompatibility, so be careful updating to this version if you use escaped arguments.
+
 ### 0.1.6
 
 * Arguments now can have "=" sign escaped: `node program.js -m loc.ark+\\=13960\\=t0000693r.meta.json` will give the following:

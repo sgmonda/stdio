@@ -1,8 +1,8 @@
-/* global describe, it, expect */
+/*global describe, it, expect */
 
 'use strict';
 
-var stdio = require('../main.js');
+var stdio = require('../lib/getopt.js');
 
 describe('preProcessArguments()', function () {
 
@@ -13,11 +13,17 @@ describe('preProcessArguments()', function () {
 		inputArguments: ['a'],
 		expected: ['a']
 	}, {
+		inputArguments: ['a', '-bcd', 'e'],
+		expected: ['a', '-b', '-c', '-d', 'e']
+	}, {
 		inputArguments: ['a', 'b=c'],
 		expected: ['a', 'b=c']
 	}, {
 		inputArguments: ['a', '-b=c'],
 		expected: ['a', '-b', 'c']
+	}, {
+		inputArguments: ['a', '-b=c', '-333', '444'],
+		expected: ['a', '-b', 'c', '-333', '444']
 	}, {
 		inputArguments: ['a', '--something=hello'],
 		expected: ['a', '--something', 'hello']
@@ -122,21 +128,21 @@ describe('getopt()', function () {
 		getoptConfig: {
 			'number': {key: 'n', args: 1},
 			'other': {key: 'o'},
-			'pepe': {args: 2}
+			'pepe': {args: 3}
 		},
-		argv: ['node', 'program.js', '--number=88', '--pepe', '22', '33'],
-		expected: {'number': '88', 'pepe': ['22', '33']}
+		argv: ['node', 'program.js', '--number=88', '--pepe', '22', '33', 'jose=3'],
+		expected: {'number': '88', 'pepe': ['22', '33', 'jose=3']}
 	}, {
 		getoptConfig: {
 			url: {key: 'u', args: 1}
 		},
-		argv: ['node', 'program.js', '--url', '"http://www.example.com/?b\\=1"'],
+		argv: ['node', 'program.js', '--url', '"http://www.example.com/?b=1"'],
 		expected: {url: '"http://www.example.com/?b=1"' }
 	}, {
 		getoptConfig: {
 			meta: {key: 'm', args: 1}
 		},
-		argv: ['node', 'program.js', '-m', 'loc.ark+\\=13960\\=t0000693r.meta.json'],
+		argv: ['node', 'program.js', '-m', 'loc.ark+=13960=t0000693r.meta.json'],
 		expected: {meta: 'loc.ark+=13960=t0000693r.meta.json' }
 	}];
 
