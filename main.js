@@ -13,3 +13,6 @@
 
 // Command-line arguments parsing
 exports.getopt = require('./lib/getopt.js').getopt;
+
+// Terminal questions/forms
+exports.question = require('./lib/question.js').question;
