@@ -144,6 +144,13 @@ describe('getopt()', function () {
 		},
 		argv: ['node', 'program.js', '-m', 'loc.ark+=13960=t0000693r.meta.json'],
 		expected: {meta: 'loc.ark+=13960=t0000693r.meta.json' }
+	}, {
+		getoptConfig: {
+			'number': {key: 'n', args: 2, mandatory: true},
+			'other': {key: 'o'}
+		},
+		argv: ['node', 'program.js', '-237'],
+		expected: null
 	}];
 
 	testCases.forEach(function (test, index) {
