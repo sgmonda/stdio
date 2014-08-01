@@ -16,3 +16,8 @@ exports.getopt = require('./lib/getopt.js').getopt;
 
 // Terminal questions/forms
 exports.question = require('./lib/question.js').question;
+
+// Input reading
+var reading = require('./lib/reading.js');
+exports.read = reading.read;
+exports.readByLines = reading.readByLines;
