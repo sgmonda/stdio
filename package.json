@@ -24,6 +24,6 @@
 	"readmeFilename": "readme.md",
 	"scripts": {
 		"jshint": "node_modules/jshint/bin/jshint main.js tests",
-		"test": "node node_modules/jasmine-node/lib/jasmine-node/cli.js --matchall tests/"
+		"test": "jasmine-node --matchall tests/"
 	}
 }
