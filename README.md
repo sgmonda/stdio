@@ -104,7 +104,7 @@ USAGE: node something.js [OPTIONS] [FILE1] [FILE2] ...
   -u, --ultima <ARG1>     	A description
 ```
 
-If a non-spected option is given or a mandatory option is not, an error (followed by the usage message) will be shown, finishing your program automatically. It's cool, isn`t it?
+If a non-expected option is given or a mandatory option is not, an error (followed by the usage message) will be shown, finishing your program automatically. It's cool, isn`t it?
 
 ### 2.2. Read standard input at once
 

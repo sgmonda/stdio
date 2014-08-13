@@ -38,7 +38,7 @@ module.exports.getopt = function (options, extra, argv) {
 
 	var opts = {};           // Options map
 	var arg;                 // Every argument
-	var spected;
+	var expected;
 	var i;
 	var len;
 	var opt;
@@ -110,15 +110,15 @@ module.exports.getopt = function (options, extra, argv) {
 		if (arg.charAt(0) === '-') {
 
 			opt = {};
-			spected = null;
+			expected = null;
 
 			if (arg.charAt(1) === '-') {
 
 				// It's a long option
 
 				optname = arg.substring(2);
-				spected = options[optname];
-				if (!spected) {
+				expected = options[optname];
+				if (!expected) {
 					console.log('Unknown option: --' + optname);
 					opts.printHelp();
 					process.exit(-1);
@@ -141,8 +141,8 @@ module.exports.getopt = function (options, extra, argv) {
 						}
 					}
 
-					spected = options[optname];
-					if (!spected) {
+					expected = options[optname];
+					if (!expected) {
 						console.log('Unknown option: -' + k);
 						opts.printHelp();
 						process.exit(-1);
@@ -160,18 +160,18 @@ module.exports.getopt = function (options, extra, argv) {
 
 				// Arguments asociated with this option
 
-				if (spected.args === 1) {
+				if (expected.args === 1) {
 
 					i = i + 1;
 					opt = argv[i];
 
-				} else if (spected.args) {
+				} else if (expected.args) {
 
 					opt = [];
-					for (j = i + 1; j < i + 1 + (spected.args || 0); j = j + 1) {
+					for (j = i + 1; j < i + 1 + (expected.args || 0); j = j + 1) {
 						opt.push(argv[j]);
 					}
-					i += spected.args;
+					i += expected.args;
 
 				} else {
 
@@ -185,7 +185,7 @@ module.exports.getopt = function (options, extra, argv) {
 
 			if (opt) {
 
-				if (spected.multiple && opts[optname]) {
+				if (expected.multiple && opts[optname]) {
 					if (Array.isArray(opts[optname])) {
 						opts[optname].push(opt);
 					} else {
