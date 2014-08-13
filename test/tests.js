@@ -159,6 +159,13 @@ var getoptTests = [
         },
         argv: ['node', 'program.js', '-m', 'loc.ark+\\=13960\\=t0000693r.meta.json'],
         expectedOps: {meta: 'loc.ark+=13960=t0000693r.meta.json' }
+    },
+    {
+        opsSpecification: {
+            meta: {key: 'm', args: 1, multiple: true}
+        },
+        argv: ['node', 'program.js', '-m', '1', '-m', '2', '-m', '3'],
+        expectedOps: {meta: ['1', '2', '3'] }
     }
 ];
 

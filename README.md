@@ -60,6 +60,25 @@ As you can see, every option in `ops` object can has 3 different type of values:
 * A single `string` if it has been specified with `args: 1`.
 * A `string` array, if it has been specified with `args` >= 2.
 
+Options can have the attribute `multiple`:
+
+```
+var ops = stdio.getopt({
+    'check': {key: 'c', args: 1, description: 'What this option means', multiple: true}
+});
+```
+
+in which case they can appear multiple times:
+
+    node test.js -c 1 -c 2 -c 3
+
+So that an array will be returned:
+
+```
+{ check: ['1', '2', '3'] }
+
+```
+
 #### Print usage
 
 This module can generate an usage message automatically. You can use it when user specifies `--help` option, which is automatically supported. This code:

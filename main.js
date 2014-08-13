@@ -67,7 +67,7 @@ module.exports.getopt = function (options, extra, argv) {
 				for (i = 0; i < options[o].args; i++) {
 					ops += '<ARG' + (i + 1) + '> ';
 				}
-				lines.push(['  ' + (options[o].key ? '-' + options[o].key + ', --' : '--') + o + ops, (options[o].description || '') + (options[o].mandatory ? ' (mandatory)' : '')]);
+				lines.push(['  ' + (options[o].key ? '-' + options[o].key + ', --' : '--') + o + ops, (options[o].description || '') + (options[o].mandatory ? ' (mandatory)' : '') + (options[o].multiple ? ' (multiple)' : '')]);
 			}
 		}
 
@@ -184,7 +184,16 @@ module.exports.getopt = function (options, extra, argv) {
 			}
 
 			if (opt) {
-				opts[optname] = opt;
+
+				if (spected.multiple && opts[optname]) {
+					if (Array.isArray(opts[optname])) {
+						opts[optname].push(opt);
+					} else {
+						opts[optname] = [opts[optname], opt];
+					}
+				} else {
+					opts[optname] = opt;
+				}
 			}
 
 		} else {
