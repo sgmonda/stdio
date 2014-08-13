@@ -30,8 +30,8 @@ var stdio = require('../main.js'),
 		stdio.read(function (input) {
 			var readedLines = parseInt(input.split('\n').length, 10) - 1;
 			console.log('\n' + title);
-			console.assert(expectedLines === readedLines, 'expected and get lines count are different\n'
-														 + 'Spec = ' + expectedLines + '\nGet  = ' + readedLines);
+			console.assert(expectedLines === readedLines, 'expected and get lines count are different\n' +
+				'Spec = ' + expectedLines + '\nGet  = ' + readedLines);
 			console.log('- Test passed ✓');
 		});
 	});
@@ -175,8 +175,8 @@ var getoptTests = [
 	getoptTests.forEach(function (t, i) {
 		var ops = JSON.stringify(stdio.getopt(t.opsSpecification, null, t.argv));
 		var expected = JSON.stringify(t.expectedOps);
-		console.assert(ops === expected, 'getopt test failed:\n'
-					   + 'Spec = ' + expected + '\nGet = ' + ops + '\n');
+		console.assert(ops === expected, 'getopt test failed:\n' +
+			'Spec = ' + expected + '\nGet = ' + ops + '\n');
 		console.log('- Test ' + (i + 1) + '/' + getoptTests.length + ' passed ✓');
 	});
 }());
