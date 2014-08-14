@@ -99,7 +99,7 @@ USAGE: node main.js [OPTION1] [OPTION2]... arg1 arg2...
   -u, --ultima <ARG1>  	A description
 ```
 
-If a non-spected option is given or a mandatory option is not, an error will be shown, suggesting to use `--help` option to know how to use your program and finishing it automatically. It's cool, isn`t it?
+If a non-expected option is given or a mandatory option isn't, then an error will be shown, suggesting to use `--help` option to know how to use your program and finishing it automatically.
 
 ```
 Missing "una" argument.
@@ -117,7 +117,11 @@ stdio.read(function(text){
 });
 ```
 
-Obviously it is not recommended for huge input files.
+Obviously it is recommended only for small input streams, for instance a small file:
+
+```
+node myprogram.js < input-file.txt
+```
 
 ### 2.3. Read standard input line by line
 
@@ -131,9 +135,13 @@ stdio.readByLines(function lineHandler(line, index) {
 }, function () {
     console.log('Finished');
 });
+```
+
+The previous code will apply `lineHandler()` to every line while they are read, without waiting the whole input to end, so it is very useful for large text streams. For instance a continuous log:
 
 ```
-The previous code will apply `lineHandler()` to every line while they are read, without waiting the whole input to end, so it is very useful for large text streams.
+tail -f /var/log/system.log | node myprogram.js
+```
 
 ### 2.4. Show prompt questions and wait user's answer
 
