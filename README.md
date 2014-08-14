@@ -146,6 +146,13 @@ npm test
 
 ## Changelog
 
+### 0.1.7
+
+* Support for multiple options added by mean of `multiple: true` flag:
+````
+node test.js -c 1 -c 2 -c 3
+````
+
 ### 0.1.6
 
 * Arguments now can have "=" sign escaped: `node program.js -m loc.ark+\\=13960\\=t0000693r.meta.json` will give the following:
