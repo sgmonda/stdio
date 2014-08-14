@@ -151,12 +151,18 @@ describe('getopt()', function () {
 		},
 		argv: ['node', 'program.js', '-237'],
 		expected: null
+	}, {
+		getoptConfig: {
+			meta: {key: 'm', multiple: true}
+		},
+		argv: ['node', 'program.js', '-m', '1', '-m', '2', '-m', '3', 'a', 'b'],
+		expected: {meta: ['1', '2', '3'], args: ['a', 'b']}
 	}];
 
 	testCases.forEach(function (test, index) {
 
 		it('Test case #' + index, function () {
-			var ops = stdio.getopt(test.getoptConfig, null, test.argv);
+			var ops = stdio.getopt(test.getoptConfig, null, test.argv, true);
 			var expected = test.expected;
 			expect(JSON.stringify(ops)).toBe(JSON.stringify(expected));
 		});
