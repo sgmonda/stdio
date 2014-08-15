@@ -23,7 +23,7 @@
 	},
 	"readmeFilename": "readme.md",
 	"scripts": {
-		"jshint": "node_modules/jshint/bin/jshint main.js tests",
+		"jshint": "jshint main.js tests",
 		"test": "jasmine-node --matchall tests/"
 	}
 }
