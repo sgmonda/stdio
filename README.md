@@ -61,7 +61,7 @@ As you can see, every option in `ops` object can have one of the following 3 typ
 
 Options can have the `multiple` flag, in which case they can appear multiple times (with one argument each time). The value of that option will be an array with all provided arguments:
 
-```
+```javascript
 var ops = stdio.getopt({
     'check': {key: 'c', description: 'What this option means', multiple: true}
 });
