@@ -1,7 +1,8 @@
-/*global describe, it, expect, jasmine */
+/*global describe, it, expect, jasmine*/
 
 'use strict';
 
+require('jasmine-reporters');
 jasmine.getEnv().addReporter(new jasmine.ConsoleReporter(console.log));
 
 describe('Stupid tests', function () {
