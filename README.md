@@ -1,8 +1,6 @@
-Module for input/output management with nodejs.
+Module for standard input/output management with nodejs.
 
 [![Build Status](https://secure.travis-ci.org/sgmonda/stdio.png)](http://travis-ci.org/sgmonda/stdio)
-
-Website: http://sgmonda.github.io/stdio/
 
 [![NPM](https://nodei.co/npm/stdio.png)](https://nodei.co/npm/stdio/)
 
@@ -17,7 +15,8 @@ To install the most recent release from npm, run:
 You can do many things with this module:
 * Parse UNIX-like command line options
 * Read standard input at once
-* Make prompt questions
+* Read standard input by lines
+* Make command-line questions
 
 ### 2.1. Parse Unix-like command line options
 
@@ -54,11 +53,26 @@ if(ops.kaka){
 }
 ```
 
-As you can see, every option in `ops` object can has 3 different type of values:
+As you can see, every option in `ops` object can have one of the following 3 types of values:
 
 * The boolean value `true` if it has been specified without an `args` attribute.
 * A single `string` if it has been specified with `args: 1`.
-* A `string` array, if it has been specified with `args` >= 2.
+* A `string` array, if it has been specified with `args` > 1.
+
+Options can have the `multiple` flag, in which case they can appear multiple times (with one argument each time). The value of that option will be an array with all provided arguments:
+
+```
+var ops = stdio.getopt({
+    'check': {key: 'c', description: 'What this option means', multiple: true}
+});
+```
+```
+node program.js -c 1 -c 2 -c 3
+```
+```
+{ check: ['1', '2', '3'] }
+
+```
 
 Options can have the attribute `multiple`:
 
@@ -81,60 +95,88 @@ So that an array will be returned:
 
 #### Print usage
 
-This module can generate an usage message automatically. You can use it when user specifies `--help` option, which is automatically supported. This code:
+This module generates a descriptive usage message automatically. You'll see it when your program is called with `--	help` option (or its short version `-h`), which is automatically supported. The following code:
 
 ```javascript
 var stdio = require('stdio');
 
-var ops = stdio.getopt({
-	una: {description: 'Sets something to some value', key: 'u', args: 2, mandatory: true},
+var ops = exports.getopt({
+	una: {description: 'Sets something to some value', args: 2, mandatory: true},
 	otra_muy_larga: {description: 'A boolean flag', key: 'o', mandatory: true},
 	una_sin_desc: {description: 'Another boolean flag'},
 	ultima: {description: 'A description', key: 'u', args: 1}
-}, '[FILE1] [FILE2] ...'); // Optional extra arguments description
+});
 ```
 
 will produce the following output (if it is called with `--help` flag):
 
 ```
-USAGE: node something.js [OPTIONS] [FILE1] [FILE2] ...
-  -u, --una <ARG1> <ARG2> 	Sets something to some value (mandatory)
-  -o, --otra_muy_larga    	A boolean flag (mandatory)
-  --una_sin_desc          	Another boolean flag
-  -u, --ultima <ARG1>     	A description
+USAGE: node main.js [OPTION1] [OPTION2]... arg1 arg2...
+  --una <ARG1> <ARG2>  	Sets something to some value (mandatory)
+  -o, --otra_muy_larga 	A boolean flag (mandatory)
+  --una_sin_desc       	Another boolean flag
+  -u, --ultima <ARG1>  	A description
 ```
 
-If a non-expected option is given or a mandatory option is not, an error (followed by the usage message) will be shown, finishing your program automatically. It's cool, isn`t it?
+If a non-expected option is given or a mandatory option isn't, then an error will be shown, suggesting to use `--help` option to know how to use your program and finishing it automatically.
+
+```
+Missing "una" argument.
+Try "--help" for more information.
+```
 
 ### 2.2. Read standard input at once
 
-This simple following code will read the whole standard input.
+The following code will read the whole standard input at once and put it into `text` variable.
 
 ```javascript
 var stdio = require('stdio');
-stdio.read(function(data){
-    console.log(data);
+stdio.read(function(text){
+    console.log(text);
 });
 ```
 
-Obviously it is not recommended for huge input files.
+Obviously it is recommended only for small input streams, for instance a small file:
 
-### 2.3. Show prompt questions and wait user's answer
+```
+node myprogram.js < input-file.txt
+```
+
+### 2.3. Read standard input line by line
+
+The following code will execute dynamically a function over every line, when it is read from the standard input:
 
 ```javascript
 var stdio = require('stdio');
-stdio.question('This is a question?', ['y', 'n'], function (err, answer) {
-    // Use answer here
+stdio.readByLines(function lineHandler(line, index) {
+    // You can do whatever you want with every line
+    console.log('Line %d:', index, line);
+}, function () {
+    console.log('Finished');
 });
 ```
 
-The previous code will show something like the following:
+The previous code will apply `lineHandler()` to every line while they are read, without waiting the whole input to end, so it is very useful for large text streams. For instance a continuous log:
 
-````
-This is a question? [y/n]:
-````
+```
+tail -f /var/log/system.log | node myprogram.js
+```
 
-and waits until user enters an answer. There will be 3 retries before reporting an error by mean of the callback.
+### 2.4. Show prompt questions and wait user's answer
+
+The following code will ask the user for some info and then print it.
+
+```javascript
+stdio.question('What is your name?', function (err, name) {
+    stdio.question('How old are you?', function (err, age) {
+        stdio.question('Are you male or female?', ['male', 'female'], function (err, sex) {
+            console.log('Your name is "%s". You are a "%s" "%s" years old.', name, sex, age);
+        });
+    });
+});
+```
+
+By default `stdio.question()` offers some retries when allowed answers are restricted (see the male/female question above). If no possible answers are specified, then the user can answer whatever he wants to the question.
 
 ## 3. Testing
 
@@ -143,64 +185,3 @@ To run tests, use the following command from module's root:
 ````
 npm test
 ````
-
-## Changelog
-
-### 0.1.7
-
-* Support for multiple options added by mean of `multiple: true` flag:
-````
-node test.js -c 1 -c 2 -c 3
-````
-
-### 0.1.6
-
-* Arguments now can have "=" sign escaped: `node program.js -m loc.ark+\\=13960\\=t0000693r.meta.json` will give the following:
-````
-{
-  createHelp: [Function],
-  printHelp: [Function],
-  meta: 'loc.ark+=13960=t0000693r.meta.json'
-}
-````
-
-### 0.1.5
-
-* Added support for prompt questions without options
-
-### 0.1.4
-
-* New fancy feature! Now you can show simple prompts to interact with users by mean of a question.
-* Old printf-like feature has been removed.
-
-### 0.1.3
-
-* Support for extended large options added. Now it is possible to write `--anoption=44` instead of `--anoption 44`. This works only for options with a single parameter.
-
-### 0.1.2
-
-* Bug fix: Negative numbers as parameters caused wrong errors.
-
-### 0.1.1
-
-* Grouped short options support added (for boolean flags). Now you can write `-abc` instead of `-a -b -c`.
-* Usage message has been simplified. Extra arguments description is supported now.
-
-### 0.1.0
-
-* If an option is specified with less arguments than the specified, an error (and the help message) is shown and program finishes.
-* Captured options now has 3 possible values: `true`, a single `string` or an array of `strings`. Much easier to use than in previous releases (but incompatible with them, so be careful updating).
-
-## Projects using `stdio` module
-
-The following projects are currently using `stdio` module:
-
-* mammock: https://github.com/earmbrust/mammock
-* sqsmonitor: https://github.com/hasallen/sqsmonitor
-* frejus: https://npmjs.org/package/frejus
-* cli-mirror: https://www.npmjs.org/package/cli_mirror
-* parser-energymech: https://www.npmjs.org/package/parser-energymech
-* tool-twist: https://www.npmjs.org/package/tooltwist
-* vtools-cli: https://www.npmjs.org/package/vtools-cli
-
-If you use this module in your project, please, let us know.
