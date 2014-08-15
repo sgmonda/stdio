@@ -74,6 +74,25 @@ node program.js -c 1 -c 2 -c 3
 
 ```
 
+Options can have the attribute `multiple`:
+
+```
+var ops = stdio.getopt({
+    'check': {key: 'c', args: 1, description: 'What this option means', multiple: true}
+});
+```
+
+in which case they can appear multiple times:
+
+    node test.js -c 1 -c 2 -c 3
+
+So that an array will be returned:
+
+```
+{ check: ['1', '2', '3'] }
+
+```
+
 #### Print usage
 
 This module generates a descriptive usage message automatically. You'll see it when your program is called with `--	help` option (or its short version `-h`), which is automatically supported. The following code:
