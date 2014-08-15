@@ -15,8 +15,7 @@
 	},
 	"dependencies": {},
 	"devDependencies": {
-		"jasmine-node": "1.14.3",
-		"jasmine-reporters": "2.0.3",
+		"jasmine-node": "1.14.2",
 		"jshint": "2.5.1"
 	},
 	"engines": {
