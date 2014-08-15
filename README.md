@@ -14,8 +14,7 @@ To install the most recent release from npm, run:
 
 You can do many things with this module:
 * Parse UNIX-like command line options
-* Read standard input at once
-* Read standard input by lines
+* Read standard input, at once or line by line.
 * Make command-line questions
 
 ### 2.1. Parse Unix-like command line options
@@ -151,12 +150,12 @@ var stdio = require('stdio');
 stdio.readByLines(function lineHandler(line, index) {
     // You can do whatever you want with every line
     console.log('Line %d:', index, line);
-}, function () {
+}, function (err) {
     console.log('Finished');
 });
 ```
 
-The previous code will apply `lineHandler()` to every line while they are read, without waiting the whole input to end, so it is very useful for large text streams. For instance a continuous log:
+The previous code will apply `lineHandler()` to every line while they are read, without waiting the whole input to end or buffering it, so it is very useful for large text streams. For instance a continuous log:
 
 ```
 tail -f /var/log/system.log | node myprogram.js
