@@ -74,23 +74,20 @@ node program.js -c 1 -c 2 -c 3
 
 ```
 
-Options can have the attribute `multiple`:
+When specifying an option, "args" can be the string "*" instead of a number, in which case all the following arguments when calling the program will be associated to that option (until the next one):
 
 ```
 var ops = stdio.getopt({
-    'check': {key: 'c', args: 1, description: 'What this option means', multiple: true}
+    'check': {args: '*'},
+	'meta': {key: 'm'}
 });
+console.log(ops);
 ```
-
-in which case they can appear multiple times:
-
-    node test.js -c 1 -c 2 -c 3
-
-So that an array will be returned:
-
 ```
-{ check: ['1', '2', '3'] }
-
+node program.js --check 1 2 3 4 5 6 -m 44 2
+```
+```
+{ check: ['1', '2', '3', '4', '5', '6'], meta: true, args: ['44', '2'] }
 ```
 
 #### Print usage

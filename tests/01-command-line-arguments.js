@@ -157,6 +157,13 @@ describe('getopt()', function () {
 		},
 		argv: ['node', 'program.js', '-m', '1', '-m', '2', '-m', '3', 'a', 'b'],
 		expected: {meta: ['1', '2', '3'], args: ['a', 'b']}
+	}, {
+		getoptConfig: {
+			meta: {args: '*'},
+			other: {key: 'o'}
+		},
+		argv: ['node', 'program.js', '--meta', '3', '4', '5', '6', '-o', '3'],
+		expected: {meta: ['3', '4', '5', '6'], other: true, args: ['3']}
 	}];
 
 	testCases.forEach(function (test, index) {

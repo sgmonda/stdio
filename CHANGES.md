@@ -1,5 +1,9 @@
 # Changes
 
+## 0.2.1
+
+* The "args" attribute when specifying an option now can be the string "*" instead of a number. This means that option supports a variable arguments count.
+
 ## 0.2.0
 
 * The whole project has been rewritten. The code is now more readable and follows JSHint. Many tests have been added, now using Jasmine.
