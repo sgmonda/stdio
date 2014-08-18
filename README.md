@@ -90,6 +90,14 @@ node program.js --check 1 2 3 4 5 6 -m 44 2
 { check: ['1', '2', '3', '4', '5', '6'], meta: true, args: ['44', '2'] }
 ```
 
+Default values can be specified using "default" attribute when specifying options. Of course, default value length has to match the specified args count:
+
+```
+var ops = stdio.getopt({
+	meta: {args: 2, default: ['a', 'b']}
+});
+```
+
 #### Print usage
 
 This module generates a descriptive usage message automatically. You'll see it when your program is called with `--	help` option (or its short version `-h`), which is automatically supported. The following code:

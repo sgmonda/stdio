@@ -164,6 +164,27 @@ describe('getopt()', function () {
 		},
 		argv: ['node', 'program.js', '--meta', '3', '4', '5', '6', '-o', '3'],
 		expected: {meta: ['3', '4', '5', '6'], other: true, args: ['3']}
+	}, {
+		getoptConfig: {
+			meta: {key: 'm', 'default': 'foo'},
+			other: true
+		},
+		argv: ['node', 'program.js', '--other'],
+		expected: {other: true, meta: 'foo'}
+	}, {
+		getoptConfig: {
+			meta: {key: 'm', args: 2, 'default': ['1', '2']},
+			other: {'default': false}
+		},
+		argv: ['node', 'program.js'],
+		expected: {meta: ['1', '2'], other: false}
+	}, {
+		getoptConfig: {
+			meta: {key: 'm', args: 2, 'default': ['1', '2']},
+			other: {'default': false}
+		},
+		argv: ['node', 'program.js', '-m', 'a', 'b'],
+		expected: {meta: ['a', 'b'], other: false}
 	}];
 
 	testCases.forEach(function (test, index) {
