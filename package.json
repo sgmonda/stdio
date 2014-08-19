@@ -1,6 +1,6 @@
 {
 	"name": "stdio",
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"description": "Standard input/output management with NodeJS",
 	"keywords": ["input", "console", "output", "terminal", "system", "arguments", "cli"],
 	"homepage": "https://github.com/sgmonda/stdio",
