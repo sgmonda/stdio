@@ -185,6 +185,14 @@ describe('getopt()', function () {
 		},
 		argv: ['node', 'program.js', '-m', 'a', 'b'],
 		expected: {meta: ['a', 'b'], other: false}
+	}, {
+		getoptConfig: {
+			check: {key: 'c', args: 1},
+			number: {key: 'n', args: 1},
+			header: {key: 'H', args: 1}
+		},
+		argv: ['node', 'program.js', 'http://localhost:80/', '-c', '2', '-n', '1', '-H', 'Cookie:SPRING_SECURITY_CONTEXT=ZmYzYjZmYjItZThjOS00ZmZhLTkyOWQtZDRjYzE3NmRmZWIy'],
+		expected: {args: ['http://localhost:80/'], check: '2', number: '1', header: 'Cookie:SPRING_SECURITY_CONTEXT=ZmYzYjZmYjItZThjOS00ZmZhLTkyOWQtZDRjYzE3NmRmZWIy'}
 	}];
 
 	testCases.forEach(function (test, index) {
