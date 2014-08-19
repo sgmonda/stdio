@@ -14,8 +14,7 @@ To install the most recent release from npm, run:
 
 You can do many things with this module:
 * Parse UNIX-like command line options
-* Read standard input at once
-* Read standard input by lines
+* Read standard input, at once or line by line.
 * Make command-line questions
 
 ### 2.1. Parse Unix-like command line options
@@ -61,7 +60,7 @@ As you can see, every option in `ops` object can have one of the following 3 typ
 
 Options can have the `multiple` flag, in which case they can appear multiple times (with one argument each time). The value of that option will be an array with all provided arguments:
 
-```
+```javascript
 var ops = stdio.getopt({
     'check': {key: 'c', description: 'What this option means', multiple: true}
 });
@@ -156,12 +155,12 @@ var stdio = require('stdio');
 stdio.readByLines(function lineHandler(line, index) {
     // You can do whatever you want with every line
     console.log('Line %d:', index, line);
-}, function () {
+}, function (err) {
     console.log('Finished');
 });
 ```
 
-The previous code will apply `lineHandler()` to every line while they are read, without waiting the whole input to end, so it is very useful for large text streams. For instance a continuous log:
+The previous code will apply `lineHandler()` to every line while they are read, without waiting the whole input to end or buffering it, so it is very useful for large text streams. For instance a continuous log:
 
 ```
 tail -f /var/log/system.log | node myprogram.js
