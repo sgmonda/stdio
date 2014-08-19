@@ -122,7 +122,7 @@ USAGE: node main.js [OPTION1] [OPTION2]... arg1 arg2...
   -u, --ultima <ARG1>  	A description
 ```
 
-If a non-expected option is given or a mandatory option isn't, then an error will be shown, suggesting to use `--help` option to know how to use your program and finishing it automatically.
+If a non-expected option is given or a mandatory option isn't, then an error will be shown, suggesting to use `--help` option to know how to use your program and finishing it automatically. In case the unknown option is similar to a known one, then a suggestion to use it will be shown.
 
 ```
 Missing "una" argument.
