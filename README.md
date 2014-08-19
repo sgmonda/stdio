@@ -90,7 +90,7 @@ node program.js --check 1 2 3 4 5 6 -m 44 2
 { check: ['1', '2', '3', '4', '5', '6'], meta: true, args: ['44', '2'] }
 ```
 
-Default values can be specified using "default" attribute when specifying options. Of course, default value length has to match the specified args count:
+Default values can be specified using "default" attribute when specifying options. Of course, default value length has to match the specified args count (if it is not '*'):
 
 ```
 var ops = stdio.getopt({
