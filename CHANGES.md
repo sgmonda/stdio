@@ -1,5 +1,9 @@
 # Changes
 
+## 0.2.2
+
+* Bug fixes
+
 ## 0.2.1
 
 * The "args" attribute when specifying an option now can be the string "*" instead of a number. This means that option supports a variable arguments count.
