@@ -3,6 +3,8 @@
 ## 0.2.1
 
 * The "args" attribute when specifying an option now can be the string "*" instead of a number. This means that option supports a variable arguments count.
+* New cool feature! `getopt()` now makes suggestions if you write an unknown option that is similar to a known one.
+* Default value per option support added.
 
 ## 0.2.0
 

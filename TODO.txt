@@ -1,7 +1,6 @@
 # TODO
 
 - [ ] Support enumerated options. Help must say something like --whatever <something|another|last>
-- [ ] Support arguments suggestions when a non-supported one is detected
 - [ ] Support mandatory extra args
 
 - [X] Add a function to print usage
@@ -13,3 +12,4 @@
 - [X] Support interactive input/output, like [Y/y/n] questions.
 - [X] Support a list of many arguments for an option (without a fixed length). {..., args: '*'}
 - [X] Support default values for options
+- [X] Support arguments suggestions when a non-supported one is detected
