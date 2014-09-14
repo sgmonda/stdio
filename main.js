@@ -21,3 +21,7 @@ exports.question = require('./lib/question.js').question;
 var reading = require('./lib/reading.js');
 exports.read = reading.read;
 exports.readByLines = reading.readByLines;
+
+// Progress bar
+var progress = require('./lib/progress.js');
+exports.progressBar = progress.progressBar;
