@@ -1,5 +1,10 @@
 # Changes
 
+## 0.2.3
+
+* `printHelp()` function is available again into `getopt()` response object.
+* `-h` is not a reserved key any more. You can use it in your options.
+
 ## 0.2.2
 
 * Bug fixes
