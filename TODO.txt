@@ -1,5 +1,6 @@
 # TODO
 
+- [ ] Recover printHelp() function
 - [ ] Support enumerated options. Help must say something like --whatever <something|another|last>
 - [ ] Support mandatory extra args
 
