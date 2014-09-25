@@ -99,7 +99,7 @@ var ops = stdio.getopt({
 
 #### Print usage
 
-This module generates a descriptive usage message automatically. You'll see it when your program is called with `--	help` option (or its short version `-h`), which is automatically supported. The following code:
+This module generates a descriptive usage message automatically. You'll see it when your program is called with `--help` option, which is automatically supported. The following code:
 
 ```javascript
 var stdio = require('stdio');
@@ -128,6 +128,8 @@ If a non-expected option is given or a mandatory option isn't, then an error wil
 Missing "una" argument.
 Try "--help" for more information.
 ```
+
+You can print the help message manually if you want, executing `ops.printHelp()`.
 
 ### 2.2. Read standard input at once
 
