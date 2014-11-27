@@ -201,6 +201,12 @@ pbar.onFinish(function () {
 });
 ```
 
+Alternatively it is possible to set the progress bar value at any time:
+
+```javascript
+pbar.setValue(31);
+```
+
 ## 3. Testing
 
 To run tests, use the following command from module's root:
