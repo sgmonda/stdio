@@ -201,7 +201,7 @@ pbar.onFinish(function () {
 });
 ```
 
-Alternatively it is possible to set the progress bar value at any time:
+Instead of calling `tick()` it is possible to force the progress bar value at any time:
 
 ```javascript
 pbar.setValue(31);
