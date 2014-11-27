@@ -1,5 +1,9 @@
 # Changes
 
+## 0.2.5
+
+* Progress bar feature added
+
 ## 0.2.3
 
 * `printHelp()` function is available again into `getopt()` response object.
