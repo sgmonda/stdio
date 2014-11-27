@@ -201,6 +201,10 @@ pbar.onFinish(function () {
 });
 ```
 
+The progress bar is updated in real-time:
+```
+00:00:03 25% [###############············································] ETA 00:00:09
+```
 Instead of calling `tick()` it is possible to force the progress bar value at any time:
 
 ```javascript
