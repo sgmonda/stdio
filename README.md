@@ -184,6 +184,23 @@ stdio.question('What is your name?', function (err, name) {
 
 By default `stdio.question()` offers some retries when allowed answers are restricted (see the male/female question above). If no possible answers are specified, then the user can answer whatever he wants to the question.
 
+### 2.5. Show a progress bar
+
+The following code will create a progress bar of 100 pieces and increments of 10. Every call to `tick()` increments the bar value. Remaining time is estimated dynamically:
+
+```javascript
+var stdio = require('./main.js');
+
+var pbar = stdio.progressBar(100, 10);
+var i = setInterval(function () {
+	pbar.tick();
+}, 1000);
+pbar.onFinish(function () {
+	console.log('finish');
+	clearInterval(i);
+});
+```
+
 ## 3. Testing
 
 To run tests, use the following command from module's root:
