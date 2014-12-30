@@ -93,7 +93,29 @@ Default values can be specified using "default" attribute when specifying option
 
 ```
 var ops = stdio.getopt({
-	meta: {args: 2, default: ['a', 'b']}
+	something: {args: 2, default: ['a', 'b']}
+});
+```
+
+#### Mandatory positional arguments
+
+If your program has to receive some mandatory positional arguments (extra arguments without an option flag), you can specify it when calling `getopt()`:
+
+```
+var ops = stdio.getopt({
+	_meta_: {args: 2}
+});
+```
+
+```
+var ops = stdio.getopt({
+	_meta_: {minArgs: 1}
+});
+```
+
+```
+var ops = stdio.getopt({
+	_meta_: {maxArgs: 5}
 });
 ```
 

@@ -1,5 +1,9 @@
 # Changes
 
+## 0.2.7
+
+* Positional arguments constraints support added, by mean of `_meta_` argument settings.
+
 ## 0.2.5
 
 * Progress bar feature added
