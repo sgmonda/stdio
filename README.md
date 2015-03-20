@@ -4,7 +4,7 @@ Module for standard input/output management with nodejs.
 
 [![NPM](https://nodei.co/npm/stdio.png)](https://nodei.co/npm/stdio/)
 
-[![Package Quality](http://packagequality.com/badge/stdio.png)](http://npm.packagequality.com/#?package=stdio)
+[![Package Quality](http://npm.packagequality.com/badge/stdio.png)](http://npm.packagequality.com/#?package=stdio)
 
 ## 1. Installation
 
