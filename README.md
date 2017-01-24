@@ -213,7 +213,7 @@ By default `stdio.question()` offers some retries when allowed answers are restr
 The following code will create a progress bar of 100 pieces and increments of 10. These values do not affect how the progress bar is shown, so a progress bar with 100 steps will be equals to a progress bar with 4 steps. Every call to `tick()` increments the bar value. Remaining time is estimated dynamically:
 
 ```javascript
-var stdio = require('./main.js');
+var stdio = require('stdio');
 
 var pbar = stdio.progressBar(100, 10);
 var i = setInterval(function () {
