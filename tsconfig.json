@@ -6,6 +6,15 @@
     "outDir": "./dist",
     "strict": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "assets", "test"]
+  "lib": [
+    "es6"
+  ],
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "assets",
+    "test"
+  ]
 }
