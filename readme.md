@@ -7,6 +7,10 @@ Standard input/output manager for Node.js
 
 ---
 
+After a very long time, finally version 2 is here. The cool `stdio` module you cannot live without has been rewritten and improved a lot, with Typescript support, promise-based usage and much more.
+
+> **Note**: Version 2 is not compatible with previous versions, so you'll need to read this documentation carefully before upgrading.
+
 ## Installation
 
 To be completed
