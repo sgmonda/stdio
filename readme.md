@@ -11,8 +11,53 @@ After a very long time, finally version 2 is here. The cool `stdio` module you c
 
 ## Installation
 
-To be completed
+To install this module you can use `npm`:
+
+```
+npm install stdio
+```
+
+Then you can import it from your project, as a whole module or any of its parts independently:
+
+```javascript
+import stdio from 'stdio';
+```
+
+```javascript
+import { getopt, read } from 'stdio';
+```
 
 ## Features
+
+### read()
+
+This function reads standard input by lines, waiting for a line to be processed successfully before reading the next one. This is perfect for huge files as lines are read only as you process them, so you don't have to worry about system resources:
+
+```javascript
+import { read } from 'stdio';
+
+async function onLine (line, index) {
+  console.log('Processing line %d: %s', index, line);
+  // Do your async stuff
+}
+
+read(onLine)
+  .then(stats => console.log('Finished', stats))
+  .catch(error => console.warn('Error', error));
+```
+
+Note that `onLine` is an `async` function, what means it returns a promise. `read()` call itself also returns a promise. In case one line fails being processed (its promise is rejected) the full `read()` promise will be rejected, too.
+
+Once a `read()` successful call finishes (when all lines have been processed successfully), a small object with some stats is returned:
+
+```typescript
+{
+  length: number; // Number of lines
+  times: Array<number>; // Duration of each line processor
+  timesAverage: number; // Average duration of line processing
+}
+```
+
+---
 
 To be completed

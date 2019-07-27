@@ -3,3 +3,5 @@ node_modules
 *~
 /dist
 /assets/*.png
+/example*
+*.js
