@@ -1,3 +1,3 @@
 export default () => {
-  console.log('I AM READINg');
+  throw new Error('Not implemented yet');
 };

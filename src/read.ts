@@ -2,30 +2,32 @@ import { createInterface, ReadLine } from 'readline';
 
 const NOW = () => new Date().getTime();
 
-export interface Stats {
+export type ILineHandler = (line: string, index: number) => Promise;
+
+export interface IStats {
   length: number;
-  times: Array<number>;
+  times: [number];
   timeAverage: number;
 }
 
-export interface State {
-  buffer: Array<string>;
+export interface IState {
+  buffer: [string];
   isOpen: boolean;
-  stats: Stats;
+  stats: IStats;
   reader: ReadLine;
-  resolve: Function;
-  reject: Function;
-  lineHandler: Function;
+  resolve: (stats: IStats) => any;
+  reject: (error: Error) => any;
+  lineHandler: ILineHandler;
   index: number;
 }
 
-function compileStats(stats: Stats) {
+function compileStats(stats: IStats) {
   const timeSum = stats.times.reduce((accum: number, time: number) => accum + time, 0);
   stats.timeAverage = timeSum / stats.times.length;
   return stats;
 }
 
-function processNextLine(state: State) {
+function processNextLine(state: IState) {
   const { buffer, isOpen, stats, reader, resolve, reject, lineHandler } = state;
   const startTime = NOW();
   const line = buffer.shift();
@@ -38,7 +40,9 @@ function processNextLine(state: State) {
     if (!isOpen && !buffer.length) {
       return resolve(compileStats(stats));
     }
-    if (!buffer.length) reader.resume();
+    if (!buffer.length) {
+      reader.resume();
+    }
     return setImmediate(() => processNextLine(state));
   }
 
@@ -52,18 +56,18 @@ function processNextLine(state: State) {
     .catch(onError);
 }
 
-export default (lineHandler: Function) =>
+export default (lineHandler: ILineHandler) =>
   new Promise((resolve, reject) => {
     const reader = createInterface({ input: process.stdin });
-    const state: State = {
+    const state: IState = {
       buffer: [],
       index: 0,
       isOpen: true,
-      stats: { length: 0, times: [], timeAverage: 0 },
-      resolve,
-      reject,
-      reader,
       lineHandler,
+      reader,
+      reject,
+      resolve,
+      stats: { length: 0, times: [], timeAverage: 0 },
     };
     reader.on('close', () => {
       state.isOpen = false;
