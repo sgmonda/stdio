@@ -58,6 +58,43 @@ Once a `read()` successful call finishes (when all lines have been processed suc
 }
 ```
 
+#### Example
+
+The following command reads a huge file and pipes it to a simple program:
+
+```
+cat hugefile.txt | node myprogram.js
+```
+
+Where `myprogram.js` prints one line per second, including the line number at the begining:
+
+```javascript
+import { read } from 'stdio';
+
+function sleep (delay) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, delay);
+  });
+}
+
+async function onLine (line, index) {
+  console.log(`#${index}: ${line}`);
+  await sleep(1000);
+}
+
+read(onLine)
+  .then((stats) => console.log('Finished', stats))
+  .catch((error) => console.warn('Error', error));
+```
+
+The output is something like this:
+
+```
+#1: This is the first line of hugefile.txt
+#2: Here the second one
+#3: A third line...
+```
+
 ---
 
 To be completed
