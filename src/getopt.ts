@@ -1,3 +1,3 @@
-export default () => {
-  throw new Error('Not implemented yet');
+export default (definition: { [key: string]: string | number }) => {
+  return {};
 };

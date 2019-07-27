@@ -29,6 +29,59 @@ import { getopt, read } from 'stdio';
 
 ## Features
 
+### getopt()
+
+This function gives parsed UNIX-like command-line and options, preprocessed and ready to be used in an easy way. It is inspired by C standard library under UNIX.
+
+```javascript
+import { getopt } from 'stdio';
+const options = getopt({
+  <option_name_1>: {<definition>},
+  <option_name_2>: {<definition>},
+  <option_name_3>: {<definition>},
+  ...
+});
+```
+
+Where `<definition>` is an object describing each option. These are the supported fields to define an option:
+
+- `key` (`string`): The short name for the option. It is a single-letter string.
+- `description` (`string`): The option description. A text for humans to understand what the option means.
+- `required` (`boolean`): If the option is mandatory or not.
+- `args`: An arguments definition, describing how many ones are required
+
+In case a required option is not defined or any option is not well used at runtime, an automatic help/usage message is printed, aborting the execution:
+
+```
+Usage: bla bla bla
+```
+
+#### Example
+
+The following program illustrates all the different types of options and how to use them.
+
+```javascript
+hola
+```
+
+Here's a valid command for the previous options definition and the result of the `getopt()` response:
+
+```
+good command
+```
+```
+options object
+```
+
+On the other hand, if any option is not well used, the execution of our program will exit with an error result and the usage message will be shown:
+
+```
+wrong usage
+```
+```
+help message
+```
+
 ### read()
 
 This function reads standard input by lines, waiting for a line to be processed successfully before reading the next one. This is perfect for huge files as lines are read only as you process them, so you don't have to worry about system resources:

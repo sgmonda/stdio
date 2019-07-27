@@ -1,5 +1,7 @@
-import { Greeter } from '../index';
+import { getopt } from '../index';
 
-test('My Greeter', () => {
-  expect(Greeter('Carl')).toBe('Hello Carl');
+test('Getopt', () => {
+  const observed = getopt({})
+  const expected = {};
+  expect(JSON.stringify(observed)).toBe(JSON.stringify(expected));
 });
