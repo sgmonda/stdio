@@ -2,16 +2,16 @@ import { createInterface, ReadLine } from 'readline';
 
 const NOW = () => new Date().getTime();
 
-export type ILineHandler = (line: string, index: number) => Promise;
+export type ILineHandler = (line: string, index: number) => Promise<any>;
 
 export interface IStats {
   length: number;
-  times: [number];
+  times: number[];
   timeAverage: number;
 }
 
 export interface IState {
-  buffer: [string];
+  buffer: string[];
   isOpen: boolean;
   stats: IStats;
   reader: ReadLine;
