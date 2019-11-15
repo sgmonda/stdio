@@ -1,7 +1,21 @@
 import { getopt } from '../index';
 
-test('Getopt', () => {
-  const observed = getopt({ a: 1, b: 2 });
-  const expected = { b: 2, a: 1 };
-  expect(observed).toEqual(expected);
+interface ITestCase {
+  argv: string[];
+  expected: { [key: string]: string | string[] | number };
+  options: any;
+}
+
+const TEST_CASES = [{
+  argv: ['node', 'program.js'],
+  expected: {},
+  options: {},
+}];
+
+TEST_CASES.forEach((case) => {
+  test(`${case.argv.join(' ')}`, () => {
+    const observed = getopt(case.options, case.argv);
+    const expected = case.expected;
+    expect(observed).toEqual(expected);
+  });
 });

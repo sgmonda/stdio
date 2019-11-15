@@ -1,4 +1,4 @@
-interface IDefinition {
+export interface IDefinition {
   [key: string]: string | number;
 }
 
