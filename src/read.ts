@@ -56,9 +56,9 @@ function processNextLine(state: IState) {
     .catch(onError);
 }
 
-export default (lineHandler: ILineHandler) =>
+export default (lineHandler: ILineHandler, input: NodeJS.ReadableStream = process.stdin) =>
   new Promise((resolve, reject) => {
-    const reader = createInterface({ input: process.stdin });
+    const reader = createInterface({ input });
     const state: IState = {
       buffer: [],
       index: 0,
