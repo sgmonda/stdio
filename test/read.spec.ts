@@ -6,7 +6,7 @@ class ReadableString extends Readable {
   constructor(private str: string) {
     super();
   }
-  public _read(): null {
+  public _read(): void {
     if (!this.sent) {
       this.push(Buffer.from(this.str));
       this.sent = true;
@@ -23,7 +23,7 @@ function getReadStream(str: string): NodeJS.ReadableStream {
 test('Basic line handler', async () => {
   const input = 'hello\nbye\nother\nlast\n\n'.repeat(5000) + 'eof';
   const observed: string[] = [];
-  const handler = async (line: string, index: number): null => observed.push(`#${index} ${line}`);
+  const handler = async (line: string, index: number): Promise<number> => observed.push(`#${index} ${line}`);
   const result = await read(handler, getReadStream(input));
   expect(result).toHaveProperty('length');
   expect(result).toHaveProperty('timeAverage');

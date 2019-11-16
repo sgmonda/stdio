@@ -8,5 +8,5 @@ export interface GetoptResponse {
 
 export default (definition: GetoptDefinition, command: string[] = process.argv): GetoptResponse => {
   console.log('COMMAND', command);
-  return { a: 1, b: 2 };
+  return {};
 };

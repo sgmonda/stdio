@@ -8,10 +8,10 @@ const TEST_CASES = [
   },
 ];
 
-TEST_CASES.forEach(test => {
-  test(command, () => {
-    const observed = getopt(test.options, test.command.split(' '));
-    const expected = test.expected;
+TEST_CASES.forEach(testCase => {
+  test(testCase.command, () => {
+    const observed = getopt(testCase.options, testCase.command.split(' '));
+    const expected = testCase.expected;
     expect(observed).toEqual(expected);
   });
 });

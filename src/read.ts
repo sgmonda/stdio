@@ -2,7 +2,7 @@ import { createInterface, ReadLine } from 'readline';
 
 const NOW = (): number => new Date().getTime();
 
-export type LineHandler = (line: string, index: number) => Promise<null>;
+export type LineHandler = (line: string, index: number) => Promise<any>;
 
 export interface Stats {
   length: number;
@@ -15,8 +15,8 @@ export interface State {
   isOpen: boolean;
   stats: Stats;
   reader: ReadLine;
-  resolve: (stats: Stats) => null;
-  reject: (error: Error) => null;
+  resolve: Function;
+  reject: Function;
   lineHandler: LineHandler;
   index: number;
 }
@@ -27,26 +27,28 @@ function compileStats(stats: Stats): Stats {
   return stats;
 }
 
-function processNextLine(state: State): null {
+function processNextLine(state: State): void {
   const { buffer, isOpen, stats, reader, resolve, reject, lineHandler } = state;
   const startTime = NOW();
   const line = buffer.shift();
   if (typeof line !== 'string') {
-    return setImmediate(processNextLine);
+    setImmediate(processNextLine);
+    return;
   }
 
-  function onSuccess(): null {
+  function onSuccess(): void {
     stats.times.push(NOW() - startTime);
     if (!isOpen && !buffer.length) {
-      return resolve(compileStats(stats));
+      resolve(compileStats(stats));
+      return;
     }
     if (!buffer.length) {
       reader.resume();
     }
-    return setImmediate(() => processNextLine(state));
+    setImmediate(() => processNextLine(state));
   }
 
-  function onError(error: Error): null {
+  function onError(error: Error): void {
     reader.close();
     reject(error);
   }
@@ -56,8 +58,8 @@ function processNextLine(state: State): null {
     .catch(onError);
 }
 
-export default (lineHandler: LineHandler, input: NodeJS.ReadableStream = process.stdin): null =>
-  new Promise((resolve, reject) => {
+export default (lineHandler: LineHandler, input: NodeJS.ReadableStream = process.stdin): Promise<void> =>
+  new Promise((resolve, reject): void => {
     const reader = createInterface({ input });
     const state: State = {
       buffer: [],
