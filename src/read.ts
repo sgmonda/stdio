@@ -1,33 +1,33 @@
 import { createInterface, ReadLine } from 'readline';
 
-const NOW = () => new Date().getTime();
+const NOW = (): number => new Date().getTime();
 
-export type ILineHandler = (line: string, index: number) => Promise<any>;
+export type LineHandler = (line: string, index: number) => Promise<null>;
 
-export interface IStats {
+export interface Stats {
   length: number;
   times: number[];
   timeAverage: number;
 }
 
-export interface IState {
+export interface State {
   buffer: string[];
   isOpen: boolean;
-  stats: IStats;
+  stats: Stats;
   reader: ReadLine;
-  resolve: (stats: IStats) => any;
-  reject: (error: Error) => any;
-  lineHandler: ILineHandler;
+  resolve: (stats: Stats) => null;
+  reject: (error: Error) => null;
+  lineHandler: LineHandler;
   index: number;
 }
 
-function compileStats(stats: IStats) {
+function compileStats(stats: Stats): Stats {
   const timeSum = stats.times.reduce((accum: number, time: number) => accum + time, 0);
   stats.timeAverage = timeSum / stats.times.length;
   return stats;
 }
 
-function processNextLine(state: IState) {
+function processNextLine(state: State): null {
   const { buffer, isOpen, stats, reader, resolve, reject, lineHandler } = state;
   const startTime = NOW();
   const line = buffer.shift();
@@ -35,7 +35,7 @@ function processNextLine(state: IState) {
     return setImmediate(processNextLine);
   }
 
-  function onSuccess() {
+  function onSuccess(): null {
     stats.times.push(NOW() - startTime);
     if (!isOpen && !buffer.length) {
       return resolve(compileStats(stats));
@@ -46,7 +46,7 @@ function processNextLine(state: IState) {
     return setImmediate(() => processNextLine(state));
   }
 
-  function onError(error: Error) {
+  function onError(error: Error): null {
     reader.close();
     reject(error);
   }
@@ -56,10 +56,10 @@ function processNextLine(state: IState) {
     .catch(onError);
 }
 
-export default (lineHandler: ILineHandler, input: NodeJS.ReadableStream = process.stdin) =>
+export default (lineHandler: LineHandler, input: NodeJS.ReadableStream = process.stdin): null =>
   new Promise((resolve, reject) => {
     const reader = createInterface({ input });
-    const state: IState = {
+    const state: State = {
       buffer: [],
       index: 0,
       isOpen: true,

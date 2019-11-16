@@ -1,21 +1,17 @@
 import { getopt } from '../index';
 
-interface ITestCase {
-  argv: string[];
-  expected: { [key: string]: string | string[] | number };
-  options: any;
-}
+const TEST_CASES = [
+  {
+    command: 'node program.js',
+    expected: {},
+    options: {},
+  },
+];
 
-const TEST_CASES = [{
-  argv: ['node', 'program.js'],
-  expected: {},
-  options: {},
-}];
-
-TEST_CASES.forEach((case) => {
-  test(`${case.argv.join(' ')}`, () => {
-    const observed = getopt(case.options, case.argv);
-    const expected = case.expected;
+TEST_CASES.forEach(test => {
+  test(command, () => {
+    const observed = getopt(test.options, test.command.split(' '));
+    const expected = test.expected;
     expect(observed).toEqual(expected);
   });
 });
