@@ -9,6 +9,15 @@ After a very long time, finally version 2 is here. The cool `stdio` module you c
 
 **Note**: Version 2 stops supporting non promise-based usage, so it is not compatible with older versions. If you're using an older version of `stdio` please, read this documentation carefully before upgrading.
 
+Table of contents:
+
+- [Installation](#installation)
+- [Usage](#usage)
+  - [getopt()](#getopt)
+    - [Example](#example)
+  - [read()](#read)
+    - [Example](#example-1)
+
 ## Installation
 
 To install this module you can use `npm`:
@@ -27,7 +36,9 @@ import stdio from 'stdio';
 import { getopt, read } from 'stdio';
 ```
 
-## Features
+## Usage
+
+This module contains the following features:
 
 ### getopt()
 
