@@ -14,9 +14,7 @@ Table of contents:
 - [Installation](#installation)
 - [Usage](#usage)
   - [getopt()](#getopt)
-    - [Example](#example)
   - [read()](#read)
-    - [Example](#example-1)
 
 ## Installation
 
@@ -67,7 +65,9 @@ In case a required option is not defined or any option is not well used at runti
 Usage: bla bla bla
 ```
 
-#### Example
+<details>
+<summary>Example</summary>
+<p>
 
 The following program illustrates all the different types of options and how to use them.
 
@@ -92,6 +92,9 @@ wrong usage
 ```
 help message
 ```
+
+</p>
+</details>
 
 ### read()
 
@@ -122,7 +125,9 @@ Once a `read()` successful call finishes (when all lines have been processed suc
 }
 ```
 
-#### Example
+<details>
+<summary>Example</summary>
+<p>
 
 The following command reads a huge file and pipes it to a simple program:
 
@@ -158,6 +163,8 @@ The output is something like this:
 #2: Here the second one
 #3: A third line...
 ```
+
+</p>
 
 ---
 
