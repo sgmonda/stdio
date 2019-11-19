@@ -11,6 +11,7 @@
   },
   "rules": {
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
     "jest/no-disabled-tests": "error",
     "jest/no-focused-tests": "error",
     "jest/no-identical-title": "error",

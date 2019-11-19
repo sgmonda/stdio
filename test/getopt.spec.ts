@@ -125,7 +125,7 @@ const TEST_CASES = [
   },
 ];
 
-TEST_CASES.slice(0, 4).forEach(testCase => {
+TEST_CASES.slice(0, 5).forEach(testCase => {
   test(testCase.command, () => {
     const observed = getopt(testCase.options, testCase.command.split(' '));
     const expected = testCase.expected;
