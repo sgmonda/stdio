@@ -97,11 +97,11 @@ const TEST_CASES = [
   // //   expected: { meta: ['1', '2', '3'], args: ['a', 'b'] },
   // //   config: { meta: { key: 'm', multiple: true } },
   // // },
-  // {
-  //   command: 'node program.js --meta 3 4 5 6 -o 3',
-  //   expected: { meta: ['3', '4', '5', '6'], other: true, args: ['3'] },
-  //   config: { meta: { args: '*' }, other: { key: 'o' } },
-  // },
+  {
+    command: 'node program.js --meta 3 4 5 6 -o 3',
+    expected: { meta: ['3', '4', '5', '6'], other: true, args: ['3'] },
+    config: { meta: { args: '*' }, other: { key: 'o' } },
+  },
   // {
   //   command: 'node program.js --other',
   //   expected: { other: true, meta: 'foo' },

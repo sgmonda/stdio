@@ -1,4 +1,5 @@
 const FAILURE = 1;
+const POSITIONAL_ARGS_KEY = 'args';
 
 export interface Config {
   [key: string]:
@@ -60,7 +61,7 @@ function getStateAndReset(state: ParsingState): { [key: string]: string[] } {
 function postprocess(input: GetoptPartialResponse): GetoptResponse {
   const initialValue: GetoptResponse = {};
   const result = Object.entries(input).reduce((accum, [key, value]) => {
-    if (Array.isArray(value) && value.length === 1) accum[key] = value[0];
+    if (Array.isArray(value) && value.length === 1 && key !== POSITIONAL_ARGS_KEY) accum[key] = value[0];
     else accum[key] = [...value];
     return accum;
   }, initialValue);
@@ -109,12 +110,14 @@ function getopt(config: Config = {}, command: string[]): GetoptResponse {
       }
       let expectedArgsCount = config[option]!.args;
       if (expectedArgsCount === '*') expectedArgsCount = Infinity;
+
+      if (state.activeOption) {
+        Object.assign(result, getStateAndReset(state));
+      }
+
       if (!expectedArgsCount) {
         result[option] = [true];
         return;
-      }
-      if (state.activeOption) {
-        Object.assign(result, getStateAndReset(state));
       }
 
       Object.assign(state, {
@@ -122,11 +125,10 @@ function getopt(config: Config = {}, command: string[]): GetoptResponse {
         remainingArgs: expectedArgsCount || 0,
         optionArgs: forcedValue ? [forcedValue] : [],
       });
-      console.log('STATE', state);
       result[option] = [true];
     });
   });
-  if (args.length) result.args = args;
+  if (args.length) result[POSITIONAL_ARGS_KEY] = args;
   const compiledResult = postprocess(result);
   checkRequiredParams(config, compiledResult);
   return compiledResult;
