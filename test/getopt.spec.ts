@@ -72,60 +72,60 @@ const TEST_CASES = [
     expected: { number: '88', pepe: ['22', '33', 'jose=3'] },
     options: { number: { key: 'n', args: 1 }, other: { key: 'o' }, pepe: { args: 3 } },
   },
-  {
-    command: 'node program.js --url "http://www.example.com/?b=1"',
-    expected: { url: '"http://www.example.com/?b=1"' },
-    options: { url: { key: 'u', args: 1 } },
-  },
-  {
-    command: 'node program.js -m loc.ark+=13960=t0000693r.meta.json',
-    expected: { meta: 'loc.ark+=13960=t0000693r.meta.json' },
-    options: { meta: { key: 'm', args: 1 } },
-  },
-  {
-    command: 'node program.js -237',
-    expected: null,
-    options: { number: { key: 'n', args: 2, mandatory: true }, other: { key: 'o' } },
-  },
-  {
-    command: 'node program.js -m 1 -m 2 -m 3 a b',
-    expected: { meta: ['1', '2', '3'], args: ['a', 'b'] },
-    options: { meta: { key: 'm', multiple: true } },
-  },
-  {
-    command: 'node program.js --meta 3 4 5 6 -o 3',
-    expected: { meta: ['3', '4', '5', '6'], other: true, args: ['3'] },
-    options: { meta: { args: '*' }, other: { key: 'o' } },
-  },
-  {
-    command: 'node program.js --other',
-    expected: { other: true, meta: 'foo' },
-    options: { meta: { key: 'm', default: 'foo' }, other: true },
-  },
-  {
-    command: 'node program.js',
-    expected: { meta: ['1', '2'], other: false },
-    options: { meta: { key: 'm', args: 2, default: ['1', '2'] }, other: { default: false } },
-  },
-  {
-    command: 'node program.js -m a b',
-    expected: { meta: ['a', 'b'], other: false },
-    options: { meta: { key: 'm', args: 2, default: ['1', '2'] }, other: { default: false } },
-  },
-  {
-    command:
-      'node program.js http://localhost:80/ -c 2 -n 1 -H Cookie:SPRING_SECURITY_CONTEXT=ZmYzYjZmYjItZThjOS00ZmZhLTkyOWQtZDRjYzE3NmRmZWIy',
-    expected: {
-      args: ['http://localhost:80/'],
-      check: '2',
-      number: '1',
-      header: 'Cookie:SPRING_SECURITY_CONTEXT=ZmYzYjZmYjItZThjOS00ZmZhLTkyOWQtZDRjYzE3NmRmZWIy',
-    },
-    options: { check: { key: 'c', args: 1 }, number: { key: 'n', args: 1 }, header: { key: 'H', args: 1 } },
-  },
+  // {
+  //   command: 'node program.js --url "http://www.example.com/?b=1"',
+  //   expected: { url: '"http://www.example.com/?b=1"' },
+  //   options: { url: { key: 'u', args: 1 } },
+  // },
+  // {
+  //   command: 'node program.js -m loc.ark+=13960=t0000693r.meta.json',
+  //   expected: { meta: 'loc.ark+=13960=t0000693r.meta.json' },
+  //   options: { meta: { key: 'm', args: 1 } },
+  // },
+  // {
+  //   command: 'node program.js -237',
+  //   expected: null,
+  //   options: { number: { key: 'n', args: 2, mandatory: true }, other: { key: 'o' } },
+  // },
+  // {
+  //   command: 'node program.js -m 1 -m 2 -m 3 a b',
+  //   expected: { meta: ['1', '2', '3'], args: ['a', 'b'] },
+  //   options: { meta: { key: 'm', multiple: true } },
+  // },
+  // {
+  //   command: 'node program.js --meta 3 4 5 6 -o 3',
+  //   expected: { meta: ['3', '4', '5', '6'], other: true, args: ['3'] },
+  //   options: { meta: { args: '*' }, other: { key: 'o' } },
+  // },
+  // {
+  //   command: 'node program.js --other',
+  //   expected: { other: true, meta: 'foo' },
+  //   options: { meta: { key: 'm', default: 'foo' }, other: true },
+  // },
+  // {
+  //   command: 'node program.js',
+  //   expected: { meta: ['1', '2'], other: false },
+  //   options: { meta: { key: 'm', args: 2, default: ['1', '2'] }, other: { default: false } },
+  // },
+  // {
+  //   command: 'node program.js -m a b',
+  //   expected: { meta: ['a', 'b'], other: false },
+  //   options: { meta: { key: 'm', args: 2, default: ['1', '2'] }, other: { default: false } },
+  // },
+  // {
+  //   command:
+  //     'node program.js http://localhost:80/ -c 2 -n 1 -H Cookie:SPRING_SECURITY_CONTEXT=ZmYzYjZmYjItZThjOS00ZmZhLTkyOWQtZDRjYzE3NmRmZWIy',
+  //   expected: {
+  //     args: ['http://localhost:80/'],
+  //     check: '2',
+  //     number: '1',
+  //     header: 'Cookie:SPRING_SECURITY_CONTEXT=ZmYzYjZmYjItZThjOS00ZmZhLTkyOWQtZDRjYzE3NmRmZWIy',
+  //   },
+  //   options: { check: { key: 'c', args: 1 }, number: { key: 'n', args: 1 }, header: { key: 'H', args: 1 } },
+  // },
 ];
 
-TEST_CASES.slice(0, 5).forEach(testCase => {
+TEST_CASES.forEach(testCase => {
   test(testCase.command, () => {
     const observed = getopt(testCase.options, testCase.command.split(' '));
     const expected = testCase.expected;

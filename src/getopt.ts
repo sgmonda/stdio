@@ -30,12 +30,16 @@ function getShorteners(options: Options): { [key: string]: string } {
   }, initialValue);
 }
 
-function parseOption(options: Options, arg: string): string | null {
-  if (!/^--?/.test(arg)) return null;
+function parseOption(options: Options, arg: string): string[] | null {
+  if (!/^--?[a-zA-Z]/.test(arg)) return null;
+  if (arg.startsWith('--')) {
+    return [arg.replace(/^--/, '')];
+  }
   const shorteners = getShorteners(options);
-  arg = arg.replace(/^--?/, '');
-  if (shorteners[arg]) arg = shorteners[arg];
-  return arg;
+  return arg
+    .replace(/^-/, '')
+    .split('')
+    .map(letter => shorteners[letter] || letter);
 }
 
 function getStateAndReset(state: ParsingState): { [key: string]: string[] } {
@@ -46,6 +50,15 @@ function getStateAndReset(state: ParsingState): { [key: string]: string[] } {
     optionArgs: [],
   });
   return partial;
+}
+
+function postprocess(input: GetoptResponse): GetoptResponse {
+  const initialValue: GetoptResponse = {};
+  return Object.entries(input).reduce((accum, [key, value]) => {
+    if (Array.isArray(value) && value.length === 1) accum[key] = value[0];
+    else accum[key] = value;
+    return accum;
+  }, initialValue);
 }
 
 function getopt(options: Options = {}, command: string[]): GetoptResponse {
@@ -59,8 +72,8 @@ function getopt(options: Options = {}, command: string[]): GetoptResponse {
     optionArgs: [],
   };
   rawArgs.forEach(arg => {
-    const option = parseOption(options, arg);
-    if (!option) {
+    const parsedOption = parseOption(options, arg);
+    if (!parsedOption) {
       if (state.activeOption) {
         state.optionArgs.push(arg);
         state.remainingArgs--;
@@ -68,23 +81,33 @@ function getopt(options: Options = {}, command: string[]): GetoptResponse {
       } else args.push(arg);
       return;
     }
-    if (!options[option]) {
-      throw new Error(`Unrecognized option: ${arg}`);
-    }
-
-    if (state.activeOption) {
-      Object.assign(result, getStateAndReset(state));
-    }
-
-    Object.assign(state, {
-      activeOption: option,
-      remainingArgs: options[option]!.args || 0,
-      optionArgs: [],
+    parsedOption.forEach(option => {
+      let forcedValue = null;
+      if (option.includes('=')) {
+        const parts = option.split('=');
+        option = parts[0];
+        forcedValue = parts[1];
+      }
+      if (!options[option]) {
+        throw new Error(`Unrecognized option: ${arg}`);
+      }
+      if (!options[option]!.args) {
+        result[option] = true;
+        return;
+      }
+      if (state.activeOption) {
+        Object.assign(result, getStateAndReset(state));
+      }
+      Object.assign(state, {
+        activeOption: option,
+        remainingArgs: options[option]!.args || 0,
+        optionArgs: forcedValue ? [forcedValue] : [],
+      });
+      result[option] = true;
     });
-    result[option] = true;
   });
   if (args.length) result.args = args;
-  return result;
+  return postprocess(result);
 }
 
 export default (options: Options, command: string[] = process.argv): GetoptResponse | null => {
