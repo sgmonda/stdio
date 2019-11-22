@@ -1,6 +1,6 @@
 const FAILURE = 1;
 
-export interface Options {
+export interface Config {
   [key: string]:
     | {
         key?: string;
@@ -8,12 +8,17 @@ export interface Options {
         multiple?: boolean;
         args?: number | string;
         mandatory?: boolean;
+        required?: boolean;
       }
     | undefined;
 }
 
+export interface GetoptPartialResponse {
+  [key: string]: Array<string | boolean>;
+}
+
 export interface GetoptResponse {
-  [key: string]: string | number | string[] | number[] | boolean;
+  [key: string]: string | number | boolean | Array<string | number | boolean>;
 }
 
 interface ParsingState {
@@ -22,7 +27,7 @@ interface ParsingState {
   optionArgs: string[];
 }
 
-function getShorteners(options: Options): { [key: string]: string } {
+function getShorteners(options: Config): { [key: string]: string } {
   const initialValue: { [key: string]: string } = {};
   return Object.entries(options).reduce((accum, [key, value]) => {
     if (typeof value === 'object' && value.key) accum[value.key] = key;
@@ -30,7 +35,7 @@ function getShorteners(options: Options): { [key: string]: string } {
   }, initialValue);
 }
 
-function parseOption(options: Options, arg: string): string[] | null {
+function parseOption(options: Config, arg: string): string[] | null {
   if (!/^--?[a-zA-Z]/.test(arg)) return null;
   if (arg.startsWith('--')) {
     return [arg.replace(/^--/, '')];
@@ -52,19 +57,28 @@ function getStateAndReset(state: ParsingState): { [key: string]: string[] } {
   return partial;
 }
 
-function postprocess(input: GetoptResponse): GetoptResponse {
+function postprocess(input: GetoptPartialResponse): GetoptResponse {
   const initialValue: GetoptResponse = {};
-  return Object.entries(input).reduce((accum, [key, value]) => {
+  const result = Object.entries(input).reduce((accum, [key, value]) => {
     if (Array.isArray(value) && value.length === 1) accum[key] = value[0];
-    else accum[key] = value;
+    else accum[key] = [...value];
     return accum;
   }, initialValue);
+  return result;
 }
 
-function getopt(options: Options = {}, command: string[]): GetoptResponse {
+function checkRequiredParams(config: Config, input: GetoptResponse): void {
+  Object.entries(config)
+    .filter(([, value]) => value && (value.mandatory || value.required))
+    .forEach(([key]) => {
+      if (!input[key]) throw new Error(`Missing parameter: ${key}`);
+    });
+}
+
+function getopt(config: Config = {}, command: string[]): GetoptResponse {
   const rawArgs = command.slice(2);
   if (!rawArgs.length) return {};
-  const result: GetoptResponse = {};
+  const result: GetoptPartialResponse = {};
   const args: string[] = [];
   const state: ParsingState = {
     activeOption: '',
@@ -72,13 +86,15 @@ function getopt(options: Options = {}, command: string[]): GetoptResponse {
     optionArgs: [],
   };
   rawArgs.forEach(arg => {
-    const parsedOption = parseOption(options, arg);
+    const parsedOption = parseOption(config, arg);
     if (!parsedOption) {
       if (state.activeOption) {
         state.optionArgs.push(arg);
         state.remainingArgs--;
         if (!state.remainingArgs) Object.assign(result, getStateAndReset(state));
-      } else args.push(arg);
+      } else {
+        args.push(arg);
+      }
       return;
     }
     parsedOption.forEach(option => {
@@ -86,35 +102,47 @@ function getopt(options: Options = {}, command: string[]): GetoptResponse {
       if (option.includes('=')) {
         const parts = option.split('=');
         option = parts[0];
-        forcedValue = parts[1];
+        forcedValue = parts.slice(1).join('=');
       }
-      if (!options[option]) {
+      if (!config[option]) {
         throw new Error(`Unrecognized option: ${arg}`);
       }
-      if (!options[option]!.args) {
-        result[option] = true;
+      let expectedArgsCount = config[option]!.args;
+      if (expectedArgsCount === '*') expectedArgsCount = Infinity;
+      if (!expectedArgsCount) {
+        result[option] = [true];
         return;
       }
       if (state.activeOption) {
         Object.assign(result, getStateAndReset(state));
       }
+
       Object.assign(state, {
         activeOption: option,
-        remainingArgs: options[option]!.args || 0,
+        remainingArgs: expectedArgsCount || 0,
         optionArgs: forcedValue ? [forcedValue] : [],
       });
-      result[option] = true;
+      console.log('STATE', state);
+      result[option] = [true];
     });
   });
   if (args.length) result.args = args;
-  return postprocess(result);
+  const compiledResult = postprocess(result);
+  checkRequiredParams(config, compiledResult);
+  return compiledResult;
 }
 
-export default (options: Options, command: string[] = process.argv): GetoptResponse | null => {
+interface Options {
+  exitOnFailure: boolean;
+}
+
+export default (config: Config, command: string[] = process.argv, options?: Options): GetoptResponse | null => {
+  const { exitOnFailure = true } = options || {};
   try {
-    return getopt(options, command);
+    return getopt(config, command);
   } catch (error) {
-    console.log(error);
+    if (!exitOnFailure) return null;
+    console.log(error); // @TODO Print help
     process.exit(FAILURE);
     return null;
   }
