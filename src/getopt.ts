@@ -11,6 +11,7 @@ export interface Config {
         mandatory?: boolean;
         required?: boolean;
       }
+    | boolean
     | undefined;
 }
 
@@ -70,7 +71,7 @@ function postprocess(input: GetoptPartialResponse): GetoptResponse {
 
 function checkRequiredParams(config: Config, input: GetoptResponse): void {
   Object.entries(config)
-    .filter(([, value]) => value && (value.mandatory || value.required))
+    .filter(([, value]) => value && typeof value !== 'boolean' && (value.mandatory || value.required))
     .forEach(([key]) => {
       if (!input[key]) throw new Error(`Missing parameter: ${key}`);
     });
@@ -105,10 +106,12 @@ function getopt(config: Config = {}, command: string[]): GetoptResponse {
         option = parts[0];
         forcedValue = parts.slice(1).join('=');
       }
-      if (!config[option]) {
+      let subconfig = config[option];
+      if (!subconfig) {
         throw new Error(`Unrecognized option: ${arg}`);
       }
-      let expectedArgsCount = config[option]!.args;
+      if (typeof subconfig === 'boolean') subconfig = {};
+      let expectedArgsCount = subconfig!.args;
       if (expectedArgsCount === '*') expectedArgsCount = Infinity;
 
       if (state.activeOption) {
