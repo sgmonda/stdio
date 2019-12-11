@@ -27,6 +27,7 @@ interface ParsingState {
   activeOption: string;
   remainingArgs: number;
   optionArgs: string[];
+  isMultiple: boolean;
 }
 
 function getShorteners(options: Config): { [key: string]: string } {
@@ -49,12 +50,13 @@ function parseOption(options: Config, arg: string): string[] | null {
     .map(letter => shorteners[letter] || letter);
 }
 
-function getStateAndReset(state: ParsingState): { [key: string]: string[] } {
+function getStateAndReset(state: ParsingState): { [key: string]: Array<string | boolean> } {
   const partial = { [state.activeOption]: state.optionArgs };
   Object.assign(state, {
     activeOption: '',
     remainingArgs: 0,
     optionArgs: [],
+    isMultiple: false,
   });
   return partial;
 }
@@ -86,6 +88,7 @@ function getopt(config: Config = {}, command: string[]): GetoptResponse {
     activeOption: '',
     remainingArgs: 0,
     optionArgs: [],
+    isMultiple: false,
   };
   rawArgs.forEach(arg => {
     const parsedOption = parseOption(config, arg);
@@ -93,7 +96,14 @@ function getopt(config: Config = {}, command: string[]): GetoptResponse {
       if (state.activeOption) {
         state.optionArgs.push(arg);
         state.remainingArgs--;
-        if (!state.remainingArgs) Object.assign(result, getStateAndReset(state));
+        if (!state.remainingArgs || state.isMultiple) {
+          const isMultiple = state.isMultiple;
+          const partial = getStateAndReset(state);
+          Object.entries(partial).forEach(([key, value]) => {
+            if (isMultiple && result[key]) partial[key] = result[key].concat(value);
+          });
+          Object.assign(result, partial);
+        }
       } else {
         args.push(arg);
       }
@@ -111,14 +121,21 @@ function getopt(config: Config = {}, command: string[]): GetoptResponse {
         throw new Error(`Unrecognized option: ${arg}`);
       }
       if (typeof subconfig === 'boolean') subconfig = {};
+      const isMultiple = !!subconfig.multiple;
+      if (result[option] && !isMultiple) throw new Error(`Option ${arg} provided many times`);
       let expectedArgsCount = subconfig!.args;
       if (expectedArgsCount === '*') expectedArgsCount = Infinity;
 
       if (state.activeOption) {
-        Object.assign(result, getStateAndReset(state));
+        const partial = getStateAndReset(state);
+        Object.entries(partial).forEach(([key, value]) => {
+          if (!result[key]) return;
+          if (isMultiple) partial[key] = result[key].concat(value);
+        });
+        Object.assign(result, partial);
       }
 
-      if (!expectedArgsCount) {
+      if (!expectedArgsCount && !isMultiple) {
         result[option] = [true];
         return;
       }
@@ -127,8 +144,9 @@ function getopt(config: Config = {}, command: string[]): GetoptResponse {
         activeOption: option,
         remainingArgs: expectedArgsCount || 0,
         optionArgs: forcedValue ? [forcedValue] : [],
+        isMultiple,
       });
-      result[option] = [true];
+      if (!isMultiple) result[option] = [true];
     });
   });
   if (args.length) result[POSITIONAL_ARGS_KEY] = args;

@@ -92,11 +92,11 @@ const TEST_CASES = [
     expected: null,
     config: { number: { key: 'n', args: 2, mandatory: true }, other: { key: 'o' } },
   },
-  // // {
-  // //   command: 'node program.js -m 1 -m 2 -m 3 a b',
-  // //   expected: { meta: ['1', '2', '3'], args: ['a', 'b'] },
-  // //   config: { meta: { key: 'm', multiple: true } },
-  // // },
+  {
+    command: 'node program.js -m 1 -m 2 -m 3 a b',
+    expected: { meta: ['1', '2', '3'], args: ['a', 'b'] },
+    config: { meta: { key: 'm', multiple: true } },
+  },
   {
     command: 'node program.js --meta 3 4 5 6 -o 3',
     expected: { meta: ['3', '4', '5', '6'], other: true, args: ['3'] },

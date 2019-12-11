@@ -57,13 +57,22 @@ Where `<definition>` is an object describing each option. These are the supporte
 - `key` (`string`): The short name for the option. It is a single-letter string.
 - `description` (`string`): The option description. A text for humans to understand what the option means.
 - `required` (`boolean`): If the option is mandatory or not.
-- `args`: An arguments definition, describing how many ones are required
+- `args` (`number|string`): An arguments definition, describing how many ones are required. This can be a number or the special string `"*"` when the amount of arguments for the option is variable.
+- `multiple` (`boolean`): If the option should be specified for each value. This makes `stdio` ignore `args` expected count and makes it mandatory to write things like `-m 1 -m 2 -m 3` instead of `-m 1 2 3`.
 
 In case a required option is not defined or any option is not well used at runtime, an automatic help/usage message is printed, aborting the execution:
 
 ```
 Usage: bla bla bla
 ```
+
+In case you don't want to abort the execution, then pass a second argument to `getopt()` with this special flag:
+
+```
+const options = getopt({...}, { exitOnFailure: false });
+```
+
+In this case `options` will have a `null` value but your process will not be finished when your program is not properly used (the terminal command contains errors).
 
 <details>
 <summary>Example</summary>
