@@ -112,22 +112,22 @@ const TEST_CASES = [
     expected: { meta: ['1', '2'], other: false },
     config: { meta: { key: 'm', args: 2, default: ['1', '2'] }, other: { default: false } },
   },
-  // {
-  //   command: 'node program.js -m a b',
-  //   expected: { meta: ['a', 'b'], other: false },
-  //   config: { meta: { key: 'm', args: 2, default: ['1', '2'] }, other: { default: false } },
-  // },
-  // {
-  //   command:
-  //     'node program.js http://localhost:80/ -c 2 -n 1 -H Cookie:SPRING_SECURITY_CONTEXT=ZmYzYjZmYjItZThjOS00ZmZhLTkyOWQtZDRjYzE3NmRmZWIy',
-  //   expected: {
-  //     args: ['http://localhost:80/'],
-  //     check: '2',
-  //     number: '1',
-  //     header: 'Cookie:SPRING_SECURITY_CONTEXT=ZmYzYjZmYjItZThjOS00ZmZhLTkyOWQtZDRjYzE3NmRmZWIy',
-  //   },
-  //   config: { check: { key: 'c', args: 1 }, number: { key: 'n', args: 1 }, header: { key: 'H', args: 1 } },
-  // },
+  {
+    command: 'node program.js -m a b',
+    expected: { meta: ['a', 'b'], other: false },
+    config: { meta: { key: 'm', args: 2, default: ['1', '2'] }, other: { default: false } },
+  },
+  {
+    command:
+      'node program.js http://localhost:80/ -c 2 -n 1 -H Cookie:SPRING_SECURITY_CONTEXT=ZmYzYjZmYjItZThjOS00ZmZhLTkyOWQtZDRjYzE3NmRmZWIy',
+    expected: {
+      args: ['http://localhost:80/'],
+      check: '2',
+      number: '1',
+      header: 'Cookie:SPRING_SECURITY_CONTEXT=ZmYzYjZmYjItZThjOS00ZmZhLTkyOWQtZDRjYzE3NmRmZWIy',
+    },
+    config: { check: { key: 'c', args: 1 }, number: { key: 'n', args: 1 }, header: { key: 'H', args: 1 } },
+  },
 ];
 
 TEST_CASES.forEach(testCase => {
