@@ -102,16 +102,16 @@ const TEST_CASES = [
     expected: { meta: ['3', '4', '5', '6'], other: true, args: ['3'] },
     config: { meta: { args: '*' }, other: { key: 'o' } },
   },
-  // {
-  //   command: 'node program.js --other',
-  //   expected: { other: true, meta: 'foo' },
-  //   config: { meta: { key: 'm', default: 'foo' }, other: true },
-  // },
-  // {
-  //   command: 'node program.js',
-  //   expected: { meta: ['1', '2'], other: false },
-  //   config: { meta: { key: 'm', args: 2, default: ['1', '2'] }, other: { default: false } },
-  // },
+  {
+    command: 'node program.js --other',
+    expected: { other: true, meta: 'foo' },
+    config: { meta: { key: 'm', default: 'foo' }, other: true },
+  },
+  {
+    command: 'node program.js',
+    expected: { meta: ['1', '2'], other: false },
+    config: { meta: { key: 'm', args: 2, default: ['1', '2'] }, other: { default: false } },
+  },
   // {
   //   command: 'node program.js -m a b',
   //   expected: { meta: ['a', 'b'], other: false },

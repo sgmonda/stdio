@@ -10,6 +10,7 @@ export interface Config {
         args?: number | string;
         mandatory?: boolean;
         required?: boolean;
+        default?: string | string[] | boolean;
       }
     | boolean
     | undefined;
@@ -79,9 +80,18 @@ function checkRequiredParams(config: Config, input: GetoptResponse): void {
     });
 }
 
+function applyDefaults(config: Config, result: GetoptPartialResponse): void {
+  Object.entries(config).forEach(([key, value]) => {
+    if (!value || typeof value !== 'object') return;
+    if ('default' in value && !(key in result)) {
+      const values = Array.isArray(value.default) ? value.default : [value.default];
+      result[key] = values.map(v => (typeof v === 'boolean' ? v : String(v)));
+    }
+  });
+}
+
 function getopt(config: Config = {}, command: string[]): GetoptResponse {
   const rawArgs = command.slice(2);
-  if (!rawArgs.length) return {};
   const result: GetoptPartialResponse = {};
   const args: string[] = [];
   const state: ParsingState = {
@@ -150,6 +160,7 @@ function getopt(config: Config = {}, command: string[]): GetoptResponse {
     });
   });
   if (args.length) result[POSITIONAL_ARGS_KEY] = args;
+  applyDefaults(config, result);
   const compiledResult = postprocess(result);
   checkRequiredParams(config, compiledResult);
   return compiledResult;
