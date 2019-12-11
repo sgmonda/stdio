@@ -16,6 +16,10 @@ export interface Config {
     | undefined;
 }
 
+export interface Options {
+  exitOnFailure: boolean;
+}
+
 export interface GetoptPartialResponse {
   [key: string]: Array<string | boolean>;
 }
@@ -164,10 +168,6 @@ function getopt(config: Config = {}, command: string[]): GetoptResponse {
   const compiledResult = postprocess(result);
   checkRequiredParams(config, compiledResult);
   return compiledResult;
-}
-
-interface Options {
-  exitOnFailure: boolean;
 }
 
 export default (config: Config, command: string[] = process.argv, options?: Options): GetoptResponse | null => {
