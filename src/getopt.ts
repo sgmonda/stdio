@@ -17,7 +17,9 @@ export interface Config {
 }
 
 export interface Options {
-  exitOnFailure: boolean;
+  exitOnFailure?: boolean;
+  throwOnFailure?: boolean;
+  printOnFailure?: boolean;
 }
 
 export interface GetoptPartialResponse {
@@ -43,12 +45,12 @@ function getShorteners(options: Config): { [key: string]: string } {
   }, initialValue);
 }
 
-function parseOption(options: Config, arg: string): string[] | null {
+function parseOption(config: Config, arg: string): string[] | null {
   if (!/^--?[a-zA-Z]/.test(arg)) return null;
   if (arg.startsWith('--')) {
     return [arg.replace(/^--/, '')];
   }
-  const shorteners = getShorteners(options);
+  const shorteners = getShorteners(config);
   return arg
     .replace(/^-/, '')
     .split('')
@@ -76,12 +78,20 @@ function postprocess(input: GetoptPartialResponse): GetoptResponse {
   return result;
 }
 
-function checkRequiredParams(config: Config, input: GetoptResponse): void {
-  Object.entries(config)
-    .filter(([, value]) => value && typeof value !== 'boolean' && (value.mandatory || value.required))
-    .forEach(([key]) => {
-      if (!input[key]) throw new Error(`Missing parameter: ${key}`);
-    });
+function checkRequiredParams(config: Config, input: GetoptPartialResponse): void {
+  Object.entries(config).forEach(([key, value]) => {
+    if (!value || typeof value !== 'object') return;
+    if ((value.mandatory || value.required) && !input[key]) {
+      throw new Error(`Missing option: "--${key}"`);
+    }
+    if (value.args && value.args !== '*') {
+      const expectedArgsCount = parseInt(String(value.args));
+      const argsCount = input[key].length;
+      if (expectedArgsCount > 0 && expectedArgsCount !== argsCount) {
+        throw new Error(`Option "--${key}" requires ${expectedArgsCount} arguments, but ${argsCount} were provided`);
+      }
+    }
+  });
 }
 
 function applyDefaults(config: Config, result: GetoptPartialResponse): void {
@@ -124,19 +134,14 @@ function getopt(config: Config = {}, command: string[]): GetoptResponse {
       return;
     }
     parsedOption.forEach(option => {
-      let forcedValue = null;
-      if (option.includes('=')) {
-        const parts = option.split('=');
-        option = parts[0];
-        forcedValue = parts.slice(1).join('=');
-      }
+      if (['h', 'help'].includes(option)) throw new Error('');
       let subconfig = config[option];
       if (!subconfig) {
-        throw new Error(`Unrecognized option: ${arg}`);
+        throw new Error(`Unknown option: "${arg}"`);
       }
       if (typeof subconfig === 'boolean') subconfig = {};
       const isMultiple = !!subconfig.multiple;
-      if (result[option] && !isMultiple) throw new Error(`Option ${arg} provided many times`);
+      if (result[option] && !isMultiple) throw new Error(`Option "--${option}" provided many times`);
       let expectedArgsCount = subconfig!.args;
       if (expectedArgsCount === '*') expectedArgsCount = Infinity;
 
@@ -157,7 +162,7 @@ function getopt(config: Config = {}, command: string[]): GetoptResponse {
       Object.assign(state, {
         activeOption: option,
         remainingArgs: expectedArgsCount || 0,
-        optionArgs: forcedValue ? [forcedValue] : [],
+        optionArgs: [],
         isMultiple,
       });
       if (!isMultiple) result[option] = [true];
@@ -165,19 +170,82 @@ function getopt(config: Config = {}, command: string[]): GetoptResponse {
   });
   if (args.length) result[POSITIONAL_ARGS_KEY] = args;
   applyDefaults(config, result);
+  checkRequiredParams(config, result);
   const compiledResult = postprocess(result);
-  checkRequiredParams(config, compiledResult);
   return compiledResult;
 }
 
+function getHelpMessage(config: Config, programName: string): string {
+  const strLines = [
+    'USAGE: node ' + programName + ' [OPTION1] [OPTION2]... arg1 arg2...',
+    'The following options are supported:',
+  ];
+
+  const lines: string[][] = [];
+
+  Object.entries(config).forEach(([key, value]) => {
+    if (key === '_meta_') return;
+    if (typeof value !== 'object' || !value) {
+      lines.push(['  --' + key, '']);
+      return;
+    }
+    let ops = ' ';
+
+    if (value.multiple) value.args = 1;
+    const argsCount = value.args || 0;
+
+    if (value.args === '*') {
+      ops += '<ARG1>...<ARGN>';
+    } else {
+      for (let i = 0; i < argsCount; i++) {
+        ops += '<ARG' + (i + 1) + '> ';
+      }
+    }
+    lines.push([
+      '  ' + (value.key ? '-' + value.key + ', --' : '--') + key + ops,
+      (value.description || '') +
+        (value.mandatory ? ' (mandatory)' : '') +
+        (value.multiple ? ' (multiple)' : '') +
+        (value.default ? ' ("' + value.default + '" by default)' : ''),
+    ]);
+  });
+
+  const maxLength = lines.reduce((prev, current) => Math.max(current[0].length, prev), 0);
+  const plainLines = lines.map(line => {
+    const key = line[0];
+    const message = line[1];
+    const padding = new Array(maxLength - key.length + 1).join(' ');
+    return (key + padding + '\t' + message).trimRight();
+  });
+
+  return strLines.concat(plainLines).join('\n');
+}
+
+function preprocessCommand(command: string[]): string[] {
+  const parsed: string[] = [];
+  command.forEach(item => {
+    if (/^--?[a-zA-Z]+=/.test(item)) {
+      const part1 = item.split('=')[0];
+      const part2 = item.replace(part1 + '=', '');
+      parsed.push(part1);
+      parsed.push(part2);
+    } else {
+      parsed.push(item);
+    }
+  });
+  return parsed;
+}
+
 export default (config: Config, command: string[] = process.argv, options?: Options): GetoptResponse | null => {
-  const { exitOnFailure = true } = options || {};
+  const { exitOnFailure = true, throwOnFailure = false, printOnFailure = true } = options || {};
   try {
-    return getopt(config, command);
+    return getopt(config, preprocessCommand(command));
   } catch (error) {
-    if (!exitOnFailure) return null;
-    console.log(error); // @TODO Print help
-    process.exit(FAILURE);
+    const programName = command[1].split('/').pop() || 'program';
+    const message = (error.message + '\n' + getHelpMessage(config, programName)).trim();
+    if (printOnFailure) console.warn(message);
+    if (exitOnFailure) process.exit(FAILURE);
+    if (throwOnFailure) throw new Error(message);
     return null;
   }
 };

@@ -1,4 +1,5 @@
 import { getopt } from '../index';
+import { Options } from '../src/getopt';
 
 const TEST_CASES = [
   {
@@ -128,12 +129,88 @@ const TEST_CASES = [
     },
     config: { check: { key: 'c', args: 1 }, number: { key: 'n', args: 1 }, header: { key: 'H', args: 1 } },
   },
+  {
+    command: 'node program.js -m',
+    expected: null,
+    config: { meta: { key: 'm', args: 2 }, other: { default: false } },
+    options: { throwOnFailure: true },
+    error: `Option "--meta" requires 2 arguments, but 1 were provided
+USAGE: node program.js [OPTION1] [OPTION2]... arg1 arg2...
+The following options are supported:
+  -m, --meta <ARG1> <ARG2>
+  --other`,
+  },
+  {
+    command: 'node program.js -237',
+    expected: null,
+    config: { number: { key: 'n', args: 4, mandatory: true }, other: { key: 'o' } },
+    options: { throwOnFailure: true },
+    error: `Missing option: "--number"
+USAGE: node program.js [OPTION1] [OPTION2]... arg1 arg2...
+The following options are supported:
+  -n, --number <ARG1> <ARG2> <ARG3> <ARG4> 	 (mandatory)
+  -o, --other`,
+  },
+  {
+    command: 'node program.js -237 -k',
+    expected: null,
+    config: { number: { key: 'n' }, other: { key: 'o' } },
+    options: { throwOnFailure: true },
+    error: `Unknown option: "-k"
+USAGE: node program.js [OPTION1] [OPTION2]... arg1 arg2...
+The following options are supported:
+  -n, --number
+  -o, --other`,
+  },
+  {
+    command: 'node program.js -237 --help',
+    expected: null,
+    config: { number: { key: 'n' }, other: { key: 'o' } },
+    options: { throwOnFailure: true },
+    error: `USAGE: node program.js [OPTION1] [OPTION2]... arg1 arg2...
+The following options are supported:
+  -n, --number
+  -o, --other`,
+  },
+  {
+    command: 'node program.js -n -234 34 -n=23',
+    expected: null,
+    config: { number: { key: 'n', args: 2 }, other: { key: 'o' } },
+    options: { throwOnFailure: true },
+    error: `Option "--number" provided many times
+USAGE: node program.js [OPTION1] [OPTION2]... arg1 arg2...
+The following options are supported:
+  -n, --number <ARG1> <ARG2>
+  -o, --other`,
+  },
+  {
+    command: 'node program.js -h',
+    expected: null,
+    config: { meta: { key: 'm', args: 1, default: 'foo' }, other: true },
+    options: { throwOnFailure: true },
+    error: `USAGE: node program.js [OPTION1] [OPTION2]... arg1 arg2...
+The following options are supported:
+  -m, --meta <ARG1> 	 ("foo" by default)
+  --other`,
+  },
 ];
+
+//@TODO _meta_ and help
 
 TEST_CASES.forEach(testCase => {
   test(testCase.command, () => {
-    const observed = getopt(testCase.config, testCase.command.split(' '), { exitOnFailure: false });
-    const expected = testCase.expected;
-    expect(observed).toEqual(expected);
+    const options: Options = {
+      exitOnFailure: false,
+      printOnFailure: false,
+      ...testCase.options,
+    };
+    try {
+      const observed = getopt(testCase.config, testCase.command.split(' '), options);
+      const expected = testCase.expected;
+      expect(observed).toEqual(expected);
+    } catch (error) {
+      expect(options.throwOnFailure).toBe(true);
+      expect(error.message).toEqual(testCase.error);
+    }
   });
 });
