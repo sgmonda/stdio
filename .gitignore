@@ -5,3 +5,4 @@ node_modules
 /assets/*.png
 /example*
 *.js
+coverage

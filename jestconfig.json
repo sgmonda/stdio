@@ -10,5 +10,7 @@
     "jsx",
     "json",
     "node"
-  ]
+  ],
+  "coverageDirectory": "./coverage/",
+  "collectCoverage": true
 }
