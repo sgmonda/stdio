@@ -263,9 +263,18 @@ function preprocessCommand(command: string[]): string[] {
   return parsed;
 }
 
+function checkConfig(config: Config): void {
+  if (config.help) throw new Error('"--help" option is reserved and cannot be declared in a getopt() call');
+  Object.values(config).forEach(value => {
+    if (value && typeof value === 'object' && value.key === 'h')
+      throw new Error('"-h" option is reserved and cannot be declared in a getopt() call');
+  });
+}
+
 export default (config: Config, command: string[] = process.argv, options?: Options): GetoptResponse | null => {
   const { exitOnFailure = true, throwOnFailure = false, printOnFailure = true } = options || {};
   try {
+    checkConfig(config);
     return getopt(config, preprocessCommand(command));
   } catch (error) {
     if (!error.message.startsWith(ERROR_PREFFIX)) {

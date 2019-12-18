@@ -185,7 +185,6 @@ The following options are supported:
   },
   {
     command: 'node program.js -h',
-    expected: null,
     config: { meta: { key: 'm', args: 1, default: 'foo' }, other: true },
     options: { throwOnFailure: true },
     error: `USAGE: node program.js [OPTION1] [OPTION2]... arg1 arg2...
@@ -195,7 +194,6 @@ The following options are supported:
   },
   {
     command: 'node program.js -o one two',
-    expected: { other: true },
     config: { test: { key: 't' }, other: { key: 'o' }, _meta_: { minArgs: 3 } },
     options: { throwOnFailure: true },
     error: `At least 3 positional arguments are required, but 2 were provided
@@ -206,7 +204,6 @@ The following options are supported:
   },
   {
     command: 'node program.js -o one two',
-    expected: { other: true },
     config: { test: { key: 't' }, other: { key: 'o' }, _meta_: { maxArgs: 1 } },
     options: { throwOnFailure: true },
     error: `Max allowed positional arguments is 1, but 2 were provided
@@ -217,7 +214,6 @@ The following options are supported:
   },
   {
     command: 'node program.js -o one two',
-    expected: { other: true },
     config: { test: { key: 't' }, other: { key: 'o' }, _meta_: { args: 3 } },
     options: { throwOnFailure: true },
     error: `3 positional arguments are required, but 2 were provided
@@ -225,6 +221,18 @@ USAGE: node program.js [OPTION1] [OPTION2]... arg1 arg2...
 The following options are supported:
   -t, --test
   -o, --other`,
+  },
+  {
+    command: 'node program.js',
+    config: { help: { key: 'x' } },
+    options: { throwOnFailure: true },
+    error: `"--help" option is reserved and cannot be declared in a getopt() call`,
+  },
+  {
+    command: 'node program.js',
+    config: { something: { key: 'h' } },
+    options: { throwOnFailure: true },
+    error: `"-h" option is reserved and cannot be declared in a getopt() call`,
   },
 ];
 
