@@ -5,4 +5,6 @@
   before_cache: ['rm -rf node_modules/.cache'],
   before_script: [],
   after_script: [],
+  scripts: ['npm install codecov -g'],
+  after_success: ['codecov']
 }
