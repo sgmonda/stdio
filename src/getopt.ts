@@ -1,5 +1,6 @@
 const FAILURE = 1;
 const POSITIONAL_ARGS_KEY = 'args';
+const ERROR_PREFFIX = 'ERROR#GETOPT: ';
 
 export interface Config {
   [key: string]:
@@ -11,6 +12,8 @@ export interface Config {
         mandatory?: boolean;
         required?: boolean;
         default?: string | string[] | boolean;
+        maxArgs?: number;
+        minArgs?: number;
       }
     | boolean
     | undefined;
@@ -35,6 +38,10 @@ interface ParsingState {
   remainingArgs: number;
   optionArgs: string[];
   isMultiple: boolean;
+}
+
+function throwError(message: string): void {
+  throw new Error(ERROR_PREFFIX + message);
 }
 
 function getShorteners(options: Config): { [key: string]: string } {
@@ -79,16 +86,35 @@ function postprocess(input: GetoptPartialResponse): GetoptResponse {
 }
 
 function checkRequiredParams(config: Config, input: GetoptPartialResponse): void {
+  if (config._meta_ && typeof config._meta_ === 'object') {
+    const { args = 0, minArgs = 0, maxArgs = 0 } = config._meta_;
+
+    let providedArgs = 0;
+    let error = null;
+    if (Array.isArray(input[POSITIONAL_ARGS_KEY]) && input[POSITIONAL_ARGS_KEY].length > 0) {
+      providedArgs = input[POSITIONAL_ARGS_KEY].length;
+    }
+    if (args && providedArgs !== args) {
+      error = `${args} positional arguments are required, but ${providedArgs} were provided`;
+    }
+    if (minArgs && providedArgs < minArgs) {
+      error = `At least ${minArgs} positional arguments are required, but ${providedArgs} were provided`;
+    }
+    if (maxArgs && providedArgs > maxArgs) {
+      error = `Max allowed positional arguments is ${maxArgs}, but ${providedArgs} were provided`;
+    }
+    if (error) throwError(error);
+  }
   Object.entries(config).forEach(([key, value]) => {
     if (!value || typeof value !== 'object') return;
     if ((value.mandatory || value.required) && !input[key]) {
-      throw new Error(`Missing option: "--${key}"`);
+      throwError(`Missing option: "--${key}"`);
     }
     if (value.args && value.args !== '*') {
       const expectedArgsCount = parseInt(String(value.args));
-      const argsCount = input[key].length;
+      const argsCount = input[key] ? input[key].length : 0;
       if (expectedArgsCount > 0 && expectedArgsCount !== argsCount) {
-        throw new Error(`Option "--${key}" requires ${expectedArgsCount} arguments, but ${argsCount} were provided`);
+        throwError(`Option "--${key}" requires ${expectedArgsCount} arguments, but ${argsCount} were provided`);
       }
     }
   });
@@ -134,14 +160,15 @@ function getopt(config: Config = {}, command: string[]): GetoptResponse {
       return;
     }
     parsedOption.forEach(option => {
-      if (['h', 'help'].includes(option)) throw new Error('');
+      if (['h', 'help'].includes(option)) throwError('');
       let subconfig = config[option];
       if (!subconfig) {
-        throw new Error(`Unknown option: "${arg}"`);
+        throwError(`Unknown option: "${arg}"`);
+        return;
       }
       if (typeof subconfig === 'boolean') subconfig = {};
       const isMultiple = !!subconfig.multiple;
-      if (result[option] && !isMultiple) throw new Error(`Option "--${option}" provided many times`);
+      if (result[option] && !isMultiple) throwError(`Option "--${option}" provided many times`);
       let expectedArgsCount = subconfig!.args;
       if (expectedArgsCount === '*') expectedArgsCount = Infinity;
 
@@ -241,8 +268,11 @@ export default (config: Config, command: string[] = process.argv, options?: Opti
   try {
     return getopt(config, preprocessCommand(command));
   } catch (error) {
+    if (!error.message.startsWith(ERROR_PREFFIX)) {
+      throw error;
+    }
     const programName = command[1].split('/').pop() || 'program';
-    const message = (error.message + '\n' + getHelpMessage(config, programName)).trim();
+    const message = (error.message.replace(ERROR_PREFFIX, '') + '\n' + getHelpMessage(config, programName)).trim();
     if (printOnFailure) console.warn(message);
     if (exitOnFailure) process.exit(FAILURE);
     if (throwOnFailure) throw new Error(message);
