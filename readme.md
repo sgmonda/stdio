@@ -264,7 +264,7 @@ bar.onFinish(() => console.log('FINISHED'));
 Note that progress bars take the 100% of the terminal width where your code runs. No matter if you use a size of 10 or 10000 ticks. `stdio` takes care about the formatting so you don't have to worry about it. Your terminal will show something like the following:
 
 ```
-00:01:12 43% [############·······························································] ETA 08:10:48
+00:01:12 23% [##############····························································] ETA 08:10:48
 ```
 
 <details>
