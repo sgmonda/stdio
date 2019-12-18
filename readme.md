@@ -16,12 +16,12 @@ Table of contents:
   - [getopt()](#getopt)
   - [read()](#read)
 
-## Installation
+# Installation
 
 To install this module you can use `npm`:
 
 ```
-npm install stdio
+$ npm install stdio
 ```
 
 Then you can import it from your project, as a whole module or any of its parts independently:
@@ -34,11 +34,11 @@ import stdio from 'stdio';
 import { getopt, read } from 'stdio';
 ```
 
-## Usage
+# Usage
 
 This module contains the following features:
 
-### getopt()
+## getopt()
 
 This function gives parsed UNIX-like command-line and options, preprocessed and ready to be used in an easy way. It is inspired by C standard library under UNIX.
 
@@ -57,55 +57,117 @@ Where `<definition>` is an object describing each option. These are the supporte
 - `key` (`string`): The short name for the option. It is a single-letter string.
 - `description` (`string`): The option description. A text for humans to understand what the option means.
 - `required` (`boolean`): If the option is mandatory or not.
-- `args` (`number|string`): An arguments definition, describing how many ones are required. This can be a number or the special string `"*"` when the amount of arguments for the option is variable.
-- `multiple` (`boolean`): If the option should be specified for each value. This makes `stdio` ignore `args` expected count and makes it mandatory to write things like `-m 1 -m 2 -m 3` instead of `-m 1 2 3`.
+- `args` (`number|string`): The expected arguments count for the option (if the option expects arguments). This can be a number or the special string `"*"` when it is variable.
+- `multiple` (`boolean`): If the option should be specified for each value. This makes it mandatory to write things like `-m 1 -m 2 -m 3` instead of `-m 1 2 3`.
+- `default`: (`string[]` or `string`): The default value for an option, in case it is not provided in the command.
 
-In case a required option is not defined or any option is not well used at runtime, an automatic help/usage message is printed, aborting the execution:
+Positional arguments (those not precedeed by an option) can be customized, too, using the special option `_meta_`, which supports some limits in the amount of required args:
+
+```javascript
+import { getopt } from 'stdio';
+const options = getopt({
+  <option_name_1>: {<definition>},
+  <option_name_2>: {<definition>},
+  <option_name_3>: {<definition>},
+  ...
+  _meta_: { minArgs: <number>, maxArgs: <number>, args: <number> },
+});
+```
+
+In case a required option is not defined or any option is not well used at runtime, an automatic help/usage message is printed, aborting the execution. This message is also shown automatically in case one of the special options `-h, --help` is provided.
 
 ```
-Usage: bla bla bla
+USAGE: node example.js [OPTION1] [OPTION2]... arg1 arg2...
+The following options are supported:
+  -<key_1>, --<option_name_1>
+  -<key_2>, --<option_name_2>
+  ...
 ```
 
-In case you don't want to abort the execution, then pass a second argument to `getopt()` with this special flag:
+<details>
+<summary>Behavior customization</summary>
+<p>
+
+In case you want to customize the automatic behavior when a command is wrong using your program, a second argument is supported by the `getopt()` call:
 
 ```
-const options = getopt({...}, { exitOnFailure: false });
+const options = getopt({...}, {<behavior_customizations>});
 ```
 
-In this case `options` will have a `null` value but your process will not be finished when your program is not properly used (the terminal command contains errors).
+Here are the supported customizations:
+
+- `printOnFailure` (`boolean`): Print the usage/help message when your user writes a wrong command. This is `true` by default.
+- `exitOnFailure` (`boolean`): Kill the process with an exit code of failure. This is `true` by default.
+- `throwOnFailure` (`boolean`): Throw an exception in the `getopt()` call you can catch. This is `false` by default.
+
+Please, note that `exitOnFailure` and `throwOnFailure` behavior customizations are not compatible. Only one of them is allowed at the same time.
+
+</p>
+</details>
+
+The response of a `getopt()` call is a simple plain object with a value per option specified in the command. Each value can be one of the following:
+
+- `boolean`, for options not needing arguments.
+- `string`, for options expecting a single argument.
+- `string[]`, for options expecting more than one argument.
+
+See the following example for a better understanding of how to use `getopt()` and the expected resoponse:
 
 <details>
 <summary>Example</summary>
 <p>
 
-The following program illustrates all the different types of options and how to use them.
+Here is a basic example of how to use `getopt()`. Please, note you'll find many more examples in the tests folder.
 
 ```javascript
-hola
+import { getopt } from 'stdio';
+
+const options = getopt({
+  name: { key: 'n', description: 'A name for the project', args: 1, required: true },
+  keywords: { key: 'k', description: 'Some keywords to describe something', args: '*', multiple: true },
+  languages: { args: '*' },
+  finished: { description: 'If the project is finished' },
+});
+
+console.log('Stdio rocks!\n', options);
 ```
 
 Here's a valid command for the previous options definition and the result of the `getopt()` response:
 
 ```
-good command
+$ node example.js -n 'hello world' -k leisure -k health -k sport --languages javascript typescript c++ --finished
 ```
 ```
-options object
+Stdio rocks!
+ {
+  name: 'hello world',
+  keywords: [ 'leisure', 'health', 'sport' ],
+  languages: [ 'javascript', 'typescript', 'c++' ],
+  finished: true
+}
 ```
 
-On the other hand, if any option is not well used, the execution of our program will exit with an error result and the usage message will be shown:
+On the other hand, if any option is not well used, the execution of our program will exit with an error result and the usage message will be shown. In this case, we omit the mandatory option `--name, -n`:
 
 ```
-wrong usage
+$ node example.js -k leisure -k health -k sport --languages javascript typescript c++ --finished
 ```
 ```
-help message
+Missing option: "--name"
+USAGE: node example.js [OPTION1] [OPTION2]... arg1 arg2...
+The following options are supported:
+  -n, --name <ARG1>          	A name for the project (required)
+  -k, --keywords <ARG1>      	Some keywords to describe something (multiple)
+  --languages <ARG1>...<ARGN>
+  --finished                 	If the project is finished
 ```
+
+Remember the same happens when `--help` or `-h` options are passed. They are reserved to be used to request help.
 
 </p>
 </details>
 
-### read()
+## read()
 
 This function reads standard input by lines, waiting for a line to be processed successfully before reading the next one. This is perfect for huge files as lines are read only as you process them, so you don't have to worry about system resources:
 

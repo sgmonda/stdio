@@ -266,7 +266,13 @@ function preprocessCommand(command: string[]): string[] {
 function checkConfig(config: Config): void {
   if (config.help) throw new Error('"--help" option is reserved and cannot be declared in a getopt() call');
   Object.values(config).forEach(value => {
-    if (!value || typeof value !== 'object') return;
+    if (!value || typeof value !== 'object') {
+      console.warn(
+        'Boolean description of getopt() options is deprecated and will be ' +
+          'removed in a future "stdio" release. Please, use an object definitions instead.',
+      );
+      return;
+    }
     if (value.key === 'h') throw new Error('"-h" option is reserved and cannot be declared in a getopt() call');
     if (value.mandatory)
       console.warn(
