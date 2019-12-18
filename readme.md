@@ -247,6 +247,7 @@ The output is something like this:
 ```
 
 </p>
+</details>
 
 ## ProgressBar 
 
@@ -255,9 +256,9 @@ This utility let you create progress bar instances that are printed automaticall
 ```javascript
 import { ProgressBar } from 'stdio';
 
-const bar = new ProgressBar(100, 1); // size of 100, tick of 1
+const bar = new ProgressBar(BAR_SIZE);
 ...
-bar.tick(); // This increments the bar value by 1
+bar.tick();
 bar.onFinish(() => console.log('FINISHED'));
 ```
 Note that progress bars take the 100% of the terminal width where your code runs. No matter if you use a size of 10 or 10000 ticks. `stdio` takes care about the formatting so you don't have to worry about it.
@@ -266,13 +267,12 @@ Note that progress bars take the 100% of the terminal width where your code runs
 <summary>Example</summary>
 <p>
 
-The following code will create a progress bar of 345 pieces and increments of 1. It means the progress bar will be at 100% when we've called `.tick()` 345 times.
+The following code will create a progress bar of 345 pieces. It means the progress bar will be at 100% when we've called `.tick()` 345 times.
 
 ```javascript
-// import { getopt } from './dist';
-const ProgressBar = require('./dist/ProgressBar').default;
+import { ProgressBar } from 'stdio';
 
-var pbar = new ProgressBar(345, 1);
+var pbar = new ProgressBar(345);
 var i = setInterval(function () {
 	pbar.tick();
 }, 1000);
@@ -289,3 +289,4 @@ If you run the previous code, the following will be shown:
 ```
 
 </p>
+</details>
