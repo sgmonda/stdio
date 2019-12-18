@@ -15,6 +15,7 @@ Table of contents:
 - [Usage](#usage)
   - [getopt()](#getopt)
   - [read()](#read)
+  - [ProgressBar](#progressbar)
 
 # Installation
 
@@ -36,7 +37,17 @@ import { getopt, read } from 'stdio';
 
 # Usage
 
-This module contains the following features:
+This module contains the following static functions:
+
+- `getopt()`: a function to parse command-line arguments.
+- `read()`: an async function to read the standard input (or huge files) by lines, without having to worry about system resources.
+- `ask()`: an async function to ask questions in a terminal and wait for a user's response.
+
+And the following classes:
+
+- `ProgressBar`: a class to create command-line progress bars.
+
+Next sections will show how to use all of them.
 
 ## getopt()
 
@@ -203,7 +214,7 @@ Once a `read()` successful call finishes (when all lines have been processed suc
 The following command reads a huge file and pipes it to a simple program:
 
 ```
-cat hugefile.txt | node myprogram.js
+$ cat hugefile.txt | node myprogram.js
 ```
 
 Where `myprogram.js` prints one line per second, including the line number at the begining:
@@ -237,6 +248,44 @@ The output is something like this:
 
 </p>
 
----
+## ProgressBar 
 
-To be completed
+This utility let you create progress bar instances that are printed automatically in the terminal, using a beautiful format and estimating the remaining time of a task. Using it is as simple as follows:
+
+```javascript
+import { ProgressBar } from 'stdio';
+
+const bar = new ProgressBar(100, 1); // size of 100, tick of 1
+...
+bar.tick(); // This increments the bar value by 1
+bar.onFinish(() => console.log('FINISHED'));
+```
+Note that progress bars take the 100% of the terminal width where your code runs. No matter if you use a size of 10 or 10000 ticks. `stdio` takes care about the formatting so you don't have to worry about it.
+
+<details>
+<summary>Example</summary>
+<p>
+
+The following code will create a progress bar of 345 pieces and increments of 1. It means the progress bar will be at 100% when we've called `.tick()` 345 times.
+
+```javascript
+// import { getopt } from './dist';
+const ProgressBar = require('./dist/ProgressBar').default;
+
+var pbar = new ProgressBar(345, 1);
+var i = setInterval(function () {
+	pbar.tick();
+}, 1000);
+pbar.onFinish(function () {
+	console.log('finish');
+	clearInterval(i);
+});
+```
+
+If you run the previous code, the following will be shown:
+
+```
+00:00:12 3% [###··········································································] ETA 00:05:35
+```
+
+</p>
