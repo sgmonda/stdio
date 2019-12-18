@@ -261,7 +261,11 @@ const bar = new ProgressBar(BAR_SIZE);
 bar.tick();
 bar.onFinish(() => console.log('FINISHED'));
 ```
-Note that progress bars take the 100% of the terminal width where your code runs. No matter if you use a size of 10 or 10000 ticks. `stdio` takes care about the formatting so you don't have to worry about it.
+Note that progress bars take the 100% of the terminal width where your code runs. No matter if you use a size of 10 or 10000 ticks. `stdio` takes care about the formatting so you don't have to worry about it. Your terminal will show something like the following:
+
+```
+00:01:12 43% [############·······························································] ETA 08:10:48
+```
 
 <details>
 <summary>Example</summary>
@@ -273,11 +277,9 @@ The following code will create a progress bar of 345 pieces. It means the progre
 import { ProgressBar } from 'stdio';
 
 var pbar = new ProgressBar(345);
-var i = setInterval(function () {
-	pbar.tick();
-}, 1000);
-pbar.onFinish(function () {
-	console.log('finish');
+var i = setInterval(() => pbar.tick(), 1000);
+pbar.onFinish(() => {
+	console.log('Finished!');
 	clearInterval(i);
 });
 ```
