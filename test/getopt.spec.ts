@@ -94,6 +94,11 @@ const TEST_CASES = [
     config: { number: { key: 'n', args: 2, mandatory: true }, other: { key: 'o' } },
   },
   {
+    command: 'node program.js -237',
+    expected: null,
+    config: { number: { key: 'n', args: 2, required: true }, other: { key: 'o' } },
+  },
+  {
     command: 'node program.js -m 1 -m 2 -m 3 a b',
     expected: { meta: ['1', '2', '3'], args: ['a', 'b'] },
     config: { meta: { key: 'm', multiple: true } },
@@ -148,7 +153,18 @@ The following options are supported:
     error: `Missing option: "--number"
 USAGE: node program.js [OPTION1] [OPTION2]... arg1 arg2...
 The following options are supported:
-  -n, --number <ARG1> <ARG2> <ARG3> <ARG4> 	 (mandatory)
+  -n, --number <ARG1> <ARG2> <ARG3> <ARG4> 	 (required)
+  -o, --other`,
+  },
+  {
+    command: 'node program.js -237',
+    expected: null,
+    config: { number: { key: 'n', args: 4, required: true }, other: { key: 'o' } },
+    options: { throwOnFailure: true },
+    error: `Missing option: "--number"
+USAGE: node program.js [OPTION1] [OPTION2]... arg1 arg2...
+The following options are supported:
+  -n, --number <ARG1> <ARG2> <ARG3> <ARG4> 	 (required)
   -o, --other`,
   },
   {

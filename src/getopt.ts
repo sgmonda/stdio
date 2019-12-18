@@ -9,7 +9,7 @@ export interface Config {
         description?: string;
         multiple?: boolean;
         args?: number | string;
-        mandatory?: boolean;
+        mandatory?: boolean; // @deprecated
         required?: boolean;
         default?: string | string[] | boolean;
         maxArgs?: number;
@@ -231,7 +231,7 @@ function getHelpMessage(config: Config, programName: string): string {
     lines.push([
       '  ' + (value.key ? '-' + value.key + ', --' : '--') + key + ops,
       (value.description || '') +
-        (value.mandatory ? ' (mandatory)' : '') +
+        (value.mandatory || value.required ? ' (required)' : '') +
         (value.multiple ? ' (multiple)' : '') +
         (value.default ? ' ("' + value.default + '" by default)' : ''),
     ]);
@@ -266,8 +266,13 @@ function preprocessCommand(command: string[]): string[] {
 function checkConfig(config: Config): void {
   if (config.help) throw new Error('"--help" option is reserved and cannot be declared in a getopt() call');
   Object.values(config).forEach(value => {
-    if (value && typeof value === 'object' && value.key === 'h')
-      throw new Error('"-h" option is reserved and cannot be declared in a getopt() call');
+    if (!value || typeof value !== 'object') return;
+    if (value.key === 'h') throw new Error('"-h" option is reserved and cannot be declared in a getopt() call');
+    if (value.mandatory)
+      console.warn(
+        '"mandatory" option is deprecated and will be removed in a ' +
+          'future "stdio" release. Please, use "required" instead.',
+      );
   });
 }
 
