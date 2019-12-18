@@ -7,9 +7,7 @@ The *de facto* standard input/output manager for Node.js
 [![Known Vulnerabilities](https://snyk.io/test/github/sgmonda/stdio/badge.svg?targetFile=package.json)](https://snyk.io/test/github/sgmonda/stdio?targetFile=package.json)
 [![Maintainability](https://api.codeclimate.com/v1/badges/70cf9b4cdd6a7849b6d1/maintainability)](https://codeclimate.com/github/sgmonda/stdio/maintainability)
 
-After a very long time, finally version 2 is here. The cool `stdio` module you cannot live without has been rewritten and improved a lot, with Typescript support, promise-based usage and much more.
-
-**Note**: Version 2 stops supporting non promise-based usage, so it is not compatible with older versions. If you're using an older version of `stdio` please, read this documentation carefully before upgrading.
+After a very long time, finally version 2 is here. The cool `stdio` module you cannot live without has been rewritten and improved a lot, with Typescript support, promise-based usage and much more. **Note**: Version 2 stops supporting non promise-based usage, so it is not compatible with older versions. If you're using an older version of `stdio` please, read this documentation carefully before upgrading.
 
 Table of contents:
 
