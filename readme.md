@@ -15,6 +15,7 @@ Table of contents:
 - [Usage](#usage)
   - [getopt()](#getopt)
   - [read()](#read)
+  - [ask()](#ask)
   - [ProgressBar](#progressbar)
 
 # Installation
@@ -248,6 +249,62 @@ The output is something like this:
 
 </p>
 </details>
+
+## ask()
+
+This simple function let you ask questions to the user through the command line and wait for an answer:
+
+```javascript
+
+import { ask } from 'stdio';
+...
+const answer = await ask(QUESTION_STRING, QUESTION_CONFIG);
+...
+```
+
+Where `QUESTION_STRING` is just a string and `QUESTION_CONFIG` is an optional object including the following properties:
+
+- `options` (`string[]`): List of allowed values for the answer. If it is not provided, then any answer is accepted.
+- `maxRetries` (`number`): Only makes sense when `options` is provided. After `maxRetries` of wrong answers, the `ask()` returning promise is rejected with an error explaining that all retries have been spent with no successfull answer.
+
+<details>
+<summary>Example</summary>
+<p>
+
+Take a look at the following code
+
+```javascript
+import { ask } from 'stdio';
+
+async function main () {
+	const name = await ask('What is your name?');
+	const age = await ask('How old are you?');
+	const gender = await ask('What is your gender?', { options: ['male', 'female'] });
+	console.log('Your name is "%s". You are a "%s" "%s" years old.', name, gender, age);
+}
+
+main()
+	.then(() => console.log('Finished'))
+	.catch(error => console.warn(error));
+```
+
+Here is an example of the execution:
+
+```
+$ node example.js
+
+What is your name?: John Doe
+How old are you?: 34
+What is your gender? [male/female]: other
+Unexpected answer. 2 retries left.
+What is your gender? [male/female]: male
+Your name is "john doe". You are a "male" "34" years old.
+Finished
+```
+
+</p>
+</details>
+
 
 ## ProgressBar 
 
