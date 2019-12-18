@@ -4,6 +4,7 @@ The *de facto* standard input/output manager for Node.js
 
 [![Build Status](https://secure.travis-ci.org/sgmonda/stdio.png)](http://travis-ci.org/sgmonda/stdio)
 [![NPM version](https://img.shields.io/npm/v/stdio.svg)](https://www.npmjs.com/package/stdio)
+[![Known Vulnerabilities](https://snyk.io/test/github/sgmonda/stdio/badge.svg?targetFile=package.json)](https://snyk.io/test/github/sgmonda/stdio?targetFile=package.json)
 
 After a very long time, finally version 2 is here. The cool `stdio` module you cannot live without has been rewritten and improved a lot, with Typescript support, promise-based usage and much more.
 
@@ -284,8 +285,8 @@ async function main () {
 }
 
 main()
-	.then(() => console.log('Finished'))
-	.catch(error => console.warn(error));
+  .then(() => console.log('Finished'))
+  .catch(error => console.warn(error));
 ```
 
 Here is an example of the execution:
