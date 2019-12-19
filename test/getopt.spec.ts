@@ -124,6 +124,11 @@ const TEST_CASES = [
     config: { meta: { key: 'm', args: 2, default: ['1', '2'] }, other: { default: false } },
   },
   {
+    command: "node program.js --value '-1pXM_DZMg'",
+    config: { value: { args: 1 } },
+    expected: { value: '-1pXM_DZMg' },
+  },
+  {
     command:
       'node program.js http://localhost:80/ -c 2 -n 1 -H Cookie:SPRING_SECURITY_CONTEXT=ZmYzYjZmYjItZThjOS00ZmZhLTkyOWQtZDRjYzE3NmRmZWIy',
     expected: {
@@ -252,6 +257,13 @@ The following options are supported:
   },
 ];
 
+function cleanParam(param: string): string {
+  if (/^'.*'$/.test(param)) {
+    return param.replace(/(^'|'$)/g, '');
+  }
+  return param;
+}
+
 TEST_CASES.forEach(testCase => {
   test(testCase.command, () => {
     const options: Options = {
@@ -260,7 +272,8 @@ TEST_CASES.forEach(testCase => {
       ...testCase.options,
     };
     try {
-      const observed = getopt(testCase.config, testCase.command.split(' '), options);
+      const command = testCase.command.split(' ').map(cleanParam);
+      const observed = getopt(testCase.config, command, options);
       const expected = testCase.expected;
       expect(observed).toEqual(expected);
     } catch (error) {
