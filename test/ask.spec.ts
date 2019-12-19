@@ -8,13 +8,13 @@ const TEST_CASES = [
     expected: 'I do not know',
   },
   {
-    question: 'Is this a test?',
+    question: 'Is this another test?',
     config: { options: ['yes', 'no'] },
     answers: ['wrong', 'yes'],
     expected: 'yes',
   },
   {
-    question: 'Is this a test?',
+    question: 'Is this a test, really?',
     config: { options: ['yes', 'no'] },
     answers: ['wrong', 'another wrong', 'third wrong', 'yes'],
     expected: null,

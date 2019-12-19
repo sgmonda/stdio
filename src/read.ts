@@ -27,16 +27,9 @@ function compileStats(stats: Stats): Stats {
   return stats;
 }
 
-function processNextLine(state: State): void {
-  const { buffer, isOpen, stats, reader, resolve, reject, lineHandler } = state;
-  const startTime = NOW();
-  const line = buffer.shift();
-  if (typeof line !== 'string') {
-    setImmediate(processNextLine);
-    return;
-  }
-
-  function onSuccess(): void {
+function getSuccessCallback(state: State, startTime: number, callback: (...args: any[]) => void): () => void {
+  const { buffer, isOpen, stats, reader, resolve } = state;
+  return (): void => {
     stats.times.push(NOW() - startTime);
     if (!isOpen && !buffer.length) {
       resolve(compileStats(stats));
@@ -45,14 +38,26 @@ function processNextLine(state: State): void {
     if (!buffer.length) {
       reader.resume();
     }
-    setImmediate(() => processNextLine(state));
-  }
+    setImmediate(callback);
+  };
+}
 
-  function onError(error: Error): void {
+function getErrorCallback(reader: ReadLine, reject: Function): (error: Error) => void {
+  return (error: Error): void => {
     reader.close();
     reject(error);
-  }
+  };
+}
 
+function processNextLine(state: State): void {
+  const { buffer, reader, reject, lineHandler } = state;
+  const line = buffer.shift();
+  if (typeof line !== 'string') {
+    setImmediate(processNextLine);
+    return;
+  }
+  const onSuccess = getSuccessCallback(state, NOW(), () => processNextLine(state));
+  const onError = getErrorCallback(reader, reject);
   lineHandler(line, state.index++)
     .then(onSuccess)
     .catch(onError);

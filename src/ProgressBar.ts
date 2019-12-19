@@ -29,6 +29,18 @@ function getStateInfo(
   };
 }
 
+function getBar(barWidth: number, percent: number): string {
+  const ticks = [];
+  for (let i = 0, len = barWidth; i < len; i++) {
+    if ((i * 100) / len <= percent) {
+      ticks.push('#');
+    } else {
+      ticks.push('·');
+    }
+  }
+  return ticks.join('');
+}
+
 class ProgressBar {
   size: number;
   tickSize: number;
@@ -51,8 +63,7 @@ class ProgressBar {
   }
 
   getEllapsed(): number {
-    const milliseconds: number = Date.now() - this.startTime;
-    return milliseconds;
+    return Date.now() - this.startTime;
   }
 
   getRemaining(): number {
@@ -68,7 +79,7 @@ class ProgressBar {
     this.value = Math.min(value, this.size);
     const str = this.print();
     if (this.value === this.size) {
-      if (!this.silent) process.stdout.write('\n');
+      this.write('\n');
       if (this.callback) this.callback();
       this.callback = (): void => {};
     }
@@ -83,22 +94,18 @@ class ProgressBar {
     this.callback = callback;
   }
 
+  write(text: string): void {
+    if (this.silent) return;
+    process.stdout.write(text);
+  }
+
   print(): string {
     const { prefix, suffix, percent } = getStateInfo(this.size, this.value, this.getEllapsed(), this.getRemaining());
-
-    if (!this.silent) process.stdout.write('\r');
-    const width = this.terminalWidth - suffix.length - prefix.length;
-    const ticks = [];
-
-    for (let i = 0, len = width; i < len; i++) {
-      if ((i * 100) / len <= percent) {
-        ticks.push('#');
-      } else {
-        ticks.push('·');
-      }
-    }
-    const str = prefix + ticks.join('') + suffix;
-    if (!this.silent) process.stdout.write(str);
+    const barWidth = this.terminalWidth - suffix.length - prefix.length;
+    const bar = getBar(barWidth, percent);
+    this.write('\r');
+    const str = prefix + bar + suffix;
+    this.write(str);
     return str;
   }
 }

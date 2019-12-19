@@ -2,9 +2,10 @@
   "extends": [
     "prettier",
     "typescript",
-    "typescript/prettier"    
+    "typescript/prettier",
+    "plugin:sonarjs/recommended"
   ],
-  "plugins": ["filenames", "jest"],
+  "plugins": ["filenames", "jest", "sonarjs"],
   "env": {    
     "jest": true,
     "node": true
@@ -17,6 +18,8 @@
     "jest/no-focused-tests": "error",
     "jest/no-identical-title": "error",
     "jest/valid-expect": "error",
-    "complexity": ["warn", 5]
+    "complexity": ["warn", 5],
+    "sonarjs/cognitive-complexity": ["warn", 5],
+    "sonarjs/no-duplicate-string": "warn"
   }
 }

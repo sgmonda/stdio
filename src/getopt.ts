@@ -77,12 +77,11 @@ function getStateAndReset(state: ParsingState): { [key: string]: Array<string | 
 
 function postprocess(input: GetoptPartialResponse): GetoptResponse {
   const initialValue: GetoptResponse = {};
-  const result = Object.entries(input).reduce((accum, [key, value]) => {
+  return Object.entries(input).reduce((accum, [key, value]) => {
     if (Array.isArray(value) && value.length === 1 && key !== POSITIONAL_ARGS_KEY) accum[key] = value[0];
     else accum[key] = [...value];
     return accum;
   }, initialValue);
-  return result;
 }
 
 function checkRequiredParams(config: Config, input: GetoptPartialResponse): void {
@@ -198,8 +197,7 @@ function getopt(config: Config = {}, command: string[]): GetoptResponse {
   if (args.length) result[POSITIONAL_ARGS_KEY] = args;
   applyDefaults(config, result);
   checkRequiredParams(config, result);
-  const compiledResult = postprocess(result);
-  return compiledResult;
+  return postprocess(result);
 }
 
 function getHelpMessage(config: Config, programName: string): string {
