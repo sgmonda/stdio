@@ -13,6 +13,22 @@ function formatTime(msec: number): string {
   return dd ? `${dd} días` : str;
 }
 
+function getStateInfo(
+  size: number,
+  value: number,
+  ellapsedTime: number,
+  remainingTime: number,
+): { prefix: string; suffix: string; percent: number } {
+  const ellapsed = formatTime(ellapsedTime);
+  const percent = Math.floor((value * 100) / size);
+  const eta = formatTime(value >= size ? 0 : remainingTime);
+  return {
+    prefix: ellapsed + ' ' + percent + '% [',
+    suffix: '] ETA ' + eta,
+    percent,
+  };
+}
+
 class ProgressBar {
   size: number;
   tickSize: number;
@@ -34,13 +50,13 @@ class ProgressBar {
     this.callback = (): void => {};
   }
 
-  getEllapsedTime(): number {
+  getEllapsed(): number {
     const milliseconds: number = Date.now() - this.startTime;
     return milliseconds;
   }
 
-  getRemainingTime(): number {
-    const secondsPerTick = this.getEllapsedTime() / this.value;
+  getRemaining(): number {
+    const secondsPerTick = this.getEllapsed() / this.value;
     const remaining = Math.floor((this.size - this.value) * secondsPerTick);
     this.lastRemainingTimes.push(remaining);
     if (this.lastRemainingTimes.length > 5) this.lastRemainingTimes.shift();
@@ -68,12 +84,7 @@ class ProgressBar {
   }
 
   print(): string {
-    const ellapsedTime = formatTime(this.getEllapsedTime());
-    const percent = Math.floor((this.value * 100) / this.size);
-    const prefix = ellapsedTime + ' ' + percent + '% [';
-
-    const eta = formatTime(this.value >= this.size ? 0 : this.getRemainingTime());
-    const suffix = '] ETA ' + eta;
+    const { prefix, suffix, percent } = getStateInfo(this.size, this.value, this.getEllapsed(), this.getRemaining());
 
     if (!this.silent) process.stdout.write('\r');
     const width = this.terminalWidth - suffix.length - prefix.length;
