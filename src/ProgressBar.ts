@@ -1,3 +1,5 @@
+const DEFAULT_TERMINAL_WIDTH = 70;
+
 function formatTime(msec: number): string {
   const dd = Math.floor(msec / 1000 / 60 / 60 / 24);
   msec -= dd * 1000 * 60 * 60 * 24;
@@ -17,14 +19,16 @@ class ProgressBar {
   value: number;
   startTime: number;
   lastRemainingTimes: number[];
+  silent: boolean;
   callback: Function;
 
-  constructor(size = 100, tickSize = 1) {
+  constructor(size = 100, { tickSize = 1, silent = false } = {}) {
     this.size = size;
     this.tickSize = tickSize;
     this.value = 0;
     this.startTime = Date.now();
     this.lastRemainingTimes = [];
+    this.silent = silent;
     this.callback = (): void => {};
   }
 
@@ -42,25 +46,26 @@ class ProgressBar {
     return Math.floor(sum / this.lastRemainingTimes.length);
   }
 
-  setValue(value: number): void {
+  setValue(value: number): string {
     this.value = Math.min(value, this.size);
-    this.print();
+    const str = this.print();
     if (this.value === this.size) {
-      process.stdout.write('\n');
+      if (!this.silent) process.stdout.write('\n');
       if (this.callback) this.callback();
       this.callback = (): void => {};
     }
+    return str;
   }
 
-  tick(): void {
-    this.setValue(this.value + 1);
+  tick(): string {
+    return this.setValue(this.value + this.tickSize);
   }
 
   onFinish(callback: Function): void {
     this.callback = callback;
   }
 
-  print(): void {
+  print(): string {
     const ellapsedTime = formatTime(this.getEllapsedTime());
     const percent = Math.floor((this.value * 100) / this.size);
     const prefix = ellapsedTime + ' ' + percent + '% [';
@@ -68,8 +73,8 @@ class ProgressBar {
     const eta = formatTime(this.value >= this.size ? 0 : this.getRemainingTime());
     const suffix = '] ETA ' + eta;
 
-    process.stdout.write('\r');
-    const terminalWidth = process.stdout.columns || 70;
+    if (!this.silent) process.stdout.write('\r');
+    const terminalWidth = process.stdout.columns || DEFAULT_TERMINAL_WIDTH;
     const width = terminalWidth - suffix.length - prefix.length;
     const ticks = [];
 
@@ -80,7 +85,9 @@ class ProgressBar {
         ticks.push('·');
       }
     }
-    process.stdout.write(prefix + ticks.join('') + suffix);
+    const str = prefix + ticks.join('') + suffix;
+    if (!this.silent) process.stdout.write(str);
+    return str;
   }
 }
 
