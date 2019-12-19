@@ -24,7 +24,7 @@ function ask(question: string, config: AskConfig = {}): Promise<string> {
       const response = data.toString().trim();
 
       if (config.options && !config.options.includes(response)) {
-        console.log('Unexpected answer. %d retries left.', tries - 1);
+        if (inputStream === process.stdin) console.log('Unexpected answer. %d retries left.', tries - 1);
         tries--;
         if (tries === 0) {
           inputStream.removeListener('data', listener);

@@ -81,7 +81,7 @@ function sleep(delay: number): Promise<void> {
 
 TEST_CASES.forEach(testCase => {
   test(`${testCase.size}/${testCase.tickSize} > ${testCase.tick}`, async () => {
-    const pbar = new ProgressBar(testCase.size, { tickSize: testCase.tickSize, silent: true });
+    const pbar = new ProgressBar(testCase.size, { tickSize: testCase.tickSize, silent: true, terminalWidth: 70 });
     let observed = '';
     let finished = false;
     pbar.onFinish(() => (finished = true));
