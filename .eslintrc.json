@@ -11,6 +11,8 @@
     "node": true
   },
   "rules": {
+    "complexity": ["warn", 5],
+    "max-lines-per-function": ["warn", 25],
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-empty-function": "off",
@@ -18,7 +20,6 @@
     "jest/no-focused-tests": "error",
     "jest/no-identical-title": "error",
     "jest/valid-expect": "error",
-    "complexity": ["warn", 5],
     "sonarjs/cognitive-complexity": ["warn", 5],
     "sonarjs/no-duplicate-string": "warn"
   }
