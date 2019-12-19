@@ -1,4 +1,4 @@
-const DEFAULT_TERMINAL_WIDTH = 70;
+const DEFAULT_TERMINAL_WIDTH = process.stdout.columns || 70;
 
 function formatTime(msec: number): string {
   const dd = Math.floor(msec / 1000 / 60 / 60 / 24);
@@ -20,15 +20,17 @@ class ProgressBar {
   startTime: number;
   lastRemainingTimes: number[];
   silent: boolean;
+  terminalWidth: number;
   callback: Function;
 
-  constructor(size = 100, { tickSize = 1, silent = false } = {}) {
+  constructor(size = 100, { tickSize = 1, silent = false, terminalWidth = DEFAULT_TERMINAL_WIDTH } = {}) {
     this.size = size;
     this.tickSize = tickSize;
     this.value = 0;
     this.startTime = Date.now();
     this.lastRemainingTimes = [];
     this.silent = silent;
+    this.terminalWidth = terminalWidth;
     this.callback = (): void => {};
   }
 
@@ -74,8 +76,7 @@ class ProgressBar {
     const suffix = '] ETA ' + eta;
 
     if (!this.silent) process.stdout.write('\r');
-    const terminalWidth = process.stdout.columns || DEFAULT_TERMINAL_WIDTH;
-    const width = terminalWidth - suffix.length - prefix.length;
+    const width = this.terminalWidth - suffix.length - prefix.length;
     const ticks = [];
 
     for (let i = 0, len = width; i < len; i++) {
