@@ -5,8 +5,9 @@ node_js:
  - 12
 scripts:
  - npm install codecov -g
+# env:
+# - CODECOV_TOKEN=ef31df0c-759c-40f3-b475-9762a9fd6cef
 after_success:
- - codecov
-env:
- - CODECOV_TOKEN=ef31df0c-759c-40f3-b475-9762a9fd6cef
+ - CODECOV_TOKEN=ef31df0c-759c-40f3-b475-9762a9fd6cef codecov
+
 
