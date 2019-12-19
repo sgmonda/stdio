@@ -3,7 +3,7 @@ node_js:
  - 8
  - 10
  - 12
-scripts:
+script:
  - npm install codecov -g
 after_success:
  - codecov
