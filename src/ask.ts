@@ -22,8 +22,8 @@ function print(text: string, config: AskConfig): void {
 function getOnError(question: string, config: AskConfig, callback: Function): Function {
   const inputStream = getInputStream(config);
   return (listener: any, tries: number): void => {
-    if (inputStream === process.stdin) console.log('Unexpected answer. %d retries left.', tries - 1);
-    if (tries === 0) {
+    if (inputStream === process.stdin) console.log('Unexpected answer. %d retries left.', tries);
+    if (!tries) {
       inputStream.removeListener('data', listener);
       inputStream.pause();
       callback('Retries spent');
@@ -35,12 +35,12 @@ function getOnError(question: string, config: AskConfig, callback: Function): Fu
 
 function getListener(question: string, config: AskConfig, callback: Function): (data: string) => void {
   const inputStream = getInputStream(config);
-  const tries = config.maxRetries || DEFAULT_MAX_RETRIES;
+  let tries = config.maxRetries || DEFAULT_MAX_RETRIES;
   const onError = getOnError(question, config, callback);
 
   function listener(data: string): void {
     const answer = data.toString().trim();
-    if (config.options && !config.options.includes(answer)) return onError(listener, tries - 1);
+    if (config.options && !config.options.includes(answer)) return onError(listener, --tries);
     inputStream.removeListener('data', listener);
     inputStream.pause();
     callback('', answer);

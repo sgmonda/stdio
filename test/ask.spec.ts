@@ -19,6 +19,18 @@ const TEST_CASES = [
     answers: ['wrong', 'another wrong', 'third wrong', 'yes'],
     expected: null,
   },
+  {
+    question: 'Is this a test, really?',
+    config: { options: ['yes', 'no'], maxRetries: 7 },
+    answers: ['wrong', 'another wrong', 'third wrong', 'wrong', 'also wrong', 'wrong', 'not yet', 'no'],
+    expected: null,
+  },
+  {
+    question: 'Is this a test, really?',
+    config: { options: ['yes', 'no'], maxRetries: 8 },
+    answers: ['wrong', 'another wrong', 'third wrong', 'wrong', 'also wrong', 'wrong', 'not yet', 'no'],
+    expected: 'no',
+  },
 ];
 
 class StdinMock {
