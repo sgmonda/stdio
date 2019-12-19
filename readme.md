@@ -10,7 +10,7 @@ The *de facto* standard input/output manager for Node.js
 
 After a very long time, finally version 2 is here. The cool `stdio` module you cannot live without has been rewritten and improved a lot, with Typescript support, promise-based usage and much more.
 
-**Note**: Version 2 stops supporting non promise-based usage, so it is not compatible with older versions. If you're using an older version of `stdio` please, read this documentation carefully before upgrading.
+**Note**: Version 2 stops supporting non promise-based usage. Some functions have been renamed, too. So it is not compatible with older versions. If you're using an older version of `stdio` please, read this documentation carefully before upgrading.
 
 Table of contents:
 
