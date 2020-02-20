@@ -18,6 +18,7 @@ Table of contents:
 - [Usage](#usage)
   - [getopt()](#getopt)
   - [read()](#read)
+  - [readLine()](#readline)
   - [ask()](#ask)
   - [ProgressBar](#progressbar)
 
@@ -45,6 +46,7 @@ This module contains the following static functions:
 
 - `getopt()`: a function to parse command-line arguments.
 - `read()`: an async function to read the standard input (or huge files) by lines, without having to worry about system resources.
+- `readLine()`: an async function to read a single line from the standard input.
 - `ask()`: an async function to ask questions in a terminal and wait for a user's response.
 
 And the following classes:
@@ -184,7 +186,7 @@ Remember the same happens when `--help` or `-h` options are passed. They are res
 
 ## read()
 
-This function reads standard input by lines, waiting for a line to be processed successfully before reading the next one. This is perfect for huge files as lines are read only as you process them, so you don't have to worry about system resources:
+This function reads the whole standard input by lines, waiting for a line to be processed successfully before reading the next one. This is perfect for huge files as lines are read only as you process them, so you don't have to worry about system resources.
 
 ```javascript
 import { read } from 'stdio';
@@ -252,6 +254,56 @@ The output is something like this:
 
 </p>
 </details>
+
+## readLine()
+
+This function reads a single line from standard input. This is perfect for interactive terminal-based programs or just to read standard input on demand.
+
+```javascript
+import { readLine } from 'stdio';
+
+(async () => {
+  ...
+  const line = await readLine(<options>);
+  ...
+})()
+```
+
+Where `<options>` is an optional object with the following properties:
+
+- `stream` (`Readable`): An object implementing `NodeJS.Readable` interface, like a stream. By default, `process.stdin` is used.
+- `close` (`boolean`): An optional flag to close the reader after returning the line. This is useful if you want to stop listening before finishing your program execution.
+
+<details>
+<summary>Example</summary>
+<p>
+
+The following simple program lets the user introduce basic instructions and responds interactively:
+
+```javascript
+import { readLine } from 'stdio';
+
+(async () => {
+  let command;
+  do {
+    command = await readLine();
+    if (command === 'SAY_A') {
+      console.log('A');
+    } else if (command === 'SAY_B') {
+      console.log('B');
+    } else if (command === 'EXIT') {
+      console.log('Good bye');
+      await readLine({ close: true });
+    }
+  } while (command !== 'EXIT')
+})()
+```
+
+Note we're closing the line reader. In this case it could be replaced by a simple `process.exit(0)`, as our program doesn't do anything else.
+
+</p>
+</details>
+
 
 ## ask()
 

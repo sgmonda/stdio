@@ -4,7 +4,10 @@
     "module": "commonjs",
     "declaration": true,
     "outDir": "./dist",
-    "strict": true
+    "strict": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ]
   },
   "lib": [
     "es6"

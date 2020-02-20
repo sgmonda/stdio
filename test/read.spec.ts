@@ -1,20 +1,5 @@
-import { Readable } from 'stream';
 import { read } from '../index';
-
-class ReadableString extends Readable {
-  private sent = false;
-  constructor(private str: string) {
-    super();
-  }
-  public _read(): void {
-    if (!this.sent) {
-      this.push(Buffer.from(this.str));
-      this.sent = true;
-    } else {
-      this.push(null);
-    }
-  }
-}
+import { ReadableString } from '../src/modules';
 
 function getReadStream(str: string): NodeJS.ReadableStream {
   return new ReadableString(str);
