@@ -9,6 +9,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
+    "codecov": "codecov -t $CODECOV_TOKEN",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint": "eslint --config .eslintrc.json --fix src/**/*.ts test/**/*.ts",
     "test": "jest --config jestconfig.json",
@@ -44,6 +45,7 @@
     "@types/node": "^12.6.8",
     "@typescript-eslint/eslint-plugin": "^2.7.0",
     "@typescript-eslint/parser": "^2.7.0",
+    "codecov": "^3.6.5",
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.5.0",
     "eslint-config-typescript": "^3.0.0",
