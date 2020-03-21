@@ -53,7 +53,7 @@ function processNextLine(state: State): void {
   const { buffer, reader, reject, lineHandler } = state;
   const line = buffer.shift();
   if (typeof line !== 'string') {
-    setImmediate(processNextLine);
+    setImmediate(() => processNextLine(state));
     return;
   }
   const onSuccess = getSuccessCallback(state, NOW(), () => processNextLine(state));
