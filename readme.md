@@ -1,4 +1,4 @@
-![logo](https://user-images.githubusercontent.com/675812/61961326-88346a80-afc7-11e9-9853-f4ef66ce686c.png)
+![logo](https://user-images.githubusercontent.com/675812/103279290-c0668680-49cd-11eb-81e2-cea88f9274ea.png)
 
 The *de facto* standard input/output manager for Node.js
 
