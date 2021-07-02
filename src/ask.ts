@@ -50,7 +50,7 @@ function getListener(question: string, config: AskConfig, callback: Function): (
   function listener(data: string): void {
     let answer = data.toString().trim();
     if (config.options && !config.options.includes(answer)) {
-      if (isInArrBounds(config.options, config.defaultIndex)) {
+      if (isInArrBounds(config.options, config.defaultIndex) && answer === '') {
         answer = config.options[config.defaultIndex as number].toString().trim();
       } else return onError(listener, --tries);
     }
