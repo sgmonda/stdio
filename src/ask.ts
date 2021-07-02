@@ -4,17 +4,26 @@ export interface AskConfig {
   options?: string[];
   maxRetries?: number;
   inputStream?: any;
+  /** Index of the option to be made the default option */
+  defaultIndex?: number;
 }
 
 function getInputStream(config: AskConfig): any {
   return config.inputStream || process.stdin;
 }
 
+function isInArrBounds(arr: Array<any> | undefined, index: number | undefined): boolean {
+  return arr !== undefined && index !== undefined && index >= 0 && index <= arr.length - 1;
+}
+
 function print(text: string, config: AskConfig): void {
   const inputStream = getInputStream(config);
   if (inputStream !== process.stdin) return;
-  const { options } = config;
-  if (options) text += ' [' + options.join('/') + ']';
+  const { options, defaultIndex } = config;
+  if (options) {
+    if (defaultIndex && isInArrBounds(options, defaultIndex)) text += ' (default ' + options[defaultIndex] + ')';
+    text += ' [' + options.join('/') + ']';
+  }
   text += ': ';
   process.stdout.write(text);
 }
@@ -39,8 +48,12 @@ function getListener(question: string, config: AskConfig, callback: Function): (
   const onError = getOnError(question, config, callback);
 
   function listener(data: string): void {
-    const answer = data.toString().trim();
-    if (config.options && !config.options.includes(answer)) return onError(listener, --tries);
+    let answer = data.toString().trim();
+    if (config.options && !config.options.includes(answer)) {
+      if (isInArrBounds(config.options, config.defaultIndex) && answer === '') {
+        answer = config.options[config.defaultIndex as number].toString().trim();
+      } else return onError(listener, --tries);
+    }
     inputStream.removeListener('data', listener);
     inputStream.pause();
     callback('', answer);
