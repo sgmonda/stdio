@@ -2,10 +2,8 @@ const DEFAULT_MAX_RETRIES = 3;
 
 export interface AskConfig {
   options?: string[];
-  /** Default: 3*/
   maxRetries?: number;
   inputStream?: any;
-  /** Index of the option to be made the default option. Underlines option set as default in console */
   defaultIndex?: number;
 }
 
