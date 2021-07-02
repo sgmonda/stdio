@@ -4,6 +4,7 @@ export interface AskConfig {
   options?: string[];
   maxRetries?: number;
   inputStream?: any;
+  /** Index of the option to be made the default option */
   defaultIndex?: number;
 }
 
