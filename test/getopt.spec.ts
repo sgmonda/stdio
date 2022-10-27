@@ -109,6 +109,11 @@ const TEST_CASES = [
     config: { meta: { args: '*' }, other: { key: 'o' } },
   },
   {
+    command: 'node program.js --bar bar foo',
+    expected: { bar: ['bar', 'foo'] },
+    config: { bar: { args: '*' } },
+  },
+  {
     command: 'node program.js --other',
     expected: { other: true, meta: 'foo' },
     config: { meta: { key: 'm', default: 'foo' }, other: true },
