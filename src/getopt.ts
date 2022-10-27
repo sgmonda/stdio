@@ -4,19 +4,19 @@ const ERROR_PREFFIX = 'ERROR#GETOPT: ';
 
 export interface Config {
   [key: string]:
-    | {
-        key?: string;
-        description?: string;
-        multiple?: boolean;
-        args?: number | string;
-        mandatory?: boolean; // @deprecated
-        required?: boolean;
-        default?: string | string[] | boolean;
-        maxArgs?: number;
-        minArgs?: number;
-      }
-    | boolean
-    | undefined;
+  | {
+    key?: string;
+    description?: string;
+    multiple?: boolean;
+    args?: number | string;
+    mandatory?: boolean; // @deprecated
+    required?: boolean;
+    default?: string | string[] | boolean;
+    maxArgs?: number;
+    minArgs?: number;
+  }
+  | boolean
+  | undefined;
 }
 
 export interface Options {
@@ -139,13 +139,13 @@ function getopt(config: Config = {}, command: string[]): GetoptResponse {
     optionArgs: [],
     isMultiple: false,
   };
-  rawArgs.forEach(arg => {
+  rawArgs.forEach((arg, index) => {
     const parsedOption = parseOption(config, arg);
     if (!parsedOption) {
       if (state.activeOption) {
         state.optionArgs.push(arg);
         state.remainingArgs--;
-        if (!state.remainingArgs || state.isMultiple) {
+        if (!state.remainingArgs || state.isMultiple || index === rawArgs.length - 1) {
           const isMultiple = state.isMultiple;
           const partial = getStateAndReset(state);
           Object.entries(partial).forEach(([key, value]) => {
@@ -229,9 +229,9 @@ function getHelpMessage(config: Config, programName: string): string {
     lines.push([
       '  ' + (value.key ? '-' + value.key + ', --' : '--') + key + ops,
       (value.description || '') +
-        (value.mandatory || value.required ? ' (required)' : '') +
-        (value.multiple ? ' (multiple)' : '') +
-        (value.default ? ' ("' + value.default + '" by default)' : ''),
+      (value.mandatory || value.required ? ' (required)' : '') +
+      (value.multiple ? ' (multiple)' : '') +
+      (value.default ? ' ("' + value.default + '" by default)' : ''),
     ]);
   });
 
@@ -267,7 +267,7 @@ function checkConfig(config: Config): void {
     if (!value || typeof value !== 'object') {
       console.warn(
         'Boolean description of getopt() options is deprecated and will be ' +
-          'removed in a future "stdio" release. Please, use an object definitions instead.',
+        'removed in a future "stdio" release. Please, use an object definitions instead.',
       );
       return;
     }
@@ -275,7 +275,7 @@ function checkConfig(config: Config): void {
     if (value.mandatory)
       console.warn(
         '"mandatory" option is deprecated and will be removed in a ' +
-          'future "stdio" release. Please, use "required" instead.',
+        'future "stdio" release. Please, use "required" instead.',
       );
   });
 }
