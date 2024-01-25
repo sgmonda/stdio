@@ -106,6 +106,7 @@ function checkRequiredParams(config: Config, input: GetoptPartialResponse): void
   }
   Object.entries(config).forEach(([key, value]) => {
     if (!value || typeof value !== 'object') return;
+    if (!input[key] && !value.mandatory && !value.required) return;
     if ((value.mandatory || value.required) && !input[key]) {
       throwError(`Missing option: "--${key}"`);
     }

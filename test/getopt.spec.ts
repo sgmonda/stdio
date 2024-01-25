@@ -273,6 +273,14 @@ The following options are supported:
     config: { foo: { args: '*' }, baz: {} },
     expected: { foo: 'bar' },
   },
+  {
+    config: {
+      username: { key: 'u', args: 1, description: 'db username', required: false },
+      password: { key: 'p', args: 1, description: 'db password', required: false },
+    },
+    command: 'node program.js',
+    expected: {},
+  },
 ];
 
 function cleanParam(param: string): string {
