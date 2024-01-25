@@ -281,6 +281,22 @@ The following options are supported:
     command: 'node program.js',
     expected: {},
   },
+  {
+    config: {
+      foo: { args: 1, required: true },
+      bar: { args: '*', required: true },
+    },
+    command: 'node myfile.js --foo foo --bar bar some-bar',
+    expected: { foo: 'foo', bar: ['bar', 'some-bar'] },
+  },
+  {
+    config: {
+      foo: { args: 1, required: true },
+      bar: { args: '*', required: true },
+    },
+    command: 'node myfile.js --bar bar some-bar --foo foo',
+    expected: { foo: 'foo', bar: ['bar', 'some-bar'] },
+  },
 ];
 
 function cleanParam(param: string): string {
