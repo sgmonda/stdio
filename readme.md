@@ -404,3 +404,10 @@ If you run the previous code, the following will be shown:
 
 </p>
 </details>
+
+## Contributing
+
+Release new version:
+
+1. Update version in `package.json`
+2. Run `npm publish`
