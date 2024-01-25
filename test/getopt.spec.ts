@@ -1,7 +1,15 @@
 import { getopt } from '../index';
-import { Options } from '../src/getopt';
+import { Config, GetoptResponse, Options } from '../src/getopt';
 
-const TEST_CASES = [
+type TestCase = {
+  command: string;
+  config: Config;
+  expected?: GetoptResponse | null;
+  options?: Options;
+  error?: string;
+};
+
+const TEST_CASES: TestCase[] = [
   {
     command: 'node program.js',
     expected: {},
@@ -254,6 +262,16 @@ The following options are supported:
     config: { something: { key: 'h' } },
     options: { throwOnFailure: true },
     error: `"-h" option is reserved and cannot be declared in a getopt() call`,
+  },
+  {
+    command: 'node program.js --foo bar --baz',
+    config: { foo: { args: '*' }, baz: {} },
+    expected: { foo: 'bar', baz: true },
+  },
+  {
+    command: 'node program.js --foo bar',
+    config: { foo: { args: '*' }, baz: {} },
+    expected: { foo: 'bar' },
   },
 ];
 
