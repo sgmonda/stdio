@@ -1,6 +1,6 @@
 {
   "name": "stdio",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Standard input/output manager for Node.js",
   "files": [
     "dist/**/*"
