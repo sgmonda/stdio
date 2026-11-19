@@ -9,7 +9,7 @@ test('Basic line reader', async () => {
   const text = 'hello\nbye\nother\nlast\n\n'.repeat(5000) + 'eof';
   const stream = getReadStream(text);
   const observed: string[] = [];
-  let line = null;
+  let line: string;
   let index = 0;
   do {
     line = await readLine({ stream });
