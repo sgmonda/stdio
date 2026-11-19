@@ -230,7 +230,7 @@ function getHelpMessage(config: Config, programName: string): string {
     if (value.args === '*') {
       ops += '<ARG1>...<ARGN>';
     } else {
-      for (let i = 0; i < argsCount; i++) {
+      for (let i = 0; i < Number(argsCount); i++) {
         ops += '<ARG' + (i + 1) + '> ';
       }
     }
@@ -293,7 +293,7 @@ export default (config: Config, command: string[] = process.argv, options?: Opti
   try {
     checkConfig(config);
     return getopt(config, preprocessCommand(command));
-  } catch (error) {
+  } catch (error: any) {
     if (!error.message.startsWith(ERROR_PREFFIX)) {
       throw error;
     }

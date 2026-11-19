@@ -318,7 +318,7 @@ TEST_CASES.forEach(testCase => {
       const observed = getopt(testCase.config, command, options);
       const expected = testCase.expected;
       expect(observed).toEqual(expected);
-    } catch (error) {
+    } catch (error: any) {
       expect(options.throwOnFailure).toBe(true);
       expect(error.message).toEqual(testCase.error);
     }

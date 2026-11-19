@@ -8,7 +8,6 @@ function formatTime(msec: number): string {
   const mm = Math.floor(msec / 1000 / 60);
   msec -= mm * 1000 * 60;
   const ss = Math.floor(msec / 1000);
-  msec -= ss * 1000;
   const str = [`0${hh}`.slice(-2), `0${mm}`.slice(-2), `0${ss}`.slice(-2)].join(':');
   return dd ? `${dd} días` : str;
 }

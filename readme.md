@@ -2,11 +2,10 @@
 
 The *de facto* standard input/output manager for Node.js
 
-[![Build Status](https://secure.travis-ci.org/sgmonda/stdio.png)](http://travis-ci.org/sgmonda/stdio)
+[![CI](https://github.com/sgmonda/stdio/actions/workflows/ci.yml/badge.svg)](https://github.com/sgmonda/stdio/actions/workflows/ci.yml)
 [![NPM version](https://img.shields.io/npm/v/stdio.svg)](https://www.npmjs.com/package/stdio)
 [![Known Vulnerabilities](https://snyk.io/test/github/sgmonda/stdio/badge.svg?targetFile=package.json)](https://snyk.io/test/github/sgmonda/stdio?targetFile=package.json)
 [![Maintainability](https://api.codeclimate.com/v1/badges/70cf9b4cdd6a7849b6d1/maintainability)](https://codeclimate.com/github/sgmonda/stdio/maintainability)
-[![codecov](https://codecov.io/gh/sgmonda/stdio/branch/master/graph/badge.svg)](https://codecov.io/gh/sgmonda/stdio)
 
 After a very long time, finally version 2 is here. The cool `stdio` module you cannot live without has been rewritten and improved a lot, with Typescript support, promise-based usage and much more.
 
