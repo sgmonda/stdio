@@ -4,6 +4,7 @@ class InputStream {
   private reader: ReadLine;
   private buffer: string[];
   private handlers: Array<Function>;
+  private closed = false;
 
   constructor(input: NodeJS.ReadableStream = process.stdin) {
     this.reader = createInterface({ input });
@@ -18,6 +19,7 @@ class InputStream {
       }
     });
     this.reader.on('close', () => {
+      this.closed = true;
       if (this.handlers.length > 0) {
         const resolver = this.handlers.shift();
         if (resolver) resolver(null);
@@ -28,9 +30,10 @@ class InputStream {
   public async getLine(): Promise<string> {
     return new Promise(resolve => {
       if (this.buffer.length > 0) {
-        this.reader.pause();
-        return resolve(this.buffer.shift());
+        if (!this.closed) this.reader.pause();
+        return resolve(this.buffer.shift() as string);
       }
+      if (this.closed) return resolve(null as unknown as string);
       this.reader.resume();
       this.handlers.push(resolve);
     });
@@ -48,7 +51,7 @@ export interface Options {
   close?: boolean;
 }
 
-export default function(options: Options = {}): Promise<string> {
+export default function (options: Options = {}): Promise<string> {
   input = input || new InputStream(options.stream);
   const line = input.getLine();
   if (options.close) input.close();

@@ -58,9 +58,7 @@ function processNextLine(state: State): void {
   }
   const onSuccess = getSuccessCallback(state, NOW(), () => processNextLine(state));
   const onError = getErrorCallback(reader, reject);
-  lineHandler(line, state.index++)
-    .then(onSuccess)
-    .catch(onError);
+  lineHandler(line, state.index++).then(onSuccess).catch(onError);
 }
 
 export default (lineHandler: LineHandler, input: NodeJS.ReadableStream = process.stdin): Promise<void> =>

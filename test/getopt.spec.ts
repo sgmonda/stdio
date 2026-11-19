@@ -1,7 +1,15 @@
 import { getopt } from '../index';
-import { Options } from '../src/getopt';
+import { Config, GetoptResponse, Options } from '../src/getopt';
 
-const TEST_CASES = [
+type TestCase = {
+  command: string;
+  config: Config;
+  expected?: GetoptResponse | null;
+  options?: Options;
+  error?: string;
+};
+
+const TEST_CASES: TestCase[] = [
   {
     command: 'node program.js',
     expected: {},
@@ -255,6 +263,40 @@ The following options are supported:
     options: { throwOnFailure: true },
     error: `"-h" option is reserved and cannot be declared in a getopt() call`,
   },
+  {
+    command: 'node program.js --foo bar --baz',
+    config: { foo: { args: '*' }, baz: {} },
+    expected: { foo: 'bar', baz: true },
+  },
+  {
+    command: 'node program.js --foo bar',
+    config: { foo: { args: '*' }, baz: {} },
+    expected: { foo: 'bar' },
+  },
+  {
+    config: {
+      username: { key: 'u', args: 1, description: 'db username', required: false },
+      password: { key: 'p', args: 1, description: 'db password', required: false },
+    },
+    command: 'node program.js',
+    expected: {},
+  },
+  {
+    config: {
+      foo: { args: 1, required: true },
+      bar: { args: '*', required: true },
+    },
+    command: 'node myfile.js --foo foo --bar bar some-bar',
+    expected: { foo: 'foo', bar: ['bar', 'some-bar'] },
+  },
+  {
+    config: {
+      foo: { args: 1, required: true },
+      bar: { args: '*', required: true },
+    },
+    command: 'node myfile.js --bar bar some-bar --foo foo',
+    expected: { foo: 'foo', bar: ['bar', 'some-bar'] },
+  },
 ];
 
 function cleanParam(param: string): string {
@@ -276,7 +318,7 @@ TEST_CASES.forEach(testCase => {
       const observed = getopt(testCase.config, command, options);
       const expected = testCase.expected;
       expect(observed).toEqual(expected);
-    } catch (error) {
+    } catch (error: any) {
       expect(options.throwOnFailure).toBe(true);
       expect(error.message).toEqual(testCase.error);
     }
