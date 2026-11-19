@@ -301,7 +301,7 @@ export default (config: Config, command: string[] = process.argv, options?: Opti
     const message = (error.message.replace(ERROR_PREFFIX, '') + '\n' + getHelpMessage(config, programName)).trim();
     if (printOnFailure) console.warn(message);
     if (exitOnFailure) process.exit(FAILURE);
-    if (throwOnFailure) throw new Error(message);
+    if (throwOnFailure) throw new Error(message, { cause: error });
     return null;
   }
 };
