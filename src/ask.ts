@@ -13,7 +13,7 @@ function getInputStream(config: AskConfig): any {
 }
 
 function isInArrBounds(arr: Array<any> | undefined, index: number | undefined): boolean {
-  return arr !== undefined && index !== undefined && index >= 0 && index <= arr.length - 1;
+  return arr !== undefined && Number.isInteger(index) && index! >= 0 && index! < arr.length;
 }
 
 function print(text: string, config: AskConfig): void {
@@ -21,7 +21,7 @@ function print(text: string, config: AskConfig): void {
   if (inputStream !== process.stdin) return;
   const { options, defaultIndex } = config;
   if (options) {
-    if (defaultIndex && isInArrBounds(options, defaultIndex)) text += ' (default ' + options[defaultIndex] + ')';
+    if (isInArrBounds(options, defaultIndex)) text += ' (default ' + options[defaultIndex!] + ')';
     text += ' [' + options.join('/') + ']';
   }
   text += ': ';
