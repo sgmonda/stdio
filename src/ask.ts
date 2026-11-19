@@ -50,7 +50,7 @@ function getListener(question: string, config: AskConfig, callback: Function): (
 
 function ask(question: string, config: AskConfig = {}): Promise<string> {
   return new Promise((resolve, reject) => {
-    const callback = (error: string, value?: string): void => (error ? reject(new Error(error)) : resolve(value));
+    const callback = (error: string, value?: string): void => (error ? reject(new Error(error)) : resolve(value ?? ''));
     const inputStream = getInputStream(config);
     inputStream.resume();
     const listener = getListener(question, config, callback);

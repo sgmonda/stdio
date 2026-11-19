@@ -9,9 +9,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "codecov": "codecov -t $CODECOV_TOKEN",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "lint": "eslint --config .eslintrc.json --fix src/**/*.ts test/**/*.ts",
+    "lint": "eslint --fix src test",
     "test": "jest --config jestconfig.json",
     "prepublishOnly": "npm test && npm run lint",
     "prepare": "npm run build",
@@ -41,22 +40,32 @@
   },
   "homepage": "https://github.com/sgmonda/stdio#readme",
   "devDependencies": {
-    "@types/jest": "^24.0.15",
-    "@types/node": "^12.6.8",
-    "@typescript-eslint/eslint-plugin": "^2.7.0",
-    "@typescript-eslint/parser": "^2.7.0",
-    "codecov": "^3.6.5",
-    "eslint": "^6.6.0",
-    "eslint-config-prettier": "^6.5.0",
-    "eslint-config-typescript": "^3.0.0",
-    "eslint-plugin-filenames": "^1.3.2",
-    "eslint-plugin-jest": "^23.0.4",
-    "eslint-plugin-prettier": "^3.1.1",
-    "eslint-plugin-sonarjs": "^0.5.0",
-    "jest": "^24.8.0",
+    "@eslint/js": "^9.39.5",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^20.19.43",
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jest": "^29.17.1",
+    "eslint-plugin-prettier": "^5.5.7",
+    "eslint-plugin-sonarjs": "^4.2.2",
+    "globals": "^17.14.0",
+    "jest": "^30.5.2",
     "mock-stdin": "^1.0.0",
-    "prettier": "^1.18.2",
-    "ts-jest": "^24.0.2",
-    "typescript": "^3.7.2"
+    "prettier": "^3.10.1",
+    "ts-jest": "^29.4.15",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.73.0"
+  },
+  "overrides": {
+    "glob": "^14.0.6",
+    "test-exclude": {
+      "minimatch": "^11.0.9"
+    },
+    "eslint-plugin-sonarjs": {
+      "minimatch": "^11.0.9"
+    },
+    "@jest/reporters": {
+      "minimatch": "^11.0.9"
+    }
   }
 }
