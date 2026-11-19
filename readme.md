@@ -320,6 +320,7 @@ Where `QUESTION_STRING` is just a string and `QUESTION_CONFIG` is an optional ob
 
 - `options` (`string[]`): List of allowed values for the answer. If it is not provided, then any answer is accepted.
 - `maxRetries` (`number`): Only makes sense when `options` is provided. After `maxRetries` of wrong answers, the `ask()` returning promise is rejected with an error explaining that all retries have been spent with no successfull answer.
+- `defaultIndex` (`number`): Only makes sense when `options` is provided. Index (in `options`) of the default answer, which is selected when the user just presses ENTER. The question shows it as `(default VALUE)`.
 
 <details>
 <summary>Example</summary>
@@ -334,7 +335,9 @@ async function main () {
 	const name = await ask('What is your name?');
 	const age = await ask('How old are you?');
 	const gender = await ask('What is your gender?', { options: ['male', 'female'] });
+	const newsletter = await ask('Subscribe to the newsletter?', { options: ['yes', 'no'], defaultIndex: 1 });
 	console.log('Your name is "%s". You are a "%s" "%s" years old.', name, gender, age);
+	console.log('Newsletter: %s', newsletter);
 }
 
 main()
@@ -352,7 +355,9 @@ How old are you?: 34
 What is your gender? [male/female]: other
 Unexpected answer. 2 retries left.
 What is your gender? [male/female]: male
+Subscribe to the newsletter? (default no) [yes/no]:
 Your name is "john doe". You are a "male" "34" years old.
+Newsletter: no
 Finished
 ```
 
