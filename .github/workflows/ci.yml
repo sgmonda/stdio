@@ -24,9 +24,3 @@ jobs:
       - run: npx eslint src test
       - run: npm test
       - run: npm audit --audit-level=moderate
-      - name: Upload coverage
-        if: matrix.node-version == 24
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
