@@ -75,8 +75,11 @@ const TEST_CASES = [
   },
 ];
 
-function sleep(delay: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, delay));
+beforeEach(() => jest.useFakeTimers());
+afterEach(() => jest.useRealTimers());
+
+async function sleep(delay: number): Promise<void> {
+  await jest.advanceTimersByTimeAsync(delay);
 }
 
 TEST_CASES.forEach(testCase => {
